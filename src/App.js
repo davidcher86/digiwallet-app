@@ -26,35 +26,45 @@ import AppNavigator from './navigation/AppNavigation';
 import PrimaryNav from './navigation/PrimaryNav';
 import HomePage from './components/homePage/HomePage';
 import Dashboard from './components/dashboard/Dashboard';
+import { FAB } from 'react-native-paper';
 
 class App extends Component {
   render() {
-    // const store = createStore(reducers, {}, applyMiddleware(ReduxThunk));
-
-    const styles = {
-      containerStyle: {},
-      headerStyle: {
-        flex: 1,
-        alignItems: 'center',
-        padding: 10,
-        background: 'green'
-      }
-    };
-
     const store = createStore(reducers, {}, applyMiddleware(ReduxThunk));
-    console.log('sdvsdvds');
 
-    // console.log(PrimaryNav);
     return (
       <Provider store={store}>
         <View style={{ flex: 1 }}>
-        {/* <Text>fsdfsdf</Text> */}
-          {/* <MyApp style={{ height: '40' }}/> */}
           <AppNavigator style={{height: '40'}}/>
+          <FAB
+            style={styles.fab}
+            small
+            icon="plus"
+            onPress={() => console.log('Pressed')}/>
         </View>
       </Provider>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  containerStyle: {},
+  headerStyle: {
+    flex: 1,
+    alignItems: 'center',
+    padding: 10,
+  },
+  fab: {
+    height: 50,
+    width: 50,
+    borderRadius: 200,
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#686cc3',
+  },
+});
 
 export default App;
