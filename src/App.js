@@ -1,46 +1,34 @@
-/* eslint-disable react-native/no-inline-styles */
-/* eslint-disable prettier/prettier */
-import React, { Component } from 'react';
-import { Provider } from 'react-redux';
+import React, {Component} from 'react';
+import {Provider} from 'react-redux';
 import ReduxThunk from 'redux-thunk';
-import { createStackNavigator, createDrawerNavigator, createAppContainer } from 'react-navigation';
-import { createStore, applyMiddleware } from 'redux';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-} from 'react-native';
+import {createStore, applyMiddleware} from 'redux';
+import {StyleSheet, View, Modal} from 'react-native';
+import {connect} from 'react-redux';
 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
 import reducers from './redux';
 import AppNavigator from './navigation/AppNavigation';
-import PrimaryNav from './navigation/PrimaryNav';
-import HomePage from './components/homePage/HomePage';
-import Dashboard from './components/dashboard/Dashboard';
-import { FAB } from 'react-native-paper';
+import NewTransactionModal from './components/common/newTransactionModal/NewTransactionModal';
+import {onLoginPress} from './components/systemControl/systemControlActions.js';
+import {FAB} from 'react-native-paper';
 
 class App extends Component {
   render() {
     const store = createStore(reducers, {}, applyMiddleware(ReduxThunk));
-
+    console.log(onLoginPress);
     return (
       <Provider store={store}>
-        <View style={{ flex: 1 }}>
-          <AppNavigator style={{height: '40'}}/>
-          <FAB
-            style={styles.fab}
-            small
-            icon="plus"
-            onPress={() => console.log('Pressed')}/>
+        {/* <Modal
+          animationType="slide"
+          transparent={true}
+          visible={true}
+          onRequestClose={() => {
+            console.log('Modal has been closed.');
+          }}> */}
+        <NewTransactionModal />
+        {/* </Modal> */}
+        <View style={{flex: 1}}>
+          <AppNavigator style={{height: '40'}} />
+          <FAB style={styles.fab} small icon="plus" onPress={onLoginPress()} />
         </View>
       </Provider>
     );
@@ -67,4 +55,12 @@ const styles = StyleSheet.create({
   },
 });
 
+// const mapStateToProps = state => {
+//   return {systemControl: state.systemControl};
+// };
+
+// export default connect(
+// mapStateToProps,
+//   actions,
+// )(App);
 export default App;

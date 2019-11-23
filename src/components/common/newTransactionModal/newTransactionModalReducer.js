@@ -1,7 +1,7 @@
 const initialState = {
   credit: 0,
   curentAmount: 0,
-};
+};;
 
 export default (state = initialState, action) => {
   switch (action.type) {
