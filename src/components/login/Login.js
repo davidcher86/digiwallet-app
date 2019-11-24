@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, TouchableOpacity, Text} from 'react-native';
+import {View, TouchableOpacity, Text, AsyncStorage} from 'react-native';
 import {Button, Input, Icon} from 'react-native-elements';
 import {connect} from 'react-redux';
 // import { Actions } from 'react-native-router-flux';
@@ -48,17 +48,26 @@ class LoginForm extends Component {
         </View>
       );
     }
-    // console.log(props);
+
+    var user;
+      try {
+        user = AsyncStorage.getItem('digiwalletUserU7ID')._55;
+      } catch (e) {
+        console.log('Failed to load name.');
+      }
+    console.log('user: ', user);
     return (
       <View style={styles.buttonContainerStyle}>
         {this.props.pageSettings.selectedTab === 'login' && (
           <TouchableOpacity
             style={styles.buttonContainer}
-            onPress={() => this.props.navigation.navigate('PrimaryNav')}
-            // onPress={() =>
-            //   props.onLoginPress(props.login.email, props.login.password)
-            // }
-          >
+            onPress={() =>
+              props.onLoginPress(
+                props.login.email,
+                props.login.password,
+                this.props.navigation,
+              )
+            }>
             <Text style={styles.buttonStyle}>LOGIN</Text>
           </TouchableOpacity>
         )}
@@ -158,7 +167,7 @@ class LoginForm extends Component {
               onChangeText={text =>
                 this.props.changeFieldValue('password', text)
               }
-              leftIcon={{name: 'maijl'}}
+              leftIcon={{name: 'mail'}}
               errorStyle={{color: 'red'}}
               errorMessage={this.props.login.error}
               secureTextEntry={true}

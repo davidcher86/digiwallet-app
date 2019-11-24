@@ -14,7 +14,7 @@ import {FAB} from 'react-native-paper';
 class App extends Component {
   render() {
     const store = createStore(reducers, {}, applyMiddleware(ReduxThunk));
-    console.log(onLoginPress);
+    // console.log(onLoginPress);
     return (
       <Provider store={store}>
         {/* <Modal

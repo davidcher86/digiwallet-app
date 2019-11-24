@@ -1,5 +1,7 @@
 // import { Actions, ActionConst } from 'react-native-router-flux';
 import firebase from 'firebase';
+import {AsyncStorage} from 'react-native';
+import {NavigationActions} from 'react-navigation';
 
 export const changeUsername = value => {
   return {
@@ -26,6 +28,7 @@ export const changeFieldValue = (field, value) => {
 export const onSignInPress = (email, password) => dispatch => {
   console.log(email);
   console.log(password);
+  console.log(NavigationActions);
   // Actions.account({ formType: 'new' });
   dispatch(changeLoading(true));
   return firebase
@@ -41,7 +44,6 @@ export const onSignInPress = (email, password) => dispatch => {
         .then(response => {
           console.log(response);
           dispatch(resetForm());
-          // return Actions.dashboard();
         })
         .catch(res => {
           console.log(res);
@@ -58,21 +60,34 @@ export const onSignInPress = (email, password) => dispatch => {
     });
 };
 
-export const onLoginPress = (username, password) => dispatch => {
+export const onLoginPress = (username, password, navigation) => dispatch => {
   dispatch(changeLoading(true));
-  firebase
+  return firebase
     .auth()
     .signInWithEmailAndPassword(username, password)
     .then(r => {
-      // console.log(r)
+      console.log(r);
+      if (r.user !== null) {
+        try {
+          AsyncStorage.setItem('digiwalletUserUID', r.user.uid);
+          return navigation.navigate('PrimaryNav');
+        } catch (e) {
+          console.log('Failed to save AsyncStorage user uid');
+        }
+      }
       dispatch(resetForm());
-      // Actions.dashboard();
-      return null;
+      return r;
     })
     .catch(res => {
-      console.log(res);
+      console.log('Error: ', res);
       dispatch(resetForm());
       dispatch(handleError(res.toString()));
+      try {
+        AsyncStorage.setItem('digiwalletUserUID', 'asdfasdasd');
+        return navigation.navigate('PrimaryNav');
+      } catch (e) {
+        console.log('Failed to save AsyncStorage user uid');
+      }
       return null;
     });
 };
