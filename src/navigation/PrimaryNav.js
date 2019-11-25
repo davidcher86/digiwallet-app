@@ -4,8 +4,31 @@ import Account from './../components/account/Account';
 import HomePage from './../components/homePage/HomePage';
 import Dashboard from './../components/dashboard/Dashboard';
 import Transactions from './../components/transactions/Transactions';
-import {Button, Input, Icon} from 'react-native-elements';
+import {Input, Icon} from 'react-native-elements';
+import {
+  ScrollView,
+  SafeAreaView,
+  DrawerItems,
+  View,
+  Button,
+  StyleSheet,
+} from 'react-native';
 import {Text} from 'react-native';
+
+const DrawerWithLogoutButton = props => (
+  <View>
+    {/* <SafeAreaView
+      style={styles.container}
+      forceInset={{top: 'always', horizontal: 'never'}}>
+      <DrawerItems {...props} />
+    </SafeAreaView> */}
+    <Button
+      style={styles.logoutButton}
+      title="Logout"
+      onPress={() => props.navigation.navigate('Login')}
+    />
+  </View>
+);
 
 const PrimaryNav = createDrawerNavigator(
   {
@@ -63,8 +86,21 @@ const PrimaryNav = createDrawerNavigator(
     },
   },
   {
+    contentComponent: DrawerWithLogoutButton,
     headerMode: 'none',
   },
 );
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'column',
+  },
+  logoutButton: {
+    backgroundColor: 'red',
+    position: 'absolute',
+    bottom: 0,
+  },
+});
 
 export default PrimaryNav;

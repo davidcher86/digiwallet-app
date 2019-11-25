@@ -20,18 +20,32 @@ class LoginForm extends Component {
       measurementId: 'G-B372DNG4CY',
     });
 
+    this.getRememberedUser();
     const {currentUser} = firebase.auth();
 
-    var user;
+    // var user;
+    // try {
+    //   user = AsyncStorage.getItem('digiwalletUserU7ID')._55;
+    //   console.log('user: ', user);
+    //   if (user !== null) {
+    //     this.props.navigation.navigate('PrimaryNav');
+    //   }
+    // } catch (e) {
+    //   console.log('Failed to load name.', e);
+    // }
+  }
+
+  getRememberedUser = async navigation => {
     try {
-      user = AsyncStorage.getItem('digiwalletUserU7ID')._55;
-      if (user !== undefined) {
+      const username = await AsyncStorage.getItem('digiwalletUserUID');
+      if (username !== null) {
+        console.log(username);
         this.props.navigation.navigate('PrimaryNav');
       }
-    } catch (e) {
-      console.log('Failed to load name.');
+    } catch (error) {
+      // Error retrieving data
     }
-  }
+  };
 
   renderButton(props) {
     const styles = {
@@ -53,7 +67,7 @@ class LoginForm extends Component {
         </View>
       );
     }
-    console.log('user: ', user);
+
     return (
       <View style={styles.buttonContainerStyle}>
         {this.props.pageSettings.selectedTab === 'login' && (

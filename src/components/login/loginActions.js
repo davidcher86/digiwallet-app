@@ -25,6 +25,25 @@ export const changeFieldValue = (field, value) => {
   };
 };
 
+const rememberUser = async uid => {
+  try {
+    await AsyncStorage.setItem('digiwalletUserUID', uid);
+  } catch (error) {
+    // Error saving data
+  }
+};
+
+// let getRememberedUser = async navigation => {
+//   try {
+//     const username = await AsyncStorage.getItem('digiwalletUserUID');
+//     if (username !== null) {
+//       return username;
+//     }
+//   } catch (error) {
+//     // Error retrieving data
+//   }
+// };
+
 export const onSignInPress = (email, password) => dispatch => {
   console.log(email);
   console.log(password);
@@ -65,12 +84,17 @@ export const onLoginPress = (username, password, navigation) => dispatch => {
     .then(r => {
       console.log(r);
       if (r.user !== null) {
-        try {
-          AsyncStorage.setItem('digiwalletUserUID', r.user.uid);
-          return navigation.navigate('PrimaryNav');
-        } catch (e) {
-          console.log('Failed to save AsyncStorage user uid');
-        }
+        this.getRememberedUser(navigation);
+        // .then(user => {
+        //   console.log(r);
+        // });
+        // console.log(user);
+        // try {
+        //   AsyncStorage.setItem('digiwalletUserUID', r.user.uid);
+        //   return navigation.navigate('PrimaryNav');
+        // } catch (e) {
+        //   console.log('Failed to save AsyncStorage user uid');
+        // }
       }
       dispatch(resetForm());
       return r;
@@ -79,6 +103,13 @@ export const onLoginPress = (username, password, navigation) => dispatch => {
       console.log('Error: ', res);
       dispatch(resetForm());
       dispatch(handleError(res.toString()));
+      // async storeToken(user) {
+      //   try {
+      //      await AsyncStorage.setItem("userData", JSON.stringify(user));
+      //   } catch (error) {
+      //     console.log("Something went wrong", error);
+      //   }
+      // }
       try {
         AsyncStorage.setItem('digiwalletUserUID', 'asdfasdasd');
         return navigation.navigate('PrimaryNav');
