@@ -1,5 +1,5 @@
-// export const logout = () => {
-//     return {
-//         type: 'LOG_OUTK'
-//     };
-// };
+export const toggleNewTransactionModal = () => {
+    return {
+      type: 'TOGGLE_NEW_TRANSACTION',
+    };
+  };

@@ -9,12 +9,15 @@ import * as actions from './newTransactionModalActions';
 
 class NewTransactionModal extends Component {
   render() {
+    const {isModalOpen} = this.props.newTransaction;
+    const {toggleNewTransactionModal} = this.props;
+
     return (
       <View style={styles.containerStyle}>
         <Modal
           animationType="slide"
           transparent={true}
-          visible={false}
+          visible={isModalOpen}
           onRequestClose={() => {
             console.log('Modal has been closed.');
           }}>
@@ -26,7 +29,7 @@ class NewTransactionModal extends Component {
           style={styles.fab}
           small
           icon="plus"
-          onPress={() => console.log('Pressed')}
+          onPress={() => toggleNewTransactionModal()}
         />
       </View>
     );
@@ -63,7 +66,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
-  return {newTransaction: state.newTransactionModal};
+  return {newTransaction: state.newTransactionModal, systemControl: state.systemControl};
 };
 
 export default connect(

@@ -21,10 +21,15 @@ class LoginForm extends Component {
     });
 
     const {currentUser} = firebase.auth();
-    // console.log(currentUser);
-    // console.log(currentUser && currentUser.uid !== null);
-    if (currentUser && currentUser.uid !== null) {
-      // console.log(currentUser);
+
+    var user;
+    try {
+      user = AsyncStorage.getItem('digiwalletUserU7ID')._55;
+      if (user !== undefined) {
+        this.props.navigation.navigate('PrimaryNav');
+      }
+    } catch (e) {
+      console.log('Failed to load name.');
     }
   }
 
@@ -48,13 +53,6 @@ class LoginForm extends Component {
         </View>
       );
     }
-
-    var user;
-      try {
-        user = AsyncStorage.getItem('digiwalletUserU7ID')._55;
-      } catch (e) {
-        console.log('Failed to load name.');
-      }
     console.log('user: ', user);
     return (
       <View style={styles.buttonContainerStyle}>

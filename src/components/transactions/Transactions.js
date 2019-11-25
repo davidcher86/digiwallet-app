@@ -4,6 +4,7 @@ import {Button, Input, Icon} from 'react-native-elements';
 import {connect} from 'react-redux';
 import firebase from 'firebase';
 
+import {FAB} from 'react-native-paper';
 import Header from './../common/Header';
 import * as actions from './transactionsActions';
 
@@ -32,6 +33,7 @@ class Transactions extends Component {
         <View style={styles.containerStyle}>
           <Text>{'Transactions'}</Text>
         </View>
+        <FAB style={styles.fab} small icon="plus" onPress={onLoginPress()} />
       </View>
     );
   }

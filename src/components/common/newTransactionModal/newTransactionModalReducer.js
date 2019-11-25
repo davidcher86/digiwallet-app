@@ -1,12 +1,14 @@
 const initialState = {
-  credit: 0,
-  curentAmount: 0,
-};;
+  isModalOpen: false,
+  amount: 0,
+  PaymentType: 0,
+  date: ''
+};
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    // case 'CHANGE_USERNAME_FIELD':
-    //     return Object.assign({}, state, { username: action.value });
+    case 'TOGGLE_NEW_TRANSACTION':
+            return Object.assign({}, state, { isModalOpen: !state.isModalOpen });
     // case 'CHANGE_PASSWORD_FIELD':
     //     return Object.assign({}, state, { password: action.value });
     // case 'CHANGE_LOADING_STATE':

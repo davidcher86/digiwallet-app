@@ -4,6 +4,7 @@ import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { Button, Input, Icon  } from 'react-native-elements';
 import { connect } from 'react-redux';
 import firebase from 'firebase';
+import {FAB} from 'react-native-paper';
 
 import * as actions from './homePageActions';
 import Header from './../common/Header';
@@ -20,6 +21,7 @@ class HomePage extends Component {
                 <View style={styles.containerStyle}>
                     <Text>{'HomePage'}</Text>
                 </View>
+                {/* <FAB style={styles.fab} small icon="plus" onPress={onLoginPress()} /> */}
             </View>
         );
     }

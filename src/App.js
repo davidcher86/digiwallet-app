@@ -9,7 +9,7 @@ import reducers from './redux';
 import AppNavigator from './navigation/AppNavigation';
 import NewTransactionModal from './components/common/newTransactionModal/NewTransactionModal';
 import {onLoginPress} from './components/systemControl/systemControlActions.js';
-import {FAB} from 'react-native-paper';
+// import {FAB} from 'react-native-paper';
 
 class App extends Component {
   render() {
@@ -28,7 +28,7 @@ class App extends Component {
         {/* </Modal> */}
         <View style={{flex: 1}}>
           <AppNavigator style={{height: '40'}} />
-          <FAB style={styles.fab} small icon="plus" onPress={onLoginPress()} />
+          {/* <FAB style={styles.fab} small icon="plus" onPress={onLoginPress()} /> */}
         </View>
       </Provider>
     );

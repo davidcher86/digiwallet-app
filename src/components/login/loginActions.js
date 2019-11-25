@@ -35,9 +35,6 @@ export const onSignInPress = (email, password) => dispatch => {
     .auth()
     .createUserWithEmailAndPassword(email, password)
     .then(r => {
-      console.log('r: ', r);
-      console.log('r: ', email);
-      console.log('r: ', password);
       return firebase
         .auth()
         .signInWithEmailAndPassword(email, password)
