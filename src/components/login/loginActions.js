@@ -44,7 +44,29 @@ const rememberUser = async uid => {
 //   }
 // };
 
-export const onSignInPress = (email, password) => dispatch => {
+export const setIdentity = value => {
+  console.log('value:', value);
+  return {
+    type: 'CHANGE_USERNAME_FIELD',
+    value,
+  };
+};
+
+export const fetchIdentity = uid => {
+  uid = 'vna4h0LGzogDF0cDADHZ5T0Aj2';
+  var ref = firebase.database().ref('users/vna4h0LGzogDF0cDADHZ5T0Aj2t2/account/-LuvmytchmNViLGsy-RI/');
+  return dispatch => {
+    console.log('uyi:', uid);
+    ref.on('value', snapshot => {
+    // ref.once('value').then(snapshot => {
+      // dispatch(setIdentity(snapshot));
+      console.log('snapshot2: ', snapshot.val());
+      // console.log('snapshot: ', snapshot);
+    });
+  };
+};
+
+export const onSignInPress = (email, password, navigation) => dispatch => {
   console.log(email);
   console.log(password);
   console.log(NavigationActions);
@@ -60,6 +82,7 @@ export const onSignInPress = (email, password) => dispatch => {
         .then(response => {
           console.log(response);
           dispatch(resetForm());
+          return navigation.navigate('Account');
         })
         .catch(res => {
           console.log(res);

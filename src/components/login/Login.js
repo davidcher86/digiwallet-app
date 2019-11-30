@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React, {Component} from 'react';
 import {View, TouchableOpacity, Text, AsyncStorage} from 'react-native';
 import {Button, Input, Icon} from 'react-native-elements';
@@ -22,24 +23,13 @@ class LoginForm extends Component {
 
     this.getRememberedUser();
     const {currentUser} = firebase.auth();
-
-    // var user;
-    // try {
-    //   user = AsyncStorage.getItem('digiwalletUserU7ID')._55;
-    //   console.log('user: ', user);
-    //   if (user !== null) {
-    //     this.props.navigation.navigate('PrimaryNav');
-    //   }
-    // } catch (e) {
-    //   console.log('Failed to load name.', e);
-    // }
   }
 
   getRememberedUser = async navigation => {
     try {
-      const username = await AsyncStorage.getItem('digiwalletUserUID');
-      if (username !== null) {
-        console.log(username);
+      const uid = await AsyncStorage.getItem('digiwalletUserUID');
+      if (uid !== null) {
+        this.props.fetchIdentity(uid);
         this.props.navigation.navigate('PrimaryNav');
       }
     } catch (error) {
@@ -86,11 +76,12 @@ class LoginForm extends Component {
         {this.props.pageSettings.selectedTab === 'signIn' && (
           <TouchableOpacity
             style={styles.buttonContainer}
-            //  onPress={() => {Actions.account()}}
-            onPress={() => props.navigation.navigate('Account', {name: 'Jane'})}
-            //   onPress={() => props.onSignInPress(props.login.newEmail, props.login.newPassword)}
-            //   onPress={this.props.onLoginPres(this.props.login.email, this.props.login.password)}
-          >
+            onPress={() => props.onSignInPress(
+                            props.login.newEmail,
+                            props.login.newPassword,
+                            this.props.navigation)}
+            // onPress={() => props.navigation.navigate('Account', {name: 'Jane'})}
+            >
             <Text style={styles.buttonStyle}>SIGN IN</Text>
           </TouchableOpacity>
         )}

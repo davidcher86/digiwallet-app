@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React, {Component} from 'react';
 import {Provider} from 'react-redux';
 import ReduxThunk from 'redux-thunk';
@@ -9,12 +10,16 @@ import reducers from './redux';
 import AppNavigator from './navigation/AppNavigation';
 import NewTransactionModal from './components/common/newTransactionModal/NewTransactionModal';
 import {onLoginPress} from './components/systemControl/systemControlActions.js';
-// import {FAB} from 'react-native-paper';
+import {FAB} from 'react-native-paper';
+
+import {toggleNewTransactionModal} from './components/common/newTransactionModal/newTransactionModalActions.js';
 
 class App extends Component {
   render() {
     const store = createStore(reducers, {}, applyMiddleware(ReduxThunk));
-    // console.log(onLoginPress);
+    // console.log(store.getState());
+    var state = store.getState();
+    const {systemControl} = state;
     return (
       <Provider store={store}>
         {/* <Modal
@@ -24,11 +29,11 @@ class App extends Component {
           onRequestClose={() => {
             console.log('Modal has been closed.');
           }}> */}
-        <NewTransactionModal />
+        <NewTransactionModal onFabPress={onLoginPress()} />
         {/* </Modal> */}
         <View style={{flex: 1}}>
           <AppNavigator style={{height: '40'}} />
-          {/* <FAB style={styles.fab} small icon="plus" onPress={onLoginPress()} /> */}
+          <FAB style={styles.fab} small icon="plus" onPress={() => store.dispatch(toggleNewTransactionModal())} />
         </View>
       </Provider>
     );
