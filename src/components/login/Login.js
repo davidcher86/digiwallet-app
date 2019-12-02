@@ -22,6 +22,7 @@ class LoginForm extends Component {
 
     this.getRememberedUser();
     const {currentUser} = firebase.auth();
+    console.log('currentUser:', currentUser);
   }
 
   getRememberedUser = async navigation => {

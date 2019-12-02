@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 import Account from './../components/account/Account';
 import HomePage from './../components/homePage/HomePage';
 import Dashboard from './../components/dashboard/Dashboard';
+import {AsyncStorage} from 'react-native';
 import Transactions from './../components/transactions/Transactions';
 import {Input, Icon} from 'react-native-elements';
 import {
@@ -14,6 +15,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import {Text} from 'react-native';
+import firebase from 'firebase';
 
 const DrawerWithLogoutButton = props => (
   <View>
@@ -26,15 +28,19 @@ const DrawerWithLogoutButton = props => (
       style={styles.logoutButton}
       title="Logout"
       onPress={() => {
-        firebase.auth().signOut()
-          .then(res => {
-            // Sign-out successful.
-            console.log(res);
-            props.navigation.navigate('Login');
-          }).catch(function(error) {
-            // An error happened.
-          });
-        // props.navigation.navigate('Login');
+        removeUID();
+        // firebase
+        // .auth()
+        // .signOut()
+        //   .then(res => {
+        //     // Sign-out successful.
+        //     console.log(res);
+        //     props.navigation.navigate('Login');
+        //   })
+        //   .catch(function(error) {
+        //     // An error happened.
+        //   });
+        props.navigation.navigate('Login');
       }}
     />
   </View>
@@ -43,6 +49,7 @@ const DrawerWithLogoutButton = props => (
 const removeUID = async uid => {
   try {
     await AsyncStorage.removeItem('digiwalletUserUID');
+    console.log('removed');
   } catch (error) {
     console.log('error while removing AsyncStorage item');
   }

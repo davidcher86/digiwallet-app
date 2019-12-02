@@ -54,11 +54,13 @@ export const setIdentity = value => {
 
 export const fetchIdentity = uid => {
   uid = 'vna4h0LGzogDF0cDADHZ5T0Aj2';
-  var ref = firebase.database().ref('users/vna4h0LGzogDF0cDADHZ5T0Aj2t2/account/-LuvmytchmNViLGsy-RI/');
+  var ref = firebase
+    .database()
+    .ref('users/vna4h0LGzogDF0cDADHZ5T0Aj2t2/account/-LuvmytchmNViLGsy-RI/');
   return dispatch => {
     console.log('uyi:', uid);
     ref.on('value', snapshot => {
-    // ref.once('value').then(snapshot => {
+      // ref.once('value').then(snapshot => {
       // dispatch(setIdentity(snapshot));
       console.log('snapshot2: ', snapshot.val());
       // console.log('snapshot: ', snapshot);
@@ -94,7 +96,7 @@ export const onSignInPress = (email, password, navigation) => {
         dispatch(handleError(res.toString()));
         return null;
       });
-    };
+  };
 };
 
 export const onLoginPress = (username, password, navigation) => {
@@ -134,7 +136,7 @@ export const onLoginPress = (username, password, navigation) => {
         }
         return null;
       });
-  }
+  };;
 };
 
 export const changeLoading = value => {

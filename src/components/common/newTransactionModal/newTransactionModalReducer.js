@@ -4,7 +4,7 @@ const initialState = {
   amount: 0,
   paymentType: 'credit',
   paymentDetails: {
-    cardType: 'Visa'
+    cardType: 'Visa',
   },
   description: '',
   date: '',
@@ -19,7 +19,7 @@ export default (state = initialState, action) => {
       return Object.assign({}, state, {[action.field]: action.value});
     case 'UPDATE_PAYMENT_DETAILS_FORM':
       paymentDetails[action.field] = action.value;
-      return Object.assign({}, state, { paymentDetails: paymentDetails });
+      return Object.assign({}, state, {paymentDetails: paymentDetails});
     // case 'CHANGE_ERROR':
     //     return Object.assign({}, state, { error: action.value });
     // case 'RESET_FORM':
@@ -28,4 +28,3 @@ export default (state = initialState, action) => {
       return state;
   }
 };
-

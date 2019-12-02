@@ -19,3 +19,8 @@ export const changeFieldValue = (field, value) => {
     field,
   };
 };
+
+export const handleAddNewTransactionAccount = newTransaction => dispatch => {
+  console.log('add new transaction');
+  console.log(newTransaction);
+};

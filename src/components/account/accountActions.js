@@ -53,10 +53,6 @@ export const handlePickerChange = (itemValue, itemIndex) => {
   };
 };
 
-export const handleRegisterAccount = newTransaction => dispatch => {
-    console.log('add new transaction');
-};
-
 export const handleRegisterAccount = account => dispatch => {
   const {currentUser} = firebase.auth();
   const json = {
