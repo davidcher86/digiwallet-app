@@ -25,10 +25,28 @@ const DrawerWithLogoutButton = props => (
     <Button
       style={styles.logoutButton}
       title="Logout"
-      onPress={() => props.navigation.navigate('Login')}
+      onPress={() => {
+        firebase.auth().signOut()
+          .then(res => {
+            // Sign-out successful.
+            console.log(res);
+            props.navigation.navigate('Login');
+          }).catch(function(error) {
+            // An error happened.
+          });
+        // props.navigation.navigate('Login');
+      }}
     />
   </View>
 );
+
+const removeUID = async uid => {
+  try {
+    await AsyncStorage.removeItem('digiwalletUserUID');
+  } catch (error) {
+    console.log('error while removing AsyncStorage item');
+  }
+};
 
 const PrimaryNav = createDrawerNavigator(
   {

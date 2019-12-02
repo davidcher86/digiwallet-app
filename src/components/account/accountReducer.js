@@ -14,7 +14,7 @@ const initialState = {
     paymentDate: '1',
     amount: 10000,
   },
-  transactions: [],
+  transactions: {},
   liability: 0,
   assets: 1000,
   validationErrors: {

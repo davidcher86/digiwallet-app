@@ -3,7 +3,6 @@ import React, {Component} from 'react';
 import {View, TouchableOpacity, Text, AsyncStorage} from 'react-native';
 import {Button, Input, Icon} from 'react-native-elements';
 import {connect} from 'react-redux';
-// import { Actions } from 'react-native-router-flux';
 import firebase from 'firebase';
 
 import * as loginActions from './loginActions';

@@ -9,8 +9,6 @@ export const changeAccountFieldValue = (field, value) => {
 };
 
 export const changeUserFieldValue = (field, value) => {
-  console.log(field);
-  console.log(value);
   return {
     type: 'UPDATE_ACCOUNT_FORM_USER',
     value,
@@ -55,6 +53,10 @@ export const handlePickerChange = (itemValue, itemIndex) => {
   };
 };
 
+export const handleRegisterAccount = newTransaction => dispatch => {
+    console.log('add new transaction');
+};
+
 export const handleRegisterAccount = account => dispatch => {
   const {currentUser} = firebase.auth();
   const json = {
@@ -64,7 +66,7 @@ export const handleRegisterAccount = account => dispatch => {
     transactions: account.transactions,
     assets: account.assets,
   };
-  console.log('json: ', json);
+  // console.log('json: ', json);
   firebase
     .database()
     .ref(`/users/${currentUser.uid}/account`)

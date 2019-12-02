@@ -29,7 +29,7 @@ const rememberUser = async uid => {
   try {
     await AsyncStorage.setItem('digiwalletUserUID', uid);
   } catch (error) {
-    // Error saving data
+    console.log('error while setting AsyncStorage item');
   }
 };
 
@@ -66,81 +66,75 @@ export const fetchIdentity = uid => {
   };
 };
 
-export const onSignInPress = (email, password, navigation) => dispatch => {
-  console.log(email);
-  console.log(password);
-  console.log(NavigationActions);
-  // Actions.account({ formType: 'new' });
-  dispatch(changeLoading(true));
-  return firebase
-    .auth()
-    .createUserWithEmailAndPassword(email, password)
-    .then(r => {
-      return firebase
-        .auth()
-        .signInWithEmailAndPassword(email, password)
-        .then(response => {
-          console.log(response);
-          dispatch(resetForm());
-          return navigation.navigate('Account');
-        })
-        .catch(res => {
-          console.log(res);
-          dispatch(resetForm());
-          dispatch(handleError(res.toString()));
-          return null;
-        });
-    })
-    .catch(res => {
-      console.log(res);
-      dispatch(resetForm());
-      dispatch(handleError(res.toString()));
-      return null;
-    });
+export const onSignInPress = (email, password, navigation) => {
+  return dispatch => {
+    dispatch(changeLoading(true));
+    firebase
+      .auth()
+      .createUserWithEmailAndPassword(email, password)
+      .then(r => {
+        return firebase
+          .auth()
+          .signInWithEmailAndPassword(email, password)
+          .then(response => {
+            console.log(response);
+            dispatch(resetForm());
+            return navigation.navigate('Account');
+          })
+          .catch(res => {
+            console.log(res);
+            dispatch(resetForm());
+            dispatch(handleError(res.toString()));
+            return null;
+          });
+      })
+      .catch(res => {
+        console.log(res);
+        dispatch(resetForm());
+        dispatch(handleError(res.toString()));
+        return null;
+      });
+    };
 };
 
-export const onLoginPress = (username, password, navigation) => dispatch => {
-  dispatch(changeLoading(true));
-  return firebase
-    .auth()
-    .signInWithEmailAndPassword(username, password)
-    .then(r => {
-      console.log(r);
-      if (r.user !== null) {
-        this.getRememberedUser(navigation);
-        // .then(user => {
-        //   console.log(r);
-        // });
-        // console.log(user);
-        // try {
-        //   AsyncStorage.setItem('digiwalletUserUID', r.user.uid);
-        //   return navigation.navigate('PrimaryNav');
-        // } catch (e) {
-        //   console.log('Failed to save AsyncStorage user uid');
-        // }
-      }
-      dispatch(resetForm());
-      return r;
-    })
-    .catch(res => {
-      console.log('Error: ', res);
-      dispatch(resetForm());
-      dispatch(handleError(res.toString()));
-      // async storeToken(user) {
-      //   try {
-      //      await AsyncStorage.setItem("userData", JSON.stringify(user));
-      //   } catch (error) {
-      //     console.log("Something went wrong", error);
-      //   }
-      // }
-      try {
-        AsyncStorage.setItem('digiwalletUserUID', 'asdfasdasd');
-        return navigation.navigate('PrimaryNav');
-      } catch (e) {
-        console.log('Failed to save AsyncStorage user uid');
-      }
-      return null;
-    });
+export const onLoginPress = (username, password, navigation) => {
+  return dispatch => {
+    dispatch(changeLoading(true));
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(username, password)
+      .then(r => {
+        console.log(r);
+        if (r.user !== null) {
+          this.getRememberedUser(navigation);
+          // .then(user => {
+          //   console.log(r);
+          // });
+          // console.log(user);
+          // try {
+          //   AsyncStorage.setItem('digiwalletUserUID', r.user.uid);
+          //   return navigation.navigate('PrimaryNav');
+          // } catch (e) {
+          //   console.log('Failed to save AsyncStorage user uid');
+          // }
+        }
+        dispatch(resetForm());
+        return r;
+      })
+      .catch(res => {
+        console.log('Error: ', res);
+        dispatch(resetForm());
+        dispatch(handleError(res.toString()));
+
+        try {
+          AsyncStorage.setItem('digiwalletUserUID', 'asdfasdasd');
+          return navigation.navigate('PrimaryNav');
+        } catch (e) {
+          console.log('Failed to save AsyncStorage user uid');
+        }
+        return null;
+      });
+  }
 };
 
 export const changeLoading = value => {

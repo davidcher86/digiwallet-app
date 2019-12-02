@@ -14,8 +14,17 @@ class NewTransactionModal extends Component {
 
   render() {
     const {isModalOpen} = this.props.newTransaction;
-    const {toggleNewTransactionModal, onFabPress} = this.props;
+    const {newTransaction, changePaymentDetailsFieldValue, handleRegisterAccount, toggleNewTransactionModal, onFabPress} = this.props;
     // console.log(toggleNewTransactionModal());
+
+    const renderDays = () => {
+      var arr = [];
+      for (var i = 1; i <= 31; i++) {
+        arr.push(<Picker.Item label={i.toString()} value={i} />);
+      }
+      return arr;
+    };
+
     return (
       <View style={styles.containerStyle}>
         <Modal
@@ -26,25 +35,82 @@ class NewTransactionModal extends Component {
           onRequestClose={() => {
             console.log('Modal has been closed.');
           }}>
+
+          <View>
+            <Text>Transaction Type</Text>
+            <Picker
+              selectedValue={newTransaction.transactionType}
+              style={{height: 50, width: 100}}
+              onValueChange={itemValue => changeFieldValue('transactionType', itemValue)}>
+              <Picker.Item label="Expense" value="expense" />
+              <Picker.Item label="Income" value="income" />
+            </Picker>
+          </View>
+
           <View style={styles.modalInnerContainerStyle}>
             <Input
               placeholder="123456"
               style={styles.inputStyle}
-              value={user.lastName}
-              onChangeText={text => changeUserFieldValue('lastName', text)}
+              value={newTransaction.amount}
+              onChangeText={text => changeFieldValue('amount', text)}
               // leftIcon={{ name: 'maijl' }}
               errorStyle={{color: 'red'}}
-              errorMessage={validationErrors.lastNameError}
-              label="Last Name" />
+              // errorMessage={validationErrors.lastNameError}
+              label="Amount" />
           </View>
-          <Text>Card Type</Text>
+
+          <View>
+              <Text>Date</Text>
               <Picker
-                selectedValue={creditCard.cardType}
+                selectedValue={newTransaction.date}
                 style={{height: 50, width: 100}}
-                onValueChange={itemValue => changeCreditFieldValue('cardType', itemValue)}>
-                <Picker.Item label="Visa" value="visa" />
-                <Picker.Item label="Mastercard" value="mastercard" />
+                onValueChange={itemValue =>
+                  changeFieldValue('date', itemValue)
+                }>
+                {renderDays()}
               </Picker>
+            </View>
+
+          <View>
+            <Text>Payment Type</Text>
+            <Picker
+              selectedValue={newTransaction.paymentType}
+              style={{height: 50, width: 100}}
+              onValueChange={itemValue => changeFieldValue('paymentType', itemValue)}>
+              <Picker.Item label="Cash" value="cash" />
+              <Picker.Item label="Credit" value="credit" />
+            </Picker>
+          </View>
+
+          {newTransaction.paymentType === 'credit' && <View>
+            <Text>Card Type</Text>
+            <Picker
+              selectedValue={creditCard.cardType}
+              style={{height: 50, width: 100}}
+              onValueChange={itemValue => changePaymentDetailsFieldValue('cardType', itemValue)}>
+              <Picker.Item label="Visa" value="visa" />
+              <Picker.Item label="Mastercard" value="mastercard" />
+            </Picker>
+          </View>}
+
+
+          <View style={styles.modalInnerContainerStyle}>
+            <Input
+              placeholder="123456"
+              style={styles.inputStyle}
+              value={newTransaction.description}
+              onChangeText={text => changeFieldValue('description', text)}
+              // leftIcon={{ name: 'maijl' }}
+              errorStyle={{color: 'red'}}
+              // errorMessage={validationErrors.lastNameError}
+              label="Description" />
+          </View>
+
+          <TouchableOpacity
+            onPress={() => handleRegisterAccount(this.props.account)}
+            style={styles.buttonContainer}>
+            <Text style={styles.buttonStyle}>ADD</Text>
+          </TouchableOpacity>
         </Modal>
       </View>
     );
@@ -58,6 +124,11 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     flexDirection: 'column',
+  },
+  buttonContainerStyle: {
+    backgroundColor: '#2980b6',
+    paddingVertical: 15,
+    flexDirection: 'row',
   },
   modalInnerContainerStyle: {
     height: '80%',

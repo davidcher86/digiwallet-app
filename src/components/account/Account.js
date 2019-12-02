@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React, {Component} from 'react';
-import {View, TouchableOpacity, Text, Picker, Item} from 'react-native';
+import {View, TouchableOpacity, Text, Picker, Item, StyleSheet} from 'react-native';
 import {Button, Input, Icon} from 'react-native-elements';
 import {connect} from 'react-redux';
 import firebase from 'firebase';
@@ -12,35 +12,6 @@ import * as actions from './accountActions';
 
 class Account extends Component {
   render() {
-    const styles = {
-      containerStyle: {
-        padding: 20,
-        flexDirection: 'column',
-        flex: 1,
-        justifyContent: 'space-between',
-      },
-      buttonContainerStyle: {
-        backgroundColor: '#2980b6',
-        paddingVertical: 15,
-        flexDirection: 'row',
-      },
-      btnNxtContainer: {
-        flex: 1,
-        justifyContent: 'center',
-      },
-      btnPrvContainer: {
-        flex: 1,
-        justifyContent: 'center',
-      },
-      inputStyle: {
-        height: 40,
-        backgroundColor: 'rgba(225,225,225,0.2)',
-        marginBottom: 10,
-        padding: 10,
-        color: '#fff',
-      },
-    };
-
     const {
       user,
       pageSettings,
@@ -71,7 +42,7 @@ class Account extends Component {
     const onNextStep = next => {
       handleStep(next);
     };
-    console.log(account.assets);
+
     return (
       <View style={styles.containerStyle}>
         <ProgressSteps activeStep={pageSettings.step}>
@@ -215,6 +186,35 @@ class Account extends Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  containerStyle: {
+    padding: 20,
+    flexDirection: 'column',
+    flex: 1,
+    justifyContent: 'space-between',
+  },
+  buttonContainerStyle: {
+    backgroundColor: '#2980b6',
+    paddingVertical: 15,
+    flexDirection: 'row',
+  },
+  btnNxtContainer: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  btnPrvContainer: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  inputStyle: {
+    height: 40,
+    backgroundColor: 'rgba(225,225,225,0.2)',
+    marginBottom: 10,
+    padding: 10,
+    color: '#fff',
+  },
+});
 
 const mapStateToProps = state => {
   return {
