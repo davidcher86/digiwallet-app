@@ -20,12 +20,12 @@ class LoginForm extends Component {
     //   measurementId: 'G-B372DNG4CY',
     // });
 
-    this.getRememberedUser();
+    // this.getRememberedUser();
     // const {currentUser} = firebase.auth();
     // console.log('currentUser:', currentUser);
   }
 
-  getRememberedUser = async navigation => {
+  getRememberedUser = async () => {
     try {
       const uid = await AsyncStorage.getItem('digiwalletUserUID');
       if (uid !== null) {

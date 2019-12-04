@@ -29,7 +29,7 @@ const rememberUser = async uid => {
   try {
     await AsyncStorage.setItem('digiwalletUserUID', uid);
   } catch (error) {
-    console.log('error while setting AsyncStorage item');
+    console.log('error while setting AsyncStorage item', error);
   }
 };
 
@@ -75,22 +75,15 @@ export const onSignInPress = (email, password, navigation) => {
       .auth()
       .createUserWithEmailAndPassword(email, password)
       .then(r => {
-        console.log('r', r);
         return firebase
           .auth()
           .signInWithEmailAndPassword(email, password)
           .then(response => {
-            console.log(response);
             dispatch(resetForm());
             rememberUser(response.user.uid);
             return navigation.navigate('Account');
-            // return navigation.navigate('Account', {
-            //   uid: r.user.uid,
-            //   type: 'new',
-            // });
           })
           .catch(res => {
-            console.log(res);
             dispatch(resetForm());
             dispatch(handleError(res.toString()));
             return null;
@@ -111,10 +104,10 @@ export const onLoginPress = (username, password, navigation) => {
     firebase
       .auth()
       .signInWithEmailAndPassword(username, password)
-      .then(r => {
-        console.log(r);
-        if (r.user !== null) {
-          this.getRememberedUser(navigation);
+      .then(res => {
+        if (res.user !== null) {
+          rememberUser(res.user.uid);
+          navigation.navigate('HomePage');
           // .then(user => {
           //   console.log(r);
           // });
@@ -127,7 +120,7 @@ export const onLoginPress = (username, password, navigation) => {
           // }
         }
         dispatch(resetForm());
-        return r;
+        return res;
       })
       .catch(res => {
         console.log('Error: ', res);
