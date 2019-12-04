@@ -11,10 +11,24 @@ import AppNavigator from './navigation/AppNavigation';
 import NewTransactionModal from './components/common/newTransactionModal/NewTransactionModal';
 import {onLoginPress} from './components/systemControl/systemControlActions.js';
 import {FAB} from 'react-native-paper';
-
+import firebase from 'firebase';
 import {toggleNewTransactionModal} from './components/common/newTransactionModal/newTransactionModalActions.js';
 
 class App extends Component {
+  componentDidMount() {
+    console.log('firebase initilised');
+    firebase.initializeApp({
+      apiKey: 'AIzaSyBuhrwvn0lV7B-ugmVEmEXYHsIa_8e-mko',
+      authDomain: 'authproj-3e757.firebaseapp.com',
+      databaseURL: 'https://authproj-3e757.firebaseio.com',
+      projectId: 'authproj-3e757',
+      storageBucket: 'authproj-3e757.appspot.com',
+      messagingSenderId: '107699463403',
+      appId: '1:107699463403:web:4ed1a7a0fb64e596684aae',
+      measurementId: 'G-B372DNG4CY',
+    });
+  };
+    
   render() {
     const store = createStore(reducers, {}, applyMiddleware(ReduxThunk));
     // console.log(store.getState());

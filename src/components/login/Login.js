@@ -9,20 +9,20 @@ import * as loginActions from './loginActions';
 
 class LoginForm extends Component {
   componentDidMount() {
-    firebase.initializeApp({
-      apiKey: 'AIzaSyBuhrwvn0lV7B-ugmVEmEXYHsIa_8e-mko',
-      authDomain: 'authproj-3e757.firebaseapp.com',
-      databaseURL: 'https://authproj-3e757.firebaseio.com',
-      projectId: 'authproj-3e757',
-      storageBucket: 'authproj-3e757.appspot.com',
-      messagingSenderId: '107699463403',
-      appId: '1:107699463403:web:4ed1a7a0fb64e596684aae',
-      measurementId: 'G-B372DNG4CY',
-    });
+    // firebase.initializeApp({
+    //   apiKey: 'AIzaSyBuhrwvn0lV7B-ugmVEmEXYHsIa_8e-mko',
+    //   authDomain: 'authproj-3e757.firebaseapp.com',
+    //   databaseURL: 'https://authproj-3e757.firebaseio.com',
+    //   projectId: 'authproj-3e757',
+    //   storageBucket: 'authproj-3e757.appspot.com',
+    //   messagingSenderId: '107699463403',
+    //   appId: '1:107699463403:web:4ed1a7a0fb64e596684aae',
+    //   measurementId: 'G-B372DNG4CY',
+    // });
 
     this.getRememberedUser();
-    const {currentUser} = firebase.auth();
-    console.log('currentUser:', currentUser);
+    // const {currentUser} = firebase.auth();
+    // console.log('currentUser:', currentUser);
   }
 
   getRememberedUser = async navigation => {

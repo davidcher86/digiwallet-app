@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React, {Component} from 'react';
-import {View, TouchableOpacity, Text, Picker, Item, StyleSheet} from 'react-native';
+import {View, TouchableOpacity, Text, Picker, Item, StyleSheet, AsyncStorage} from 'react-native';
 import {Button, Input, Icon} from 'react-native-elements';
 import {connect} from 'react-redux';
 import firebase from 'firebase';
@@ -11,6 +11,22 @@ import DatePicker from 'react-native-datepicker';
 import * as actions from './accountActions';
 
 class Account extends Component {
+    getRememberedUser = async () => {
+        try {
+            const uid = await AsyncStorage.getItem('digiwalletUserUID');
+            console.log(uid);
+            this.props.changeUserFieldValue('uid', uid);
+            return uid;
+        } catch (error) {
+            console.log(error);
+            // Error retrieving data
+        }
+    };
+
+    componentDidMount() {
+        this.getRememberedUser();
+    }
+
   render() {
     const {
       user,
@@ -34,7 +50,7 @@ class Account extends Component {
     const renderDays = () => {
       var arr = [];
       for (var i = 1; i <= 31; i++) {
-        arr.push(<Picker.Item label={i.toString()} value={i} />);
+        arr.push(<Picker.Item key={i} label={i.toString()} value={i} />);
       }
       return arr;
     };
@@ -42,6 +58,9 @@ class Account extends Component {
     const onNextStep = next => {
       handleStep(next);
     };
+    console.log(this.props);
+    console.log(this.props.navigation.getParam('uid'));
+    console.log(this.props.navigation.getParam('type'));
 
     return (
       <View style={styles.containerStyle}>
@@ -175,7 +194,7 @@ class Account extends Component {
                 {renderDays()}
               </Picker>
               <TouchableOpacity
-                onPress={() => handleRegisterAccount(this.props.account)}
+                onPress={() => handleRegisterAccount(this.props.account, this.props.account.user.uid, this.props.navigation)}
                 style={styles.buttonContainer}>
                 <Text style={styles.buttonStyle}>ADD</Text>
               </TouchableOpacity>

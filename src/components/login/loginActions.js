@@ -56,7 +56,7 @@ export const fetchIdentity = uid => {
   uid = 'vna4h0LGzogDF0cDADHZ5T0Aj2';
   var ref = firebase
     .database()
-    .ref('users/vna4h0LGzogDF0cDADHZ5T0Aj2t2/account/-LuvmytchmNViLGsy-RI/');
+    .ref('users/' + uid + '/account/-LuvmytchmNViLGsy-RI/');
   return dispatch => {
     console.log('uyi:', uid);
     ref.on('value', snapshot => {
@@ -75,13 +75,19 @@ export const onSignInPress = (email, password, navigation) => {
       .auth()
       .createUserWithEmailAndPassword(email, password)
       .then(r => {
+        console.log('r', r);
         return firebase
           .auth()
           .signInWithEmailAndPassword(email, password)
           .then(response => {
             console.log(response);
             dispatch(resetForm());
+            rememberUser(response.user.uid);
             return navigation.navigate('Account');
+            // return navigation.navigate('Account', {
+            //   uid: r.user.uid,
+            //   type: 'new',
+            // });
           })
           .catch(res => {
             console.log(res);
@@ -136,7 +142,7 @@ export const onLoginPress = (username, password, navigation) => {
         }
         return null;
       });
-  };;
+  };
 };
 
 export const changeLoading = value => {

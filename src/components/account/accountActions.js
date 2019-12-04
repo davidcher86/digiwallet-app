@@ -53,8 +53,7 @@ export const handlePickerChange = (itemValue, itemIndex) => {
   };
 };
 
-export const handleRegisterAccount = account => dispatch => {
-  const {currentUser} = firebase.auth();
+export const handleRegisterAccount = (account, uid, navigation) => dispatch => {
   const json = {
     sallary: account.sallary,
     creditCards: [account.creditCard],
@@ -65,10 +64,12 @@ export const handleRegisterAccount = account => dispatch => {
   // console.log('json: ', json);
   firebase
     .database()
-    .ref(`/users/${currentUser.uid}/account`)
+    .ref(`/users/${uid}/account`)
     .push(json)
     .then(res => {
       console.log(res);
+      navigation.navigate('HomePage');
+      return res;
     })
     .catch(err => {
       console.log(err);
