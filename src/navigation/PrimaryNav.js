@@ -49,9 +49,8 @@ const DrawerWithLogoutButton = props => (
 const removeUID = async uid => {
   try {
     await AsyncStorage.removeItem('digiwalletUserUID');
-    console.log('removed');
   } catch (error) {
-    console.log('error while removing AsyncStorage item');
+    console.log('error while removing AsyncStorage item ', error);
   }
 };
 

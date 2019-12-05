@@ -1,3 +1,5 @@
+import firebase from 'firebase';
+
 export const toggleNewTransactionModal = () => {
   return {
     type: 'TOGGLE_NEW_TRANSACTION',
@@ -20,7 +22,16 @@ export const changeFieldValue = (field, value) => {
   };
 };
 
-export const handleAddNewTransactionAccount = newTransaction => dispatch => {
+export const handleAddNewTransactionAccount = (newTransaction, uid) => dispatch => {
   console.log('add new transaction');
-  console.log(newTransaction);
+  var data = {
+    transactionType: newTransaction.transactionType,
+    amount: newTransaction.uid,
+    cardType: newTransaction.paymentType.cardType,
+    paymentDetails: newTransaction.paymentDetails,
+    date: newTransaction.date,
+    description: newTransaction.description,
+  };
+  console.log(data);
+  var commentsRef = firebase.database().ref('users/' + uid);
 };

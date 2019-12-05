@@ -35,7 +35,7 @@ class NewTransactionModal extends Component {
     const renderDays = () => {
       var arr = [];
       for (var i = 1; i <= 31; i++) {
-        arr.push(<Picker.Item label={i.toString()} value={i} />);
+        arr.push(<Picker.Item key={i} label={i.toString()} value={i} />);
       }
       return arr;
     };

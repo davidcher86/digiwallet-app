@@ -108,16 +108,6 @@ export const onLoginPress = (username, password, navigation) => {
         if (res.user !== null) {
           rememberUser(res.user.uid);
           navigation.navigate('HomePage');
-          // .then(user => {
-          //   console.log(r);
-          // });
-          // console.log(user);
-          // try {
-          //   AsyncStorage.setItem('digiwalletUserUID', r.user.uid);
-          //   return navigation.navigate('PrimaryNav');
-          // } catch (e) {
-          //   console.log('Failed to save AsyncStorage user uid');
-          // }
         }
         dispatch(resetForm());
         return res;
