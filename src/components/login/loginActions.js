@@ -117,12 +117,12 @@ export const onLoginPress = (username, password, navigation) => {
         dispatch(resetForm());
         dispatch(handleError(res.toString()));
 
-        try {
-          AsyncStorage.setItem('digiwalletUserUID', 'asdfasdasd');
-          return navigation.navigate('PrimaryNav');
-        } catch (e) {
-          console.log('Failed to save AsyncStorage user uid');
-        }
+        // try {
+        //   AsyncStorage.setItem('digiwalletUserUID', 'asdfasdasd');
+        //   return navigation.navigate('PrimaryNav');
+        // } catch (e) {
+        //   console.log('Failed to save AsyncStorage user uid');
+        // }
         return null;
       });
   };

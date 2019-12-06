@@ -8,38 +8,41 @@ import Transactions from './../components/transactions/Transactions';
 import {Input, Icon} from 'react-native-elements';
 import {
   ScrollView,
-  SafeAreaView,
   DrawerItems,
   View,
   Button,
   StyleSheet,
+  Text,
 } from 'react-native';
-import {Text} from 'react-native';
 import firebase from 'firebase';
 
 const DrawerWithLogoutButton = props => (
   <View>
-    {/* <SafeAreaView
-      style={styles.container}
-      forceInset={{top: 'always', horizontal: 'never'}}>
-      <DrawerItems {...props} />
-    </SafeAreaView> */}
+    <Button
+      style={styles.logoutButton}
+      title="Home Page"
+      onPress={() => props.navigation.navigate('HomePage')}
+    />
+    <Button
+      style={styles.logoutButton}
+      title="Dashboard"
+      onPress={() => props.navigation.navigate('Dashboard')}
+    />
+    <Button
+      style={styles.logoutButton}
+      title="Account"
+      onPress={() => props.navigation.navigate('Account')}
+    />
+    <Button
+      style={styles.logoutButton}
+      title="Transactions"
+      onPress={() => props.navigation.navigate('Transactions')}
+    />
     <Button
       style={styles.logoutButton}
       title="Logout"
       onPress={() => {
         removeUID();
-        // firebase
-        // .auth()
-        // .signOut()
-        //   .then(res => {
-        //     // Sign-out successful.
-        //     console.log(res);
-        //     props.navigation.navigate('Login');
-        //   })
-        //   .catch(function(error) {
-        //     // An error happened.
-        //   });
         props.navigation.navigate('Login');
       }}
     />
@@ -121,6 +124,9 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   logoutButton: {
+    marginBottom: 30,
+    marginTop: 30,
+    justifyContent: 'space-between',
     backgroundColor: 'red',
     position: 'absolute',
     bottom: 0,

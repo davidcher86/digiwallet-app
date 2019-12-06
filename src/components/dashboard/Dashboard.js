@@ -33,7 +33,7 @@ class Dashboard extends Component {
         <View style={styles.containerStyle}>
           <Text>{'Dashboard'}</Text>
         </View>
-        <FAB style={styles.fab} small icon="plus" onPress={onLoginPress()} />
+        {/* <FAB style={styles.fab} small icon="plus" onPress={onLoginPress()} /> */}
       </View>
     );
   }
