@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import {Provider} from 'react-redux';
 import ReduxThunk from 'redux-thunk';
 import {createStore, applyMiddleware} from 'redux';
-import {StyleSheet, View, Modal} from 'react-native';
+import {StyleSheet, View, Modal, KeyboardAvoidingView} from 'react-native';
 import {connect} from 'react-redux';
 
 import reducers from './redux';
@@ -35,21 +35,15 @@ class App extends Component {
     var state = store.getState();
     const {systemControl} = state;
     return (
-      <Provider store={store}>
-        {/* <Modal
-          animationType="slide"
-          transparent={true}
-          visible={true}
-          onRequestClose={() => {
-            console.log('Modal has been closed.');
-          }}> */}
-        <NewTransactionModal onFabPress={onLoginPress()} />
-        {/* </Modal> */}
-        <View style={{flex: 1}}>
-          <AppNavigator style={{height: '40'}} />
-          <FAB style={styles.fab} small icon="plus" onPress={() => store.dispatch(toggleNewTransactionModal())} />
-        </View>
-      </Provider>
+      <KeyboardAvoidingView style={{flex: 1}} behavior="padding" enabled>
+        <Provider store={store}>
+          <NewTransactionModal onFabPress={onLoginPress()} />
+          <View style={{flex: 1}}>
+            <AppNavigator style={{height: '40'}} />
+            <FAB style={styles.fab} small icon="plus" onPress={() => store.dispatch(toggleNewTransactionModal())} />
+          </View>
+        </Provider>
+      </KeyboardAvoidingView>
     );
   }
 }

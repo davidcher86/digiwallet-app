@@ -34,7 +34,7 @@ export const changeFieldValue = (field, value) => {
   };
 };
 
-export const handleAddNewTransactionAccount = (newTransaction,uid) => dispatch => {
+export const handleAddNewTransactionAccount = (newTransaction, uid) => dispatch => {
   console.log('add new transaction');
   var data = {
     transactionType: newTransaction.transactionType,
@@ -43,6 +43,8 @@ export const handleAddNewTransactionAccount = (newTransaction,uid) => dispatch =
     paymentDetails: newTransaction.paymentDetails,
     date: newTransaction.date,
     description: newTransaction.description,
+    mainCategory: newTransaction.mainCategory,
+    subCategory: newTransaction.subCategory,
   };
   console.log(data);
   // var transactionsRef = firebase.database().ref('users/' + uid + '/account/transactions');

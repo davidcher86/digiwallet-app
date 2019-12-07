@@ -2,6 +2,12 @@ const initialState = {
   isModalOpen: false,
   transactionType: 'expense',
   amount: 0,
+  categoryList: {
+    car: ['Gas', 'license Renewel', 'Insuranes'],
+    'house Hold': ['Electric Bill', 'Water Bill', 'Gas Bill'],
+  },
+  mainCategory: '',
+  subCategory: '',
   paymentType: 'credit',
   paymentDetails: {
     cardType: 'Visa',

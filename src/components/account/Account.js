@@ -36,6 +36,7 @@ class Account extends Component {
       creditCard,
       sallary,
     } = this.props;
+
     const {
       changeTab,
       handleStep,

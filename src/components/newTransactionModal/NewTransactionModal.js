@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React, {Component} from 'react';
 import {
   View,
@@ -5,6 +6,8 @@ import {
   Text,
   Modal,
   StyleSheet,
+  KeyboardAvoidingView,
+  ScrollView,
   Picker,
 } from 'react-native';
 import {Button, Input, Icon} from 'react-native-elements';
@@ -21,7 +24,7 @@ class NewTransactionModal extends Component {
   };
 
   render() {
-    const {isModalOpen} = this.props.newTransaction;
+    const {isModalOpen, categoryList, subCategory} = this.props.newTransaction;
     const {
       newTransaction,
       paymentDetails,
@@ -32,7 +35,7 @@ class NewTransactionModal extends Component {
       identity,
       onFabPress,
     } = this.props;
-    console.log('identity: ', identity);
+    // console.log('identity: ', identity);
 
     const renderDays = () => {
       var arr = [];
@@ -42,8 +45,31 @@ class NewTransactionModal extends Component {
       return arr;
     };
 
+    const renderMainCategories = () => {
+      var mainCategories = [];
+
+      for (let category in categoryList) {
+        mainCategories.push(<Picker.Item key={category} label={category} value={category} />);
+      }
+
+      return mainCategories;
+    };
+
+    const renderSubCategories = () => {
+      var subCategories = [];
+      let mainCategory = newTransaction.mainCategory;
+      console.log('mainCategory', mainCategory);
+      if (mainCategory !== null && mainCategory !== '') {
+        newTransaction.categoryList[mainCategory].forEach(category => {
+          subCategories.push(<Picker.Item key={category} label={category} value={category} />);
+        });
+      }
+      console.log('subCategories', subCategories);
+      return subCategories;
+    };
+
     return (
-      <View style={styles.containerStyle}>
+      <KeyboardAvoidingView style={styles.containerStyle} behavior="padding" enabled>
         <Modal
           animationType="slide"
           transparent={true}
@@ -52,7 +78,7 @@ class NewTransactionModal extends Component {
           onRequestClose={() => {
             console.log('Modal has been closed.');
           }}>
-          <View style={styles.modalInnerContainerStyle}>
+          <ScrollView style={styles.modalInnerContainerStyle}>
             <View>
               <Text>Transaction Type</Text>
               <Picker
@@ -78,6 +104,29 @@ class NewTransactionModal extends Component {
                 label="Amount"
               />
             </View>
+
+            <View>
+              <Text>Main Category</Text>
+              <Picker
+                selectedValue={newTransaction.mainCategory}
+                style={{height: 50, width: 100}}
+                onValueChange={itemValue => changeFieldValue('mainCategory', itemValue)}>
+                  <Picker.Item key={'*'} label={''} value={''} />
+                  {renderMainCategories()}
+              </Picker>
+            </View>
+
+            {newTransaction.mainCategory !== '' && <View>
+              <Text>Sub Category</Text>
+              <Picker
+                selectedValue={newTransaction.subCategory}
+                style={{height: 50, width: 100}}
+                onValueChange={itemValue =>
+                  changeFieldValue('subCategory', itemValue)
+                }>
+                  {renderSubCategories()}
+              </Picker>
+            </View>}
 
             <View>
               <Text>Date</Text>
@@ -153,9 +202,9 @@ class NewTransactionModal extends Component {
               style={styles.buttonContainer}>
               <Text style={styles.buttonStyle}>ADD</Text>
             </TouchableOpacity>
-          </View>
+          </ScrollView>
         </Modal>
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 }
