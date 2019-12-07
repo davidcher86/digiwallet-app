@@ -11,6 +11,7 @@ import {Button, Input, Icon} from 'react-native-elements';
 import {connect} from 'react-redux';
 import firebase from 'firebase';
 import {FAB} from 'react-native-paper';
+import DatePicker from 'react-native-datepicker';
 
 import * as actions from './newTransactionModalActions';
 
@@ -28,9 +29,10 @@ class NewTransactionModal extends Component {
       handleAddNewTransactionAccount,
       toggleNewTransactionModal,
       changeFieldValue,
+      identity,
       onFabPress,
     } = this.props;
-    // console.log(this.props);
+    console.log('identity: ', identity);
 
     const renderDays = () => {
       var arr = [];
@@ -79,14 +81,29 @@ class NewTransactionModal extends Component {
 
             <View>
               <Text>Date</Text>
-              <Picker
-                selectedValue={newTransaction.date}
-                style={{height: 50, width: 100}}
-                onValueChange={itemValue =>
-                  changeFieldValue('date', itemValue)
-                }>
-                {renderDays()}
-              </Picker>
+              <DatePicker
+                style={{width: 200}}
+                date={newTransaction.date}
+                mode="date"
+                placeholder="select date"
+                format="YYYY-MM-DD"
+                minDate="1916-05-01"
+                maxDate="2019-06-01"
+                customStyles={{
+                  dateIcon: {
+                    position: 'absolute',
+                    left: 0,
+                    top: 4,
+                    marginLeft: 0,
+                  },
+                  dateInput: {
+                    marginLeft: 36,
+                  },
+                }}
+                onDateChange={itemValue => changeFieldValue('date', itemValue)}
+                confirmBtnText="Confirm"
+                cancelBtnText="Cancel"
+              />
             </View>
 
             <View>
@@ -131,7 +148,7 @@ class NewTransactionModal extends Component {
             </View>
 
             <TouchableOpacity
-              onPress={() => handleAddNewTransactionAccount(newTransaction)}
+              onPress={() => handleAddNewTransactionAccount(newTransaction, identity.uid)}
               // onPress={() => console.log(this.props.account)}
               style={styles.buttonContainer}>
               <Text style={styles.buttonStyle}>ADD</Text>
@@ -203,6 +220,7 @@ const mapStateToProps = state => {
   return {
     newTransaction: state.newTransactionModal,
     systemControl: state.systemControl,
+    identity: state.identity,
     paymentDetails: state.newTransactionModal.paymentDetails,
   };
 };

@@ -33,6 +33,12 @@ const rememberUser = async uid => {
   }
 };
 
+export const setIdentity = uid => {
+  return {
+    type: 'SET_IDENTITY',
+    uid,
+  };
+};
 // let getRememberedUser = async navigation => {
 //   try {
 //     const username = await AsyncStorage.getItem('digiwalletUserUID');
@@ -44,29 +50,28 @@ const rememberUser = async uid => {
 //   }
 // };
 
-export const setIdentity = value => {
-  console.log('value:', value);
-  return {
-    type: 'CHANGE_USERNAME_FIELD',
-    value,
-  };
-};
+// export const setIdentity = value => {
+//   return {
+//     type: 'CHANGE_USERNAME_FIELD',
+//     value,
+//   };
+// };
 
-export const fetchIdentity = uid => {
-  uid = 'vna4h0LGzogDF0cDADHZ5T0Aj2';
-  var ref = firebase
-    .database()
-    .ref('users/' + uid + '/account/-LuvmytchmNViLGsy-RI/');
-  return dispatch => {
-    console.log('uyi:', uid);
-    ref.on('value', snapshot => {
-      // ref.once('value').then(snapshot => {
-      // dispatch(setIdentity(snapshot));
-      console.log('snapshot2: ', snapshot.val());
-      // console.log('snapshot: ', snapshot);
-    });
-  };
-};
+// export const fetchIdentity = uid => {
+//   uid = 'vna4h0LGzogDF0cDADHZ5T0Aj2';
+//   var ref = firebase
+//     .database()
+//     .ref('users/' + uid + '/account/-LuvmytchmNViLGsy-RI/');
+//   return dispatch => {
+//     console.log('uyi:', uid);
+//     ref.on('value', snapshot => {
+//       // ref.once('value').then(snapshot => {
+//       // dispatch(setIdentity(snapshot));
+//       console.log('snapshot2: ', snapshot.val());
+//       // console.log('snapshot: ', snapshot);
+//     });
+//   };
+// };
 
 export const onSignInPress = (email, password, navigation) => {
   return dispatch => {

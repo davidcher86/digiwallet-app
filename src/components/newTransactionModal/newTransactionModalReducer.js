@@ -7,7 +7,7 @@ const initialState = {
     cardType: 'Visa',
   },
   description: '',
-  date: '',
+  date: '2016-05-01',
 };
 
 export default (state = initialState, action) => {
@@ -20,10 +20,10 @@ export default (state = initialState, action) => {
     case 'UPDATE_PAYMENT_DETAILS_FORM':
       paymentDetails[action.field] = action.value;
       return Object.assign({}, state, {paymentDetails: paymentDetails});
-    // case 'CHANGE_ERROR':
-    //     return Object.assign({}, state, { error: action.value });
-    // case 'RESET_FORM':
-    //     return Object.assign({}, state, { error: '', username: '', password: '', loading: false });
+    case 'CLOSE_NEW_TRANSACTION_MODAL':
+      return Object.assign({}, state, {isModalOpen: false});
+    case 'RESET_NEW_TRANSACTION_FORM':
+      return initialState;
     default:
       return state;
   }

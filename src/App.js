@@ -8,11 +8,11 @@ import {connect} from 'react-redux';
 
 import reducers from './redux';
 import AppNavigator from './navigation/AppNavigation';
-import NewTransactionModal from './components/common/newTransactionModal/NewTransactionModal';
-import {onLoginPress} from './components/systemControl/systemControlActions.js';
+import NewTransactionModal from './components/newTransactionModal/NewTransactionModal';
+import {onLoginPress} from './components/systemControl/systemControlActions';
 import {FAB} from 'react-native-paper';
 import firebase from 'firebase';
-import {toggleNewTransactionModal} from './components/common/newTransactionModal/newTransactionModalActions.js';
+import {toggleNewTransactionModal} from './components/newTransactionModal/newTransactionModalActions';
 
 class App extends Component {
   componentDidMount() {

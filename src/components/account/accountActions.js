@@ -65,7 +65,7 @@ export const handleRegisterAccount = (account, uid, navigation) => dispatch => {
   firebase
     .database()
     .ref(`/users/${uid}/account`)
-    .push(json)
+    .set(json)
     .then(res => {
       console.log(res);
       navigation.navigate('HomePage');

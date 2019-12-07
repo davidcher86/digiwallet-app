@@ -3,9 +3,9 @@ import React, {Component} from 'react';
 import {View, TouchableOpacity, Text, AsyncStorage} from 'react-native';
 import {Button, Input, Icon} from 'react-native-elements';
 import {connect} from 'react-redux';
-import firebase from 'firebase';
 
 import * as loginActions from './loginActions';
+// import {setIdentity} from './../identity/identityActions';
 
 class LoginForm extends Component {
   componentDidMount() {
@@ -15,13 +15,12 @@ class LoginForm extends Component {
   getRememberedUser = async () => {
     try {
       const uid = await AsyncStorage.getItem('digiwalletUserUID');
-      console.log('uid: ', uid);
       if (uid !== null) {
-        this.props.fetchIdentity(uid);
+        this.props.setIdentity(uid);
         this.props.navigation.navigate('PrimaryNav');
       }
     } catch (error) {
-      // Error retrieving data
+      console.log(error);
     }
   };
 
