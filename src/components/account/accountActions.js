@@ -1,4 +1,3 @@
-import firebase from 'firebase';
 import {firebaseAction} from './../../Api';
 
 export const changeAccountFieldValue = (field, value) => {
@@ -63,20 +62,7 @@ export const handleRegisterAccount = (account, uid, navigation) => dispatch => {
     assets: account.assets,
   };
 
-  // firebaseAction(uid, 'account', 'add', json)
-  //   .then(res => {
-  //     console.log(res);
-  //     navigation.navigate('HomePage');
-  //     return res;
-  //   })
-  //   .catch(err => {
-  //     console.log(err);
-  //   });
-
-  firebase
-    .database()
-    .ref(`/users/${uid}/account`)
-    .set(json)
+  firebaseAction(uid, 'account', 'add', json)
     .then(res => {
       console.log(res);
       navigation.navigate('HomePage');
@@ -88,9 +74,7 @@ export const handleRegisterAccount = (account, uid, navigation) => dispatch => {
 };
 
 export const handleEditAccount = account => dispatch => {
-  const {currentUser} = firebase.auth();
   console.log('edit: ', account);
-  console.log(currentUser);
   const json = {
     sallary: account.sallary,
     creditCard: account.creditCard,

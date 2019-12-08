@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import {Provider} from 'react-redux';
 import ReduxThunk from 'redux-thunk';
 import {createStore, applyMiddleware} from 'redux';
-import {StyleSheet, View, Modal, KeyboardAvoidingView} from 'react-native';
+import {StyleSheet, View, Modal, SafeAreaView, KeyboardAvoidingView, Keyboard, TouchableWithoutFeedback} from 'react-native';
 import {connect} from 'react-redux';
 
 import reducers from './redux';
@@ -35,7 +35,8 @@ class App extends Component {
     var state = store.getState();
     const {systemControl} = state;
     return (
-      <KeyboardAvoidingView style={{flex: 1}} behavior="padding" enabled>
+      <SafeAreaView style={{flex: 1}}>
+        <TouchableWithoutFeedback style={{flex: 1}} onPress={Keyboard.dismiss}>
         <Provider store={store}>
           <NewTransactionModal onFabPress={onLoginPress()} />
           <View style={{flex: 1}}>
@@ -43,7 +44,8 @@ class App extends Component {
             <FAB style={styles.fab} small icon="plus" onPress={() => store.dispatch(toggleNewTransactionModal())} />
           </View>
         </Provider>
-      </KeyboardAvoidingView>
+        </TouchableWithoutFeedback>
+      </SafeAreaView>
     );
   }
 }

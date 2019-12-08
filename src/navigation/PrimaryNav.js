@@ -1,10 +1,5 @@
 import {createDrawerNavigator} from 'react-navigation';
 import React, {Component} from 'react';
-import Account from './../components/account/Account';
-import HomePage from './../components/homePage/HomePage';
-import Dashboard from './../components/dashboard/Dashboard';
-import {AsyncStorage} from 'react-native';
-import Transactions from './../components/transactions/Transactions';
 import {Input, Icon} from 'react-native-elements';
 import {
   ScrollView,
@@ -14,7 +9,12 @@ import {
   StyleSheet,
   Text,
 } from 'react-native';
-import firebase from 'firebase';
+
+import Account from './../components/account/Account';
+import HomePage from './../components/homePage/HomePage';
+import Dashboard from './../components/dashboard/Dashboard';
+import Transactions from './../components/transactions/Transactions';
+import {removeUID} from './../components/common/Actions';
 
 const DrawerWithLogoutButton = props => (
   <View>
@@ -48,14 +48,6 @@ const DrawerWithLogoutButton = props => (
     />
   </View>
 );
-
-const removeUID = async uid => {
-  try {
-    await AsyncStorage.removeItem('digiwalletUserUID');
-  } catch (error) {
-    console.log('error while removing AsyncStorage item ', error);
-  }
-};
 
 const PrimaryNav = createDrawerNavigator(
   {

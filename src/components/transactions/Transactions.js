@@ -1,19 +1,44 @@
 import React, {Component} from 'react';
-import {View, TouchableOpacity, Text, FlatList, StyleSheet} from 'react-native';
-import {Button, Input, Icon} from 'react-native-elements';
+import {View, TouchableOpacity, FlatList, StyleSheet} from 'react-native';
+import {Input, Icon} from 'react-native-elements';
 import {connect} from 'react-redux';
-import firebase from 'firebase';
+import {
+  Container,
+  Header,
+  Content,
+  List,
+  ListItem,
+  Thumbnail,
+  Text,
+  Left,
+  Body,
+  Right,
+  Button,
+} from 'native-base';
 
 import {FAB} from 'react-native-paper';
-import Header from './../common/Header';
+// import Header from './../common/Header';
 import * as actions from './transactionsActions';
 
-function Item({title}) {
-  return (
-    <View style={styles.item}>
-      <Text style={styles.title}>{title}</Text>
-    </View>
-  );
+class TransactionItem extends Component {
+  render() {
+    console.log(this.props);
+    return (
+      <ListItem>
+        <Body>
+          <Text>Sankhadeep</Text>
+          <Text note numberOfLines={1}>
+            Its time to build a difference . .
+          </Text>
+        </Body>
+        <Right>
+          <Button transparent>
+            <Text>View</Text>
+          </Button>
+        </Right>
+      </ListItem>
+    );
+  }
 }
 
 class Transactions extends Component {
@@ -32,22 +57,27 @@ class Transactions extends Component {
     this.props.fetchTransactions(this.props.identity.uid);
   }
 
-  // renderTransactionsList = async () => {
-  //   return(
-
-  //   );
-  // };
-
   render() {
     const {transactions, identity} = this.props;
-    console.log('transactions: ', transactions);
+    // console.log('transactions: ', transactions);
+
+    const renderTransactions = (props) => {
+      console.log('props', props.transactions);
+      var itemList = [];
+      if (props.transactions.length > 0) {
+        itemList = props.transactions.map(item => (
+          <TransactionItem transactionItem={item} />
+        ));
+      }
+
+      return itemList;
+    };
+
     return (
       <View style={{flex: 1}}>
-        <FlatList
-          data={transactions}
-          renderItem={({item}) => <Item title={item.date} />}
-          keyExtractor={item => item.id}
-        />
+        <List>
+          {renderTransactions(this.props)}
+        </List>
       </View>
     );
   }
@@ -60,6 +90,9 @@ const styles = StyleSheet.create({
   item: {
     backgroundColor: '#f9c2ff',
     padding: 20,
+    width: 100,
+    flex: 6,
+    height: 20,
     marginVertical: 8,
     marginHorizontal: 16,
   },

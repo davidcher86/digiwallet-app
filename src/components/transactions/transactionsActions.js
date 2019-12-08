@@ -1,5 +1,4 @@
 /* eslint-disable prettier/prettier */
-import firebase from 'firebase';
 import {firebaseAction} from './../../Api';
 
 export const setTransactions = (transactions) => {
@@ -9,33 +8,27 @@ export const setTransactions = (transactions) => {
   };
 };
 
+
+const fetch = async uid => {
+  try {
+    return await firebaseAction(uid, 'transactions', 'read', null);
+  } catch (error) {
+    console.log('error while setting AsyncStorage item', error);
+  }
+}
+
 export const fetchTransactions = (uid) => {
-  var transactionsRef = firebase.database().ref(`users/${uid}/account/transactions`);
-  var newTransactionList = [];
-  return dispatch => {
-    // firebaseAction(uid, 'transactions', 'read', data)
-    //   .then(res => {
-    //     var payload = res;
-    //     for (var transaction in payload) {
-    //       if (payload.hasOwnProperty(transaction)) {
-    //           newTransactionList.push(payload[transaction]);
-    //     }
-    //   }
-
-    //   dispatch(setTransactions(newTransactionList));
-    //   });
-
-    transactionsRef.on('value', function(snapshot) {
-        var payload = snapshot.val();
-
-        for (var transaction in payload) {
-            if (payload.hasOwnProperty(transaction)) {
-                newTransactionList.push(payload[transaction]);
+    var newTransactionList = [];
+    return dispatch => {
+        var data = fetch(uid);
+        console.log('d:', data)
+        for (var item in data) {
+            if (data.hasOwnProperty(item)) {
+                newTransactionList.push(data[item]);
             }
         }
-
+        // console.log('newTransactionList', newTransactionList);
         dispatch(setTransactions(newTransactionList));
-    });
-  };
+    };
 };
 

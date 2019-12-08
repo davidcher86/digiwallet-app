@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React, {Component} from 'react';
-import {View, TouchableOpacity, Text, AsyncStorage} from 'react-native';
+import {View, TouchableOpacity, Text, AsyncStorage, KeyboardAvoidingView} from 'react-native';
 import {Button, Input, Icon} from 'react-native-elements';
 import {connect} from 'react-redux';
 
@@ -10,28 +10,14 @@ import {getRememberedUser} from './../common/Actions';
 
 class LoginForm extends Component {
   componentDidMount() {
-    this.getRememberedUser();
-
-    // getRememberedUser()
-    //   .then(res => {
-    //     if (res !== null) {
-    //       this.props.setIdentity(res);
-    //       this.props.navigation.navigate('PrimaryNav');
-    //     }
-    //   });
+    getRememberedUser()
+      .then(res => {
+        if (res !== null) {
+          this.props.setIdentity(res);
+          this.props.navigation.navigate('PrimaryNav');
+        }
+      });
   }
-
-  getRememberedUser = async () => {
-    try {
-      const uid = await AsyncStorage.getItem('digiwalletUserUID');
-      if (uid !== null) {
-        this.props.setIdentity(uid);
-        this.props.navigation.navigate('PrimaryNav');
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   renderButton(props) {
     const styles = {
@@ -75,9 +61,7 @@ class LoginForm extends Component {
             onPress={() => props.onSignInPress(
                             props.login.newEmail,
                             props.login.newPassword,
-                            this.props.navigation)}
-            // onPress={() => props.navigation.navigate('Account', {name: 'Jane'})}
-            >
+                            this.props.navigation)}>
             <Text style={styles.buttonStyle}>SIGN IN</Text>
           </TouchableOpacity>
         )}
@@ -89,6 +73,7 @@ class LoginForm extends Component {
     const styles = {
       containerStyle: {
         padding: 20,
+        flex: 1,
       },
       labelStyle: {},
       inputStyle: {
@@ -120,7 +105,7 @@ class LoginForm extends Component {
     const {changeTab} = this.props;
 
     return (
-      <View style={styles.containerStyle}>
+      <KeyboardAvoidingView style={styles.containerStyle} behavior="padding" enabled>
         <View style={styles.tabContainerStyle}>
           <Text
             onPress={() => changeTab('login')}
@@ -150,7 +135,6 @@ class LoginForm extends Component {
               style={styles.inputStyle}
               autoCorrect={false}
               value={login.email}
-              // onChangeText={text => this.props.changeUsername(text)}
               onChangeText={text => this.props.changeFieldValue('email', text)}
               leftIcon={{name: 'mail'}}
               autoCapitalize="none"
@@ -162,7 +146,6 @@ class LoginForm extends Component {
               placeholder="123456"
               style={styles.inputStyle}
               value={login.password}
-              // onChangeText={text => this.props.changePassword(text)}
               onChangeText={text =>
                 this.props.changeFieldValue('password', text)
               }
@@ -181,7 +164,6 @@ class LoginForm extends Component {
               style={styles.inputStyle}
               autoCorrect={false}
               value={login.newEmail}
-              // onChangeText={text => this.props.changeUsername(text)}
               onChangeText={text =>
                 this.props.changeFieldValue('newEmail', text)
               }
@@ -196,7 +178,6 @@ class LoginForm extends Component {
               placeholder="123456"
               style={styles.inputStyle}
               value={login.newPassword}
-              // onChangeText={text => this.props.changePassword(text)}
               onChangeText={text =>
                 this.props.changeFieldValue('newPassword', text)
               }
@@ -210,7 +191,6 @@ class LoginForm extends Component {
               placeholder="123456"
               style={styles.inputStyle}
               value={login.reEnteredPassword}
-              // onChangeText={text => this.props.changePassword(text)}
               onChangeText={text =>
                 this.props.changeFieldValue('reEnteredPassword', text)
               }
@@ -223,7 +203,7 @@ class LoginForm extends Component {
           </View>
         )}
         <View>{this.renderButton(this.props)}</View>
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 }

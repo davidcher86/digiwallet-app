@@ -1,8 +1,4 @@
-import firebase from 'firebase';
-import {AsyncStorage} from 'react-native';
-import {NavigationActions} from 'react-navigation';
-
-// import {rememberUser} from './../common/Actions';
+import {rememberUser} from './../common/Actions';
 import {firebaseAction} from './../../Api';
 
 export const changeUsername = value => {
@@ -27,14 +23,6 @@ export const changeFieldValue = (field, value) => {
   };
 };
 
-const rememberUser = async uid => {
-  try {
-    await AsyncStorage.setItem('digiwalletUserUID', uid);
-  } catch (error) {
-    console.log('error while setting AsyncStorage item', error);
-  }
-};
-
 export const setIdentity = uid => {
   return {
     type: 'SET_IDENTITY',
@@ -45,47 +33,21 @@ export const setIdentity = uid => {
 export const onSignInPress = (email, password, navigation) => {
   var data = {
     email: email,
-    password: password
+    password: password,
   };
   return dispatch => {
     dispatch(changeLoading(true));
 
-    // firebaseAction(null, 'authentication', 'register', data)
-    //   .then(r => {
-    //     firebaseAction(null, 'authentication', 'login', data)
-    //      .then(response => {
-    //           dispatch(resetForm());
-    //           rememberUser(response.user.uid);
-    //           return navigation.navigate('Account');
-    //      })
-    //   })
-    //   .catch(res => {
-    //     console.log('Error: ', res);
-    //     dispatch(resetForm());
-    //     dispatch(handleError(res.toString()));
-    //     return null;
-    //   });
-
-    firebase
-      .auth()
-      .createUserWithEmailAndPassword(email, password)
+    firebaseAction(null, 'authentication', 'register', data)
       .then(r => {
-        return firebase
-          .auth()
-          .signInWithEmailAndPassword(email, password)
-          .then(response => {
-            dispatch(resetForm());
-            rememberUser(response.user.uid);
-            return navigation.navigate('Account');
-          })
-          .catch(res => {
-            dispatch(resetForm());
-            dispatch(handleError(res.toString()));
-            return null;
-          });
+        firebaseAction(null, 'authentication', 'login', data).then(response => {
+          dispatch(resetForm());
+          rememberUser(response.user.uid);
+          return navigation.navigate('Account');
+        });
       })
       .catch(res => {
-        console.log(res);
+        console.log('Error: ', res);
         dispatch(resetForm());
         dispatch(handleError(res.toString()));
         return null;
@@ -93,33 +55,16 @@ export const onSignInPress = (email, password, navigation) => {
   };
 };
 
-export const onLoginPress = (username, password, navigation) => {
+export const onLoginPress = (email, password, navigation) => {
   var data = {
     email: email,
-    password: password
+    password: password,
   };
 
   return dispatch => {
     dispatch(changeLoading(true));
 
-    // firebaseAction(null, 'authentication', 'login', data)
-    //   .then(res => {
-    //     if (res.user !== null) {
-    //       rememberUser(res.user.uid);
-    //       navigation.navigate('HomePage');
-    //     }
-    //     dispatch(resetForm());
-    //     return res;
-    //   })
-    //   .catch(res => {
-    //     console.log('Error: ', res);
-    //     dispatch(resetForm());
-    //     dispatch(handleError(res.toString()));
-    //     return null;
-    //   });
-    firebase
-      .auth()
-      .signInWithEmailAndPassword(username, password)
+    firebaseAction(null, 'authentication', 'login', data)
       .then(res => {
         if (res.user !== null) {
           rememberUser(res.user.uid);
