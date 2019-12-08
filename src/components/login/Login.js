@@ -5,11 +5,20 @@ import {Button, Input, Icon} from 'react-native-elements';
 import {connect} from 'react-redux';
 
 import * as loginActions from './loginActions';
+import {getRememberedUser} from './../common/Actions';
 // import {setIdentity} from './../identity/identityActions';
 
 class LoginForm extends Component {
   componentDidMount() {
     this.getRememberedUser();
+
+    // getRememberedUser()
+    //   .then(res => {
+    //     if (res !== null) {
+    //       this.props.setIdentity(res);
+    //       this.props.navigation.navigate('PrimaryNav');
+    //     }
+    //   });
   }
 
   getRememberedUser = async () => {

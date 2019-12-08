@@ -1,7 +1,9 @@
-// import { Actions, ActionConst } from 'react-native-router-flux';
 import firebase from 'firebase';
 import {AsyncStorage} from 'react-native';
 import {NavigationActions} from 'react-navigation';
+
+// import {rememberUser} from './../common/Actions';
+import {firebaseAction} from './../../Api';
 
 export const changeUsername = value => {
   return {
@@ -39,43 +41,31 @@ export const setIdentity = uid => {
     uid,
   };
 };
-// let getRememberedUser = async navigation => {
-//   try {
-//     const username = await AsyncStorage.getItem('digiwalletUserUID');
-//     if (username !== null) {
-//       return username;
-//     }
-//   } catch (error) {
-//     // Error retrieving data
-//   }
-// };
-
-// export const setIdentity = value => {
-//   return {
-//     type: 'CHANGE_USERNAME_FIELD',
-//     value,
-//   };
-// };
-
-// export const fetchIdentity = uid => {
-//   uid = 'vna4h0LGzogDF0cDADHZ5T0Aj2';
-//   var ref = firebase
-//     .database()
-//     .ref('users/' + uid + '/account/-LuvmytchmNViLGsy-RI/');
-//   return dispatch => {
-//     console.log('uyi:', uid);
-//     ref.on('value', snapshot => {
-//       // ref.once('value').then(snapshot => {
-//       // dispatch(setIdentity(snapshot));
-//       console.log('snapshot2: ', snapshot.val());
-//       // console.log('snapshot: ', snapshot);
-//     });
-//   };
-// };
 
 export const onSignInPress = (email, password, navigation) => {
+  var data = {
+    email: email,
+    password: password
+  };
   return dispatch => {
     dispatch(changeLoading(true));
+
+    // firebaseAction(null, 'authentication', 'register', data)
+    //   .then(r => {
+    //     firebaseAction(null, 'authentication', 'login', data)
+    //      .then(response => {
+    //           dispatch(resetForm());
+    //           rememberUser(response.user.uid);
+    //           return navigation.navigate('Account');
+    //      })
+    //   })
+    //   .catch(res => {
+    //     console.log('Error: ', res);
+    //     dispatch(resetForm());
+    //     dispatch(handleError(res.toString()));
+    //     return null;
+    //   });
+
     firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
@@ -104,8 +94,29 @@ export const onSignInPress = (email, password, navigation) => {
 };
 
 export const onLoginPress = (username, password, navigation) => {
+  var data = {
+    email: email,
+    password: password
+  };
+
   return dispatch => {
     dispatch(changeLoading(true));
+
+    // firebaseAction(null, 'authentication', 'login', data)
+    //   .then(res => {
+    //     if (res.user !== null) {
+    //       rememberUser(res.user.uid);
+    //       navigation.navigate('HomePage');
+    //     }
+    //     dispatch(resetForm());
+    //     return res;
+    //   })
+    //   .catch(res => {
+    //     console.log('Error: ', res);
+    //     dispatch(resetForm());
+    //     dispatch(handleError(res.toString()));
+    //     return null;
+    //   });
     firebase
       .auth()
       .signInWithEmailAndPassword(username, password)
@@ -121,13 +132,6 @@ export const onLoginPress = (username, password, navigation) => {
         console.log('Error: ', res);
         dispatch(resetForm());
         dispatch(handleError(res.toString()));
-
-        // try {
-        //   AsyncStorage.setItem('digiwalletUserUID', 'asdfasdasd');
-        //   return navigation.navigate('PrimaryNav');
-        // } catch (e) {
-        //   console.log('Failed to save AsyncStorage user uid');
-        // }
         return null;
       });
   };

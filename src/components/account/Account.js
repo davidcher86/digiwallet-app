@@ -3,11 +3,11 @@ import React, {Component} from 'react';
 import {View, TouchableOpacity, Text, Picker, Item, StyleSheet, AsyncStorage} from 'react-native';
 import {Button, Input, Icon} from 'react-native-elements';
 import {connect} from 'react-redux';
-import firebase from 'firebase';
 import {ProgressSteps, ProgressStep} from 'react-native-progress-steps';
 import DatePicker from 'react-native-datepicker';
 // import Picker from '@react-native-community/picker';
 
+// import {rememberUser} from './../../Actions';
 import * as actions from './accountActions';
 
 class Account extends Component {
@@ -25,6 +25,14 @@ class Account extends Component {
 
     componentDidMount() {
         this.getRememberedUser();
+
+        // getRememberedUser()
+        //   .then(res => {
+        //     if (res !== null) {
+        //       this.props.setIdentity(res);
+        //       this.props.navigation.navigate('PrimaryNav');
+        //     }
+        //   });
     }
 
   render() {

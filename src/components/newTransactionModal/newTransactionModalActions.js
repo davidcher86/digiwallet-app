@@ -1,4 +1,5 @@
 import firebase from 'firebase';
+import {firebaseAction} from './../../Api';
 
 export const toggleNewTransactionModal = () => {
   return {
@@ -47,8 +48,18 @@ export const handleAddNewTransactionAccount = (newTransaction, uid) => dispatch 
     subCategory: newTransaction.subCategory,
   };
   console.log(data);
-  // var transactionsRef = firebase.database().ref('users/' + uid + '/account/transactions');
-  // transactionsRef
+
+  //  firebaseAction(uid, 'transactions', 'push', data)
+  //   .then(res => {
+  //     console.log(res);
+  //     dispatch(resetNewTransactionForm());
+  //     dispatch(closeNewTransactionModal());
+  //     return res;
+  //   })
+  //   .catch(err => {
+  //     console.log(err);
+  //   });
+
   firebase
     .database()
     .ref(`/users/${uid}/account/transactions`)
