@@ -183,6 +183,21 @@ class NewTransactionModal extends Component {
               </View>
             )}
 
+            {newTransaction.paymentType === 'credit' && (
+              <View>
+                <Text>number of payments</Text>
+                <Input
+                placeholder="123456"
+                style={styles.inputStyle}
+                value={newTransaction.paymentAmount}
+                onChangeText={text => changePaymentDetailsFieldValue('paymentAmount', itemValue)}
+                // leftIcon={{ name: 'maijl' }}
+                errorStyle={{color: 'red'}}
+                // errorMessage={validationErrors.lastNameError}
+                label="Description" />
+              </View>
+            )}
+
             <View>
               <Input
                 placeholder="123456"
