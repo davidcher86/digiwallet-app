@@ -25,10 +25,12 @@ export function firebaseAction(userUID, targetData, action, data) {
   const dataRef = getDataRef(userUID, targetData);
   switch (action) {
     case 'read':
-      dataRef.on('value', function(snapshot) {
-        console.log(snapshot.val());
-        return snapshot.val();
-      });
+      return dataRef
+        .on('value', function(snapshot) {
+          console.log('snapshot', snapshot.val());
+          return snapshot.val();
+        })
+        .then(res => res);
     case 'edit':
       break;
     case 'add':

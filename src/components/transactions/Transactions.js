@@ -22,9 +22,11 @@ import * as actions from './transactionsActions';
 
 class TransactionItem extends Component {
   render() {
-    console.log(this.props);
     return (
-      <ListItem>
+      <ListItem thumbnail>
+        <Left>
+          <Text>dsfdsf</Text>
+        </Left>
         <Body>
           <Text>Sankhadeep</Text>
           <Text note numberOfLines={1}>
@@ -32,7 +34,7 @@ class TransactionItem extends Component {
           </Text>
         </Body>
         <Right>
-          <Button transparent>
+          <Button transparent onPress={() => console.log('clicked')}>
             <Text>View</Text>
           </Button>
         </Right>
@@ -61,8 +63,8 @@ class Transactions extends Component {
     const {transactions, identity} = this.props;
     // console.log('transactions: ', transactions);
 
-    const renderTransactions = (props) => {
-      console.log('props', props.transactions);
+    const renderTransactions = props => {
+      console.log('renderTransactions', props);
       var itemList = [];
       if (props.transactions.length > 0) {
         itemList = props.transactions.map(item => (
@@ -75,9 +77,7 @@ class Transactions extends Component {
 
     return (
       <View style={{flex: 1}}>
-        <List>
-          {renderTransactions(this.props)}
-        </List>
+        <List>{renderTransactions(this.props)}</List>
       </View>
     );
   }
@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   return {
-    transactions: state.transactions,
+    transactions: state.transactions.transactions,
     identity: state.identity,
   };
 };
