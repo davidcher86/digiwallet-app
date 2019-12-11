@@ -21,21 +21,41 @@ import {FAB} from 'react-native-paper';
 import * as actions from './transactionsActions';
 
 class TransactionItem extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      pageSettings: {
+        isOpen: false,
+      },
+    };
+  }
+
   render() {
+    const onToggle = () => {
+      let pageSettings = this.state.pageSettings;
+      pageSettings.isOpen = !this.state.pageSettings.isOpen;
+      // console.log(pageSettings);
+      this.setState({pageSettings: pageSettings});
+    };
+    const {pageSettings, openTransaction, key, transactionItem} = this.props;
+    console.log('pageSettings', pageSettings);
     return (
-      <ListItem thumbnail>
+      <ListItem key={key} thumbnail>
         <Left>
-          <Text>dsfdsf</Text>
+          <Text>{transactionItem.amount}</Text>
         </Left>
         <Body>
-          <Text>Sankhadeep</Text>
+          <Text>{(pageSettings.isOpenIndex === transactionItem.uid ? 'Opened' : 'cled')}</Text>
           <Text note numberOfLines={1}>
-            Its time to build a difference . .
+            {transactionItem.date}
           </Text>
         </Body>
         <Right>
-          <Button transparent onPress={() => console.log('clicked')}>
-            <Text>View</Text>
+          <Button transparent onPress={() => openTransaction(transactionItem.uid)}>
+            <Text>Open</Text>
+          </Button>
+          <Button transparent onPress={() => onToggle()}>
+            <Text>DELETE</Text>
           </Button>
         </Right>
       </ListItem>
@@ -60,21 +80,25 @@ class Transactions extends Component {
   }
 
   render() {
-    const {transactions, identity} = this.props;
+    const {transactionsList, identity, pageSettings, openTransaction} = this.props;
     // console.log('transactions: ', transactions);
 
     const renderTransactions = props => {
-      console.log('renderTransactions', props);
+      console.log('renderTransactions', this.props);
       var itemList = [];
-      if (props.transactions.length > 0) {
-        itemList = props.transactions.map(item => (
-          <TransactionItem transactionItem={item} />
+      if (props.transactionsList.length > 0) {
+        itemList = props.transactionsList.map((item, key) => (
+          <TransactionItem
+            key={key}
+            pageSettings={pageSettings}
+            openTransaction={openTransaction}
+            transactionItem={item}/>
         ));
       }
 
       return itemList;
     };
-
+    console.log('props', this.props);
     return (
       <View style={{flex: 1}}>
         <List>{renderTransactions(this.props)}</List>
@@ -100,7 +124,9 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   return {
-    transactions: state.transactions.transactions,
+    trans: state.transactions,
+    transactionsList: state.transactions.transactions,
+    pageSettings: state.transactions.pageSettings,
     identity: state.identity,
   };
 };

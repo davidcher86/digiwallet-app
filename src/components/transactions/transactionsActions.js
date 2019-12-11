@@ -17,7 +17,20 @@ const fetch = async uid => {
   } catch (error) {
     console.log('error while setting AsyncStorage item', error);
   }
-}
+};
+
+export const setOpenIndex = (uid) => {
+  return {
+    type: 'CHANGE_OPEN_INDEX',
+    uid,
+  };
+};
+
+export const openTransaction = (uid) => {
+  return dispatch => {
+    dispatch(setOpenIndex(uid));
+  };
+};
 
 export const fetchTransactions = (uid) => {
     var newTransactionList = [];
@@ -27,6 +40,7 @@ export const fetchTransactions = (uid) => {
         const dataRef = firebase.database().ref(`/users/${uid}/account/transactions`);
         dataRef.on('value', function(snapshot) {
           var res = snapshot.val();
+          console.log(res);
           var fixedList = [];
           for (var item in res) {
             res[item].uid = item;
