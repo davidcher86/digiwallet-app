@@ -1,4 +1,5 @@
 import firebase from 'firebase';
+import {fetchTransactions} from './../transactions/transactionsActions';
 import {firebaseAction} from './../../Api';
 
 export const toggleNewTransactionModal = () => {
@@ -68,6 +69,7 @@ export const handleAddNewTransactionAccount = (newTransaction, uid) => dispatch 
       console.log(res);
       dispatch(resetNewTransactionForm());
       dispatch(closeNewTransactionModal());
+      dispatch(fetchTransactions(uid));
       return res;
     })
     .catch(err => {

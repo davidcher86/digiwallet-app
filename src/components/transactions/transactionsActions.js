@@ -12,8 +12,12 @@ export const setTransactions = (transactions) => {
 
 const fetch = async uid => {
   try {
-    var data = await firebaseAction(uid, 'transactions', 'read', null);
-    return data;
+    const dataRef = firebase.database().ref(`/users/${uid}/account/transactions`);
+
+    await dataRef.on('value', snapshot => {
+      var res = snapshot.val();
+      return res;
+    });
   } catch (error) {
     console.log('error while setting AsyncStorage item', error);
   }
@@ -32,30 +36,26 @@ export const openTransaction = (uid) => {
   };
 };
 
+export const deleteTransaction = (transactionUID, userUID) => {
+  return async dispatch => {
+    await firebase.database().ref(`/users/${userUID}/account/transactions/${transactionUID}`).remove();
+    dispatch(fetchTransactions(userUID));
+    return null;
+  };
+};
+
 export const fetchTransactions = (uid) => {
-    var newTransactionList = [];
     return dispatch => {
-        // var data = fetch(uid);
-        // console.log('d:', data);
-        const dataRef = firebase.database().ref(`/users/${uid}/account/transactions`);
-        dataRef.on('value', function(snapshot) {
-          var res = snapshot.val();
-          console.log(res);
-          var fixedList = [];
-          for (var item in res) {
-            res[item].uid = item;
-            fixedList.push(res[item]);
-          }
-          dispatch(setTransactions(fixedList));
-          return res;
-        });
-        // for (var item in data) {
-        //     if (data.hasOwnProperty(item)) {
-        //         newTransactionList.push(data[item]);
-        //     }
-        // }
-        // console.log('newTransactionList', newTransactionList);
-        dispatch(setTransactions(newTransactionList));
+      const dataRef = firebase.database().ref(`/users/${uid}/account/transactions`);
+      dataRef.once('value').then(function(snapshot) {
+        var res = snapshot.val();
+        var fixedList = [];
+        for (var item in res) {
+          res[item].uid = item;
+          fixedList.push(res[item]);
+        }
+        dispatch(setTransactions(fixedList));
+      });
     };
 };
 

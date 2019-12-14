@@ -21,40 +21,40 @@ import {FAB} from 'react-native-paper';
 import * as actions from './transactionsActions';
 
 class TransactionItem extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      pageSettings: {
-        isOpen: false,
-      },
-    };
-  }
-
   render() {
-    const onToggle = () => {
-      let pageSettings = this.state.pageSettings;
-      pageSettings.isOpen = !this.state.pageSettings.isOpen;
-      // console.log(pageSettings);
-      this.setState({pageSettings: pageSettings});
-    };
-    const {pageSettings, openTransaction, key, transactionItem} = this.props;
-    console.log('pageSettings', pageSettings);
+    const {
+      pageSettings,
+      openTransaction,
+      key,
+      identity,
+      transactionItem,
+      deleteTransaction,
+    } = this.props;
+    // console.log('pageSettings', pageSettings);
     return (
       <ListItem key={key} thumbnail>
         <Left>
           <Text>{transactionItem.amount}</Text>
         </Left>
         <Body>
-          <Text>{(pageSettings.isOpenIndex === transactionItem.uid ? 'Opened' : 'cled')}</Text>
+          <Text>
+            {pageSettings.isOpenIndex === transactionItem.uid
+              ? 'Opened'
+              : 'cled'}
+          </Text>
           <Text note numberOfLines={1}>
             {transactionItem.date}
           </Text>
         </Body>
         <Right>
-          <Button transparent onPress={() => openTransaction(transactionItem.uid)}>
+          <Button
+            transparent
+            onPress={() => openTransaction(transactionItem.uid)}>
             <Text>Open</Text>
           </Button>
-          <Button transparent onPress={() => onToggle()}>
+          <Button
+            transparent
+            onPress={() => deleteTransaction(transactionItem.uid, identity.uid)}>
             <Text>DELETE</Text>
           </Button>
         </Right>
@@ -75,16 +75,26 @@ class Transactions extends Component {
     },
   };
 
+  // componentWillReceiveProps(nextProps, nextState) {
+  //   console.log('oldProps', this.props.transactionsList.length);
+  //   console.log('nextProps', nextProps.transactionsList.length);
+  // }
+
   componentDidMount() {
     this.props.fetchTransactions(this.props.identity.uid);
   }
 
   render() {
-    const {transactionsList, identity, pageSettings, openTransaction} = this.props;
+    const {
+      transactionsList,
+      identity,
+      pageSettings,
+      openTransaction,
+      deleteTransaction,
+    } = this.props;
     // console.log('transactions: ', transactions);
 
     const renderTransactions = props => {
-      console.log('renderTransactions', this.props);
       var itemList = [];
       if (props.transactionsList.length > 0) {
         itemList = props.transactionsList.map((item, key) => (
@@ -92,13 +102,16 @@ class Transactions extends Component {
             key={key}
             pageSettings={pageSettings}
             openTransaction={openTransaction}
-            transactionItem={item}/>
+            identity={identity}
+            deleteTransaction={deleteTransaction}
+            transactionItem={item}
+          />
         ));
       }
 
       return itemList;
     };
-    console.log('props', this.props);
+    // console.log('transactionsList', this.props.transactionsList);
     return (
       <View style={{flex: 1}}>
         <List>{renderTransactions(this.props)}</List>

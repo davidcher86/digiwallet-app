@@ -11,7 +11,7 @@ export default (state = initialState, action) => {
     case 'SET_TRANSACTIONS_LIST':
       return Object.assign({}, state, {transactions: action.transactions});
     case 'CHANGE_OPEN_INDEX':
-      console.log(action.uid);
+      // console.log(action.uid);
       pageSettings = state.pageSettings;
       pageSettings.isOpenIndex = action.uid;
       return Object.assign({}, state, {pageSettings: pageSettings});
