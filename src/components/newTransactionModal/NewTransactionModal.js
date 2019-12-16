@@ -32,6 +32,7 @@ class NewTransactionModal extends Component {
       handleAddNewTransactionAccount,
       toggleNewTransactionModal,
       changeFieldValue,
+      closeNewTransactionModal,
       identity,
       onFabPress,
     } = this.props;
@@ -58,69 +59,66 @@ class NewTransactionModal extends Component {
     const renderSubCategories = () => {
       var subCategories = [];
       let mainCategory = newTransaction.mainCategory;
-      console.log('mainCategory', mainCategory);
+      // console.log('mainCategory', mainCategory);
       if (mainCategory !== null && mainCategory !== '') {
         newTransaction.categoryList[mainCategory].forEach(category => {
           subCategories.push(<Picker.Item key={category} label={category} value={category} />);
         });
       }
-      console.log('subCategories', subCategories);
+      // console.log('subCategories', subCategories);
       return subCategories;
     };
 
     return (
-      <KeyboardAvoidingView style={styles.containerStyle} behavior="padding" enabled>
+      <KeyboardAvoidingView style={styles.containerStyle}>
+        <View>
         <Modal
           animationType="slide"
           transparent={true}
           // visible={true}
           visible={isModalOpen}
-          onRequestClose={() => {
-            console.log('Modal has been closed.');
-          }}>
+          onRequestClose={() => closeNewTransactionModal()}>
           <ScrollView style={styles.modalInnerContainerStyle}>
-            <View>
-              <Text>Transaction Type</Text>
+            <View style={styles.inputContainer}>
+              <Text style={styles.pickerLabel}>Transaction Type</Text>
               <Picker
                 selectedValue={newTransaction.transactionType}
-                style={{height: 50, width: 100}}
-                onValueChange={itemValue =>
-                  changeFieldValue('transactionType', itemValue)
-                }>
+                style={styles.pickerInput}
+                onValueChange={itemValue => changeFieldValue('transactionType', itemValue)}>
                 <Picker.Item label="Expense" value="expense" />
                 <Picker.Item label="Income" value="income" />
               </Picker>
             </View>
 
-            <View>
+            <View style={styles.inputContainer}>
               <Input
-                placeholder="123456"
+                placeholder="Amount"
                 style={styles.inputStyle}
                 value={newTransaction.amount}
                 onChangeText={text => changeFieldValue('amount', text)}
                 // leftIcon={{ name: 'maijl' }}
                 errorStyle={{color: 'red'}}
                 // errorMessage={validationErrors.lastNameError}
-                label="Amount"
+                // label="Amount"
               />
             </View>
 
-            <View>
-              <Text>Main Category</Text>
+            <View style={styles.inputContainer}>
+              <Text style={styles.pickerLabel}>Main Category</Text>
               <Picker
                 selectedValue={newTransaction.mainCategory}
-                style={{height: 50, width: 100}}
+                style={styles.pickerInput}
                 onValueChange={itemValue => changeFieldValue('mainCategory', itemValue)}>
                   <Picker.Item key={'*'} label={''} value={''} />
                   {renderMainCategories()}
               </Picker>
             </View>
 
-            {newTransaction.mainCategory !== '' && <View>
-              <Text>Sub Category</Text>
+            {newTransaction.mainCategory !== '' && <View style={styles.inputContainer}>
+              <Text style={styles.pickerLabel}>Sub Category</Text>
               <Picker
                 selectedValue={newTransaction.subCategory}
-                style={{height: 50, width: 100}}
+                style={styles.pickerInput}
                 onValueChange={itemValue =>
                   changeFieldValue('subCategory', itemValue)
                 }>
@@ -128,10 +126,10 @@ class NewTransactionModal extends Component {
               </Picker>
             </View>}
 
-            <View>
-              <Text>Date</Text>
+            <View style={styles.inputContainer}>
+              <Text style={styles.pickerLabel}>Date</Text>
               <DatePicker
-                style={{width: 200}}
+                style={styles.pickerInput}
                 date={newTransaction.date}
                 mode="date"
                 placeholder="select date"
@@ -155,11 +153,11 @@ class NewTransactionModal extends Component {
               />
             </View>
 
-            <View>
-              <Text>Payment Type</Text>
+            <View style={styles.inputContainer}>
+              <Text style={styles.pickerLabel}>Payment Type</Text>
               <Picker
                 selectedValue={newTransaction.paymentType}
-                style={{height: 50, width: 100}}
+                style={styles.pickerInput}
                 onValueChange={itemValue =>
                   changeFieldValue('paymentType', itemValue)
                 }>
@@ -169,11 +167,11 @@ class NewTransactionModal extends Component {
             </View>
 
             {newTransaction.paymentType === 'credit' && (
-              <View>
-                <Text>Card Type</Text>
+              <View style={styles.inputContainer}>
+                <Text style={styles.pickerLabel}>Card Type</Text>
                 <Picker
                   selectedValue={paymentDetails.cardType}
-                  style={{height: 50, width: 100}}
+                  style={styles.pickerInput}
                   onValueChange={itemValue =>
                     changePaymentDetailsFieldValue('cardType', itemValue)
                   }>
@@ -184,30 +182,30 @@ class NewTransactionModal extends Component {
             )}
 
             {newTransaction.paymentType === 'credit' && (
-              <View>
-                <Text>number of payments</Text>
+              <View style={styles.inputContainer}>
                 <Input
-                placeholder="123456"
+                placeholder="Number of Payments"
                 style={styles.inputStyle}
                 value={newTransaction.paymentAmount}
-                onChangeText={text => changePaymentDetailsFieldValue('paymentAmount', itemValue)}
+                onChangeText={text => changePaymentDetailsFieldValue('paymentAmount', text)}
                 // leftIcon={{ name: 'maijl' }}
                 errorStyle={{color: 'red'}}
                 // errorMessage={validationErrors.lastNameError}
-                label="Description" />
+                // label="Number of Payments"
+                />
               </View>
             )}
 
-            <View>
+            <View style={styles.inputContainer}>
               <Input
-                placeholder="123456"
+                placeholder="Description"
                 style={styles.inputStyle}
                 value={newTransaction.description}
                 onChangeText={text => changeFieldValue('description', text)}
                 // leftIcon={{ name: 'maijl' }}
                 errorStyle={{color: 'red'}}
                 // errorMessage={validationErrors.lastNameError}
-                label="Description"
+                // label="Description"
               />
             </View>
 
@@ -217,8 +215,16 @@ class NewTransactionModal extends Component {
               style={styles.buttonContainer}>
               <Text style={styles.buttonStyle}>ADD</Text>
             </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => closeNewTransactionModal()}
+              // onPress={() => console.log(this.props.account)}
+              style={styles.buttonContainer}>
+              <Text style={styles.buttonStyle}>CANCEL</Text>
+            </TouchableOpacity>
           </ScrollView>
         </Modal>
+        </View>
+        {/* <FAB style={styles.fab} small icon="plus" onPress={() => this.props.toggleNewTransactionModal()} /> */}
       </KeyboardAvoidingView>
     );
   }
@@ -245,7 +251,9 @@ const styles = StyleSheet.create({
   //   flex: 1,
   // },
   modalInnerContainerStyle: {
-    height: '80%',
+    flex: 1,
+    flexDirection: 'column',
+    // height: '80%',
     margin: 30,
     backgroundColor: '#ede3f2',
     borderRadius: 15,
@@ -254,10 +262,33 @@ const styles = StyleSheet.create({
     opacity: 0.8,
     padding: 8,
   },
+  inputContainer: {
+    // justifyContent: 'center',
+    // alignItems: 'center',
+    flexDirection: 'row',
+    width: '100%',
+    marginTop: 8,
+    backgroundColor: 'pink',
+  },
+  pickerInput: {
+    height: 50,
+    width: '40%',
+  },
+  pickerLabel: {
+    height: 50,
+    width: '60%',
+  },
   fabContainerStyle: {
     height: '20%',
     width: '100%',
     backgroundColor: 'yellow',
+  },
+  buttonContainer: {
+    width: '100%',
+    backgroundColor: 'green',
+    marginTop: 6,
+    padding: 8,
+    alignItems: 'center',
   },
   fab: {
     // flex: 1,

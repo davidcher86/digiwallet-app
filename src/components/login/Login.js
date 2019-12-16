@@ -1,8 +1,9 @@
 /* eslint-disable prettier/prettier */
 import React, {Component} from 'react';
-import {View, TouchableOpacity, Text, AsyncStorage, KeyboardAvoidingView} from 'react-native';
+import {View, TouchableOpacity, Text, ScrollView, KeyboardAvoidingView, StyleSheet} from 'react-native';
 import {Button, Input, Icon} from 'react-native-elements';
 import {connect} from 'react-redux';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import * as loginActions from './loginActions';
 import {getRememberedUser} from './../common/Actions';
@@ -20,18 +21,6 @@ class LoginForm extends Component {
   }
 
   renderButton(props) {
-    const styles = {
-      buttonContainerStyle: {
-        backgroundColor: '#2980b6',
-        paddingVertical: 15,
-      },
-      buttonStyle: {
-        color: '#fff',
-        textAlign: 'center',
-        fontWeight: '700',
-      },
-    };
-
     if (props.login.loading) {
       return (
         <View style={styles.buttonContainerStyle}>
@@ -70,144 +59,182 @@ class LoginForm extends Component {
   }
 
   render() {
-    const styles = {
-      containerStyle: {
-        padding: 20,
-        flex: 1,
-      },
-      labelStyle: {},
-      inputStyle: {
-        height: 40,
-        backgroundColor: 'rgba(225,225,225,0.2)',
-        marginBottom: 10,
-        padding: 10,
-        color: '#fff',
-      },
-      tabContainerStyle: {
-        flexDirection: 'row',
-      },
-      tabStyle: {
-        flex: 2,
-        textAlign: 'center',
-        padding: 7,
-        justifyContent: 'space-between',
-        backgroundColor: 'yellow',
-      },
-      selectedTabStyle: {
-        borderBottomColor: 'black',
-        borderBottomWidth: 1,
-      },
-      selectedArrowStyle: {},
-      loginContainerStyle: {},
-    };
     // console.log(this.props);
     const {login, pageSettings, validationErrors} = this.props;
     const {changeTab} = this.props;
 
     return (
-      <KeyboardAvoidingView style={styles.containerStyle} behavior="padding" enabled>
-        <View style={styles.tabContainerStyle}>
-          <Text
-            onPress={() => changeTab('login')}
-            style={[
-              styles.tabStyle,
-              pageSettings.selectedTab === 'login'
-                ? styles.selectedTabStyle
-                : {},
-            ]}>
-            Login
-          </Text>
-          <Text
-            onPress={() => changeTab('signIn')}
-            style={[
-              styles.tabStyle,
-              pageSettings.selectedTab === 'signIn'
-                ? styles.selectedTabStyle
-                : {},
-            ]}>
-            Sign In
-          </Text>
-        </View>
-        {pageSettings.selectedTab === 'login' && (
-          <View style={styles.loginContainerStyle}>
-            <Input
-              placeholder="user@gmail.com"
-              style={styles.inputStyle}
-              autoCorrect={false}
-              value={login.email}
-              onChangeText={text => this.props.changeFieldValue('email', text)}
-              leftIcon={{name: 'mail'}}
-              autoCapitalize="none"
-              errorStyle={{color: 'red'}}
-              placeholderTextColor="rgba(225,225,225,0.7)"
-              label="Email"
-            />
-            <Input
-              placeholder="123456"
-              style={styles.inputStyle}
-              value={login.password}
-              onChangeText={text =>
-                this.props.changeFieldValue('password', text)
-              }
-              leftIcon={{name: 'mail'}}
-              errorStyle={{color: 'red'}}
-              errorMessage={this.props.login.error}
-              secureTextEntry={true}
-              label="Password"
-            />
+      <KeyboardAvoidingView style={styles.containerStyle}>
+        <ScrollView style={styles.scrollerWrapper}>
+          <View style={styles.wrapper}>
+            <View style={styles.tabContainerStyle}>
+              <Text
+                onPress={() => changeTab('login')}
+                style={[
+                  styles.tabStyle,
+                  pageSettings.selectedTab === 'login'
+                    ? styles.selectedTabStyle
+                    : {},
+                ]}>
+                Login
+              </Text>
+              <Text
+                onPress={() => changeTab('signIn')}
+                style={[
+                  styles.tabStyle,
+                  pageSettings.selectedTab === 'signIn'
+                    ? styles.selectedTabStyle
+                    : {},
+                ]}>
+                Sign In
+              </Text>
+            </View>
+            {pageSettings.selectedTab === 'login' && (
+              <KeyboardAvoidingView style={styles.loginContainerStyle}>
+                <Input
+                  placeholder="Email"
+                  style={styles.inputStyle}
+                  autoCorrect={false}
+                  value={login.email}
+                  onChangeText={text => this.props.changeFieldValue('email', text)}
+                  leftIcon={{name: 'mail'}}
+                  autoCapitalize="none"
+                  errorStyle={{color: 'red'}}
+                  placeholderTextColor="rgba(225,225,225,0.7)"
+                  // label="Email"
+                />
+                <Input
+                  placeholder="Password"
+                  style={styles.inputStyle}
+                  value={login.password}
+                  onChangeText={text =>
+                    this.props.changeFieldValue('password', text)
+                  }
+                  leftIcon={{name: 'mail'}}
+                  errorStyle={{color: 'red'}}
+                  errorMessage={this.props.login.error}
+                  secureTextEntry={true}
+                  // label="Password"
+                />
+              </KeyboardAvoidingView>
+            )}
+            {pageSettings.selectedTab === 'signIn' && (
+              <View style={styles.signInContainerStyle}>
+                <Input
+                  placeholder="Enter Email"
+                  style={styles.inputStyle}
+                  autoCorrect={false}
+                  value={login.newEmail}
+                  onChangeText={text =>
+                    this.props.changeFieldValue('newEmail', text)
+                  }
+                  leftIcon={{name: 'mail'}}
+                  autoCapitalize="none"
+                  errorStyle={{color: 'red'}}
+                  errorMessage={validationErrors.newEmailError}
+                  // label="Enter Email"
+                  placeholderTextColor="rgba(225,225,225,0.7)"/>
+                <Input
+                  placeholder="Enter New Password"
+                  style={styles.inputStyle}
+                  value={login.newPassword}
+                  onChangeText={text =>
+                    this.props.changeFieldValue('newPassword', text)
+                  }
+                  leftIcon={{name: 'mail'}}
+                  errorStyle={{color: 'red'}}
+                  // label="Enter New Password"
+                  errorMessage={validationErrors.newPassError}
+                  secureTextEntry={true}/>
+                <Input
+                  placeholder="Re-Enter Password"
+                  style={styles.inputStyle}
+                  value={login.reEnteredPassword}
+                  onChangeText={text =>
+                    this.props.changeFieldValue('reEnteredPassword', text)
+                  }
+                  leftIcon={{name: 'mail'}}
+                  errorStyle={{color: 'red'}}
+                  errorMessage={validationErrors.newReEnteredPassError}
+                  // label="Re-Enter Password"
+                  secureTextEntry={true}/>
+              </View>
+            )}
+            <View>{this.renderButton(this.props)}</View>
           </View>
-        )}
-        {pageSettings.selectedTab === 'signIn' && (
-          <View style={styles.signInContainerStyle}>
-            <Input
-              placeholder="user@gmail.com"
-              style={styles.inputStyle}
-              autoCorrect={false}
-              value={login.newEmail}
-              onChangeText={text =>
-                this.props.changeFieldValue('newEmail', text)
-              }
-              leftIcon={{name: 'mail'}}
-              autoCapitalize="none"
-              errorStyle={{color: 'red'}}
-              errorMessage={validationErrors.newEmailError}
-              placeholderTextColor="rgba(225,225,225,0.7)"
-              label="Enter Email"
-            />
-            <Input
-              placeholder="123456"
-              style={styles.inputStyle}
-              value={login.newPassword}
-              onChangeText={text =>
-                this.props.changeFieldValue('newPassword', text)
-              }
-              leftIcon={{name: 'mail'}}
-              errorStyle={{color: 'red'}}
-              errorMessage={validationErrors.newPassError}
-              secureTextEntry={true}
-              label="Enter New Password"
-            />
-            <Input
-              placeholder="123456"
-              style={styles.inputStyle}
-              value={login.reEnteredPassword}
-              onChangeText={text =>
-                this.props.changeFieldValue('reEnteredPassword', text)
-              }
-              leftIcon={{name: 'mail'}}
-              errorStyle={{color: 'red'}}
-              errorMessage={validationErrors.newReEnteredPassError}
-              secureTextEntry={true}
-              label="Re-Enter Password"
-            />
-          </View>
-        )}
-        <View>{this.renderButton(this.props)}</View>
+        </ScrollView>
       </KeyboardAvoidingView>
     );
   }
 }
 
+const styles = StyleSheet.create({
+  containerStyle: {
+    // display: "flex",
+    // paddingTop: 300,
+    flex: 1,
+    backgroundColor: '#00868b',
+  },
+  scrollerWrapper: {
+    // marginTop: 200,
+    // position: 'absolute',
+    // margin: 10,
+    // width: '100%',
+    flex: 1,
+  },
+  wrapper: {
+    flex: 1,
+    marginTop: 300,
+    paddingLeft: 20,
+    paddingRight: 20,
+  },
+  scrollViewWrapper: {
+    borderWidth: 2,
+    paddingTop: 300,
+    // margin: 10,
+    // flex: 1,
+  },
+  labelStyle: {},
+  inputStyle: {
+    height: 40,
+    backgroundColor: 'rgba(225,225,225,0.2)',
+    marginBottom: 10,
+    paddingTop: 20,
+    padding: 10,
+    borderWidth: 2,
+    color: '#fff',
+  },
+  tabContainerStyle: {
+    flexDirection: 'row',
+  },
+  tabStyle: {
+    flex: 2,
+    opacity: 0.8,
+    textAlign: 'center',
+    padding: 7,
+    justifyContent: 'space-between',
+    backgroundColor: '#6bcfe8',
+  },
+  selectedTabStyle: {
+    borderBottomColor: '#316b79',
+    borderBottomWidth: 5,
+  },
+  selectedArrowStyle: {},
+  loginContainerStyle: {
+    flexDirection: 'column',
+    paddingTop: 30,
+  },
+  buttonContainerStyle: {
+    backgroundColor: '#2980b6',
+    paddingVertical: 15,
+    marginTop: 30,
+  },
+  buttonStyle: {
+    color: '#fff',
+    textAlign: 'center',
+    fontWeight: '700',
+  },
+});
 const mapStateToProps = state => {
   return {
     login: state.login,

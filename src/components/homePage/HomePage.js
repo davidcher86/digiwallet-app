@@ -15,6 +15,7 @@ class HomePage extends Component {
     }
 
     render() {
+        console.log(this.props.identity);
         return (
             <View style={{flex: 1}}>
                 <Header navigation={this.props.navigation} title="Home"/>
@@ -36,7 +37,10 @@ const styles = StyleSheet.create({
   });
 
 const mapStateToProps = state => {
-    return { homePage: state.homePage };
+    return {
+        homePage: state.homePage,
+        identity: state.identity,
+     };
 };
 
 export default connect(mapStateToProps, actions)(HomePage);

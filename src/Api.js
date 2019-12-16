@@ -21,16 +21,15 @@ const getDataRef = (uid, targetData) => {
   return firebase.database().ref(refUrl);
 };
 
-export function firebaseAction(userUID, targetData, action, data) {
+export function firebaseAction(userUID, targetData, action, data, fetchAction = null) {
   const dataRef = getDataRef(userUID, targetData);
   switch (action) {
     case 'read':
-      return dataRef
-        .on('value', function(snapshot) {
-          console.log('snapshot', snapshot.val());
-          return snapshot.val();
-        })
-        .then(res => res);
+      var data;
+      return dataRef.once('value', function(snapshot) {
+        data = snapshot.val();
+        return data;
+      });
     case 'edit':
       break;
     case 'add':

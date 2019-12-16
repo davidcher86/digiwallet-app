@@ -1,6 +1,5 @@
 import firebase from 'firebase';
 import {fetchTransactions} from './../transactions/transactionsActions';
-import {firebaseAction} from './../../Api';
 
 export const toggleNewTransactionModal = () => {
   return {
@@ -48,7 +47,6 @@ export const handleAddNewTransactionAccount = (newTransaction, uid) => dispatch 
     mainCategory: newTransaction.mainCategory,
     subCategory: newTransaction.subCategory,
   };
-  console.log(data);
 
   //  firebaseAction(uid, 'transactions', 'push', data)
   //   .then(res => {

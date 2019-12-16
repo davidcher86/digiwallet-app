@@ -27,12 +27,13 @@ class App extends Component {
       appId: '1:107699463403:web:4ed1a7a0fb64e596684aae',
       measurementId: 'G-B372DNG4CY',
     });
-  };
-    
+  }
+
   render() {
     const store = createStore(reducers, {}, applyMiddleware(ReduxThunk));
-    // console.log(store.getState());
+
     var state = store.getState();
+    // console.log(state.identity);
     const {systemControl} = state;
     return (
       <SafeAreaView style={{flex: 1}}>

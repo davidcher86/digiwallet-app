@@ -13,7 +13,7 @@ export default (state = initialState, action) => {
     case 'CHANGE_OPEN_INDEX':
       // console.log(action.uid);
       pageSettings = state.pageSettings;
-      pageSettings.isOpenIndex = action.uid;
+      pageSettings.isOpenIndex = (pageSettings.isOpenIndex === action.uid ? null : action.uid);
       return Object.assign({}, state, {pageSettings: pageSettings});
     // case 'CHANGE_LOADING_STATE':
     //     return Object.assign({}, state, { loading: action.value });

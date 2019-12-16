@@ -1,5 +1,6 @@
 import {createDrawerNavigator} from 'react-navigation';
 import React, {Component} from 'react';
+import {FAB} from 'react-native-paper';
 import {Input, Icon} from 'react-native-elements';
 import {
   ScrollView,
@@ -7,6 +8,7 @@ import {
   View,
   Button,
   StyleSheet,
+  TouchableHighlight,
   Text,
 } from 'react-native';
 
@@ -17,35 +19,35 @@ import Transactions from './../components/transactions/Transactions';
 import {removeUID} from './../components/common/Actions';
 
 const DrawerWithLogoutButton = props => (
-  <View>
-    <Button
+  <View style={styles.navContainer}>
+    <TouchableHighlight
+      style={styles.navButton}
+      onPress={() => props.navigation.navigate('HomePage')}>
+      <Text>HomePage</Text>
+    </TouchableHighlight>
+    <TouchableHighlight
+      style={styles.navButton}
+      onPress={() => props.navigation.navigate('Dashboard')}>
+      <Text>Dashboard</Text>
+    </TouchableHighlight>
+    <TouchableHighlight
+      style={styles.navButton}
+      onPress={() => props.navigation.navigate('Account')}>
+      <Text>Account</Text>
+    </TouchableHighlight>
+    <TouchableHighlight
+      style={styles.navButton}
+      onPress={() => props.navigation.navigate('Transactions')}>
+      <Text>Transactions</Text>
+    </TouchableHighlight>
+    <TouchableHighlight
       style={styles.logoutButton}
-      title="Home Page"
-      onPress={() => props.navigation.navigate('HomePage')}
-    />
-    <Button
-      style={styles.logoutButton}
-      title="Dashboard"
-      onPress={() => props.navigation.navigate('Dashboard')}
-    />
-    <Button
-      style={styles.logoutButton}
-      title="Account"
-      onPress={() => props.navigation.navigate('Account')}
-    />
-    <Button
-      style={styles.logoutButton}
-      title="Transactions"
-      onPress={() => props.navigation.navigate('Transactions')}
-    />
-    <Button
-      style={styles.logoutButton}
-      title="Logout"
       onPress={() => {
         removeUID();
         props.navigation.navigate('Login');
-      }}
-    />
+      }}>
+      <Text>Logout</Text>
+    </TouchableHighlight>
   </View>
 );
 
@@ -111,15 +113,36 @@ const PrimaryNav = createDrawerNavigator(
 );
 
 const styles = StyleSheet.create({
-  container: {
+  navContainer: {
     flex: 1,
     flexDirection: 'column',
   },
+  navButton: {
+    // marginBottom: 30,
+    marginTop: 10,
+    // flex: 1,
+    padding: 4,
+    width: '100%',
+    // borderWidth: 2,
+    height: 40,
+    borderColor: 'black',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'green',
+    top: 0,
+  },
   logoutButton: {
-    marginBottom: 30,
-    marginTop: 30,
-    justifyContent: 'space-between',
+    // alignSelf: 'flex-end',
+    // borderWidth: 2,
+    height: 40,
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: 'red',
+    // marginBottom: 30,
+    // marginTop: 30,
+    // justifyContent: 'space-between',
+    // backgroundColor: 'red',
     position: 'absolute',
     bottom: 0,
   },

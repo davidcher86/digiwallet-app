@@ -1,5 +1,6 @@
 import {rememberUser} from './../common/Actions';
 import {firebaseAction} from './../../Api';
+// import {setIdentity} from './../identity/identityActions';
 
 export const changeUsername = value => {
   return {
@@ -69,6 +70,7 @@ export const onLoginPress = (email, password, navigation) => {
         if (res.user !== null) {
           rememberUser(res.user.uid);
           navigation.navigate('HomePage');
+          dispatch(setIdentity(res.user.uid));
         }
         dispatch(resetForm());
         return res;
