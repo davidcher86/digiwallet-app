@@ -84,22 +84,22 @@ class Account extends Component {
                 style={styles.innerTabContainer}
                 label="First Step">
                 <View style={styles.innerTabWrapper}>
-                <View style={styles.inputRowContainer}>
-                  <Text>Personal Data</Text>
-                </View>
-                <View style={styles.inputRowContainer}>
-                  <Input
-                    style={styles.inputStyle}
-                    autoCorrect={false}
-                    placeholder="First Name"
-                    value={user.firstName}
-                    onChangeText={text => changeUserFieldValue('firstName', text)}
-                    // leftIcon={{ name: 'mail' }}
-                    autoCapitalize="none"
-                    errorStyle={{color: 'red'}}
-                    errorMessage={validationErrors.firstNameError}
-                    // label="First Name"
-                    placeholderTextColor="rgba(225,225,225,0.7)"/>
+                  <View style={styles.inputRowContainer}>
+                    <Text>Personal Data</Text>
+                  </View>
+                  <View style={styles.inputRowContainer}>
+                    <Input
+                      style={styles.inputStyle}
+                      autoCorrect={false}
+                      placeholder="First Name"
+                      value={user.firstName}
+                      onChangeText={text => changeUserFieldValue('firstName', text)}
+                      // leftIcon={{ name: 'mail' }}
+                      autoCapitalize="none"
+                      errorStyle={{color: 'red'}}
+                      errorMessage={validationErrors.firstNameError}
+                      // label="First Name"
+                      placeholderTextColor="rgba(225,225,225,0.7)"/>
                   </View>
                   <View style={styles.inputRowContainer}>
                     <Input
@@ -154,26 +154,35 @@ class Account extends Component {
               <ProgressStep
                 onNext={() => onNextStep(3)}
                 onPrevious={() => onNextStep(1)}
+                style={styles.innerTabContainer}
                 label="Second Step">
-                <View style={{alignItems: 'center'}}>
-                  <Text>Credit Card Details</Text>
-                  <Text>Card Type</Text>
-                  <Picker
-                    selectedValue={creditCard.cardType}
-                    style={{height: 50, width: 100}}
-                    onValueChange={itemValue => changeCreditFieldValue('cardType', itemValue)}>
-                    <Picker.Item label="Visa" value="visa" />
-                    <Picker.Item label="Mastercard" value="mastercard" />
-                  </Picker>
-                  <Text>Billing Date</Text>
-                  <Picker
-                    selectedValue={creditCard.billingDate}
-                    style={{height: 50, width: 100}}
-                    onValueChange={itemValue =>
-                      changeCreditFieldValue('billingDate', itemValue)
-                    }>
-                    {renderDays()}
-                  </Picker>
+                <View style={styles.innerTabWrapper}>
+                  <View style={{alignItems: 'center'}}>
+                    <View style={styles.inputRowContainer}>
+                      <Text>Credit Card Details</Text>
+                    </View>
+                    <View style={[styles.inputRowContainer,{flexDirection: 'row'}]}>
+                      <Text>Card Type</Text>
+                      <Picker
+                        selectedValue={creditCard.cardType}
+                        style={{height: 50, width: '50%'}}
+                        onValueChange={itemValue => changeCreditFieldValue('cardType', itemValue)}>
+                        <Picker.Item label="Visa" value="visa" />
+                        <Picker.Item label="Mastercard" value="mastercard" />
+                      </Picker>
+                    </View>
+                    <View style={[styles.inputRowContainer,{flexDirection: 'row'}]}>
+                      <Text>Billing Date</Text>
+                      <Picker
+                        selectedValue={creditCard.billingDate}
+                        style={{height: 50, width: '50%'}}
+                        onValueChange={itemValue =>
+                          changeCreditFieldValue('billingDate', itemValue)
+                        }>
+                        {renderDays()}
+                      </Picker>
+                    </View>
+                  </View>
                 </View>
               </ProgressStep>
               <ProgressStep
@@ -267,7 +276,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     // height: '100%',
     marginBottom: 30,
-    borderWidth: 2,
+    // borderWidth: 2,
   },
   inputRowContainer: {
     padding: 8,
