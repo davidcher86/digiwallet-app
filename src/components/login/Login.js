@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React, {Component} from 'react';
-import {View, TouchableOpacity, Text, ScrollView, KeyboardAvoidingView, StyleSheet} from 'react-native';
+import {View, TouchableOpacity, Text, Image, ScrollView, KeyboardAvoidingView, StyleSheet} from 'react-native';
 import {Button, Input, Icon} from 'react-native-elements';
 import {connect} from 'react-redux';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -67,6 +67,11 @@ class LoginForm extends Component {
       <KeyboardAvoidingView style={styles.containerStyle}>
         <ScrollView style={styles.scrollerWrapper}>
           <View style={styles.wrapper}>
+            <View style={styles.mainIconContainerStyle}>
+              <Image
+                style={{width: 100, height: 100}}
+                source={require('./../../img/login-main-icn.png')}/>
+            </View>
             <View style={styles.tabContainerStyle}>
               <Text
                 onPress={() => changeTab('login')}
@@ -91,73 +96,81 @@ class LoginForm extends Component {
             </View>
             {pageSettings.selectedTab === 'login' && (
               <KeyboardAvoidingView style={styles.loginContainerStyle}>
-                <Input
-                  placeholder="Email"
-                  style={styles.inputStyle}
-                  autoCorrect={false}
-                  value={login.email}
-                  onChangeText={text => this.props.changeFieldValue('email', text)}
-                  leftIcon={{name: 'mail'}}
-                  autoCapitalize="none"
-                  errorStyle={{color: 'red'}}
-                  placeholderTextColor="rgba(225,225,225,0.7)"
-                  // label="Email"
-                />
-                <Input
-                  placeholder="Password"
-                  style={styles.inputStyle}
-                  value={login.password}
-                  onChangeText={text =>
-                    this.props.changeFieldValue('password', text)
-                  }
-                  leftIcon={{name: 'mail'}}
-                  errorStyle={{color: 'red'}}
-                  errorMessage={this.props.login.error}
-                  secureTextEntry={true}
-                  // label="Password"
-                />
+                <View style={styles.inputConntainerStyle}>
+                  <Input
+                    placeholder="Email"
+                    style={styles.inputStyle}
+                    autoCorrect={false}
+                    value={login.email}
+                    onChangeText={text => this.props.changeFieldValue('email', text)}
+                    leftIcon={{name: 'mail'}}
+                    autoCapitalize="none"
+                    errorStyle={{color: 'red'}}
+                    // label="Email"
+                    placeholderTextColor="rgba(225,225,225,0.7)" />
+                </View>
+                <View style={styles.inputConntainerStyle}>
+                  <Input
+                    placeholder="Password"
+                    style={styles.inputStyle}
+                    value={login.password}
+                    onChangeText={text =>
+                      this.props.changeFieldValue('password', text)
+                    }
+                    leftIcon={{name: 'mail'}}
+                    errorStyle={{color: 'red'}}
+                    // label="Password"
+                    errorMessage={this.props.login.error}
+                    secureTextEntry={true} />
+                </View>
               </KeyboardAvoidingView>
             )}
             {pageSettings.selectedTab === 'signIn' && (
               <View style={styles.signInContainerStyle}>
-                <Input
-                  placeholder="Enter Email"
-                  style={styles.inputStyle}
-                  autoCorrect={false}
-                  value={login.newEmail}
-                  onChangeText={text =>
-                    this.props.changeFieldValue('newEmail', text)
-                  }
-                  leftIcon={{name: 'mail'}}
-                  autoCapitalize="none"
-                  errorStyle={{color: 'red'}}
-                  errorMessage={validationErrors.newEmailError}
-                  // label="Enter Email"
-                  placeholderTextColor="rgba(225,225,225,0.7)"/>
-                <Input
-                  placeholder="Enter New Password"
-                  style={styles.inputStyle}
-                  value={login.newPassword}
-                  onChangeText={text =>
-                    this.props.changeFieldValue('newPassword', text)
-                  }
-                  leftIcon={{name: 'mail'}}
-                  errorStyle={{color: 'red'}}
-                  // label="Enter New Password"
-                  errorMessage={validationErrors.newPassError}
-                  secureTextEntry={true}/>
-                <Input
-                  placeholder="Re-Enter Password"
-                  style={styles.inputStyle}
-                  value={login.reEnteredPassword}
-                  onChangeText={text =>
-                    this.props.changeFieldValue('reEnteredPassword', text)
-                  }
-                  leftIcon={{name: 'mail'}}
-                  errorStyle={{color: 'red'}}
-                  errorMessage={validationErrors.newReEnteredPassError}
-                  // label="Re-Enter Password"
-                  secureTextEntry={true}/>
+                <View style={styles.inputConntainerStyle}>
+                  <Input
+                    placeholder="Enter Email"
+                    style={styles.inputStyle}
+                    autoCorrect={false}
+                    value={login.newEmail}
+                    onChangeText={text =>
+                      this.props.changeFieldValue('newEmail', text)
+                    }
+                    leftIcon={{name: 'mail'}}
+                    autoCapitalize="none"
+                    errorStyle={{color: 'red'}}
+                    errorMessage={validationErrors.newEmailError}
+                    // label="Enter Email"
+                    placeholderTextColor="rgba(225,225,225,0.7)"/>
+                </View>
+                <View style={styles.inputConntainerStyle}>
+                  <Input
+                    placeholder="Enter New Password"
+                    style={styles.inputStyle}
+                    value={login.newPassword}
+                    onChangeText={text =>
+                      this.props.changeFieldValue('newPassword', text)
+                    }
+                    leftIcon={{name: 'mail'}}
+                    errorStyle={{color: 'red'}}
+                    // label="Enter New Password"
+                    errorMessage={validationErrors.newPassError}
+                    secureTextEntry={true}/>
+                </View>
+                <View style={styles.inputConntainerStyle}>
+                  <Input
+                    placeholder="Re-Enter Password"
+                    style={styles.inputStyle}
+                    value={login.reEnteredPassword}
+                    onChangeText={text =>
+                      this.props.changeFieldValue('reEnteredPassword', text)
+                    }
+                    leftIcon={{name: 'mail'}}
+                    errorStyle={{color: 'red'}}
+                    errorMessage={validationErrors.newReEnteredPassError}
+                    // label="Re-Enter Password"
+                    secureTextEntry={true}/>
+                </View>
               </View>
             )}
             <View>{this.renderButton(this.props)}</View>
@@ -170,21 +183,15 @@ class LoginForm extends Component {
 
 const styles = StyleSheet.create({
   containerStyle: {
-    // display: "flex",
-    // paddingTop: 300,
     flex: 1,
     backgroundColor: '#00868b',
   },
   scrollerWrapper: {
-    // marginTop: 200,
-    // position: 'absolute',
-    // margin: 10,
-    // width: '100%',
     flex: 1,
   },
   wrapper: {
     flex: 1,
-    marginTop: 300,
+    marginTop: 40,
     paddingLeft: 20,
     paddingRight: 20,
   },
@@ -193,6 +200,12 @@ const styles = StyleSheet.create({
     paddingTop: 300,
     // margin: 10,
     // flex: 1,
+  },
+  mainIconContainerStyle: {
+    opacity: 0.4,
+    justifyContent: 'center',
+    height: 270,
+    alignItems: 'center',
   },
   labelStyle: {},
   inputStyle: {
@@ -228,6 +241,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#2980b6',
     paddingVertical: 15,
     marginTop: 30,
+  },
+  inputConntainerStyle: {
+    marginTop: 5,
+    marginBottom: 5,
   },
   buttonStyle: {
     color: '#fff',

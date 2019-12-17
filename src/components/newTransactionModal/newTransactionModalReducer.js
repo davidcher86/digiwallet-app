@@ -11,10 +11,10 @@ const initialState = {
   paymentType: 'credit',
   paymentDetails: {
     cardType: 'Visa',
-    paymentAmount: 1
+    paymentAmount: 1,
   },
   description: '',
-  date: '2016-05-01',
+  date: new Date(),
 };
 
 export default (state = initialState, action) => {
