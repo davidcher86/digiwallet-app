@@ -12,29 +12,30 @@ import Header from './../common/Header';
 import * as actions from './accountActions';
 
 class Account extends Component {
-    getRememberedUser = async () => {
-        try {
-            const uid = await AsyncStorage.getItem('digiwalletUserUID');
-            console.log(uid);
-            this.props.changeUserFieldValue('uid', uid);
-            return uid;
-        } catch (error) {
-            console.log(error);
-            // Error retrieving data
-        }
-    };
+  getRememberedUser = async () => {
+      try {
+          const uid = await AsyncStorage.getItem('digiwalletUserUID');
+          console.log(uid);
+          this.props.changeUserFieldValue('uid', uid);
+          return uid;
+      } catch (error) {
+          console.log(error);
+          // Error retrieving data
+      }
+  };
 
-    componentDidMount() {
-        this.getRememberedUser();
+  componentDidMount() {
+      this.getRememberedUser();
 
-        // getRememberedUser()
-        //   .then(res => {
-        //     if (res !== null) {
-        //       this.props.setIdentity(res);
-        //       this.props.navigation.navigate('PrimaryNav');
-        //     }
-        //   });
-    }
+      // getRememberedUser()
+      //   .then(res => {
+      //     if (res !== null) {
+      //       this.props.setIdentity(res);
+      //       this.props.navigation.navigate('PrimaryNav');
+      //     }
+      //   });
+  }
+
 
   render() {
     const {
@@ -68,17 +69,16 @@ class Account extends Component {
     const onNextStep = next => {
       handleStep(next);
     };
-    // console.log(this.props);
-    // console.log(this.props.navigation.getParam('uid'));
-    // console.log(this.props.navigation.getParam('type'));
 
     return (
       <KeyboardAvoidingView style={styles.containerStyle}>
         <Header navigation={this.props.navigation} title="Account" />
         <ScrollView style={styles.scrollerWrapper}>
           <View style={styles.wrapper}>
-            <ProgressSteps style={styles.progressbar} activeStep={pageSettings.step}>
+            <ProgressSteps previousBtnStyle={{color: '#007aff', fontSize: 18}} nextBtnTextStyle={{color: '#007aff', fontSize: 18}} style={styles.progressbar} onSubmit={() => console.log('sdfgdsf')}>
               <ProgressStep
+                nextBtnTextStyle={{color: '#ccfbf0', fontSize: 18}}
+                previousBtnTextStyle={{color: '#ccfbf0', fontSize: 18}}
                 previousBtnDisabled={true}
                 onNext={() => onNextStep(2)}
                 style={styles.innerTabContainer}
@@ -116,7 +116,7 @@ class Account extends Component {
                     <Text style={{width: '50%'}}>Gender</Text>
                     <Picker
                       selectedValue={user.gender}
-                      style={{height: 50, width: 100, width: '50%'}}
+                      style={{height: 50, width: '50%'}}
                       onValueChange={itemValue => changeUserFieldValue(itemValue)}>
                       <Picker.Item label="Male" value="male" />
                       <Picker.Item label="Female" value="female" />
@@ -152,6 +152,8 @@ class Account extends Component {
                 </View>
               </ProgressStep>
               <ProgressStep
+                nextBtnTextStyle={{color: '#ccfbf0', fontSize: 18}}
+                previousBtnTextStyle={{color: '#ccfbf0', fontSize: 18}}
                 onNext={() => onNextStep(3)}
                 onPrevious={() => onNextStep(1)}
                 style={styles.innerTabContainer}
@@ -161,8 +163,8 @@ class Account extends Component {
                     <View style={styles.inputRowContainer}>
                       <Text>Credit Card Details</Text>
                     </View>
-                    <View style={[styles.inputRowContainer,{flexDirection: 'row'}]}>
-                      <Text>Card Type</Text>
+                    <View style={[styles.inputRowContainer,{flexDirection: 'row', alignItems: 'center'}]}>
+                      <Text style={{width: '50%'}}>Card Type</Text>
                       <Picker
                         selectedValue={creditCard.cardType}
                         style={{height: 50, width: '50%'}}
@@ -171,8 +173,8 @@ class Account extends Component {
                         <Picker.Item label="Mastercard" value="mastercard" />
                       </Picker>
                     </View>
-                    <View style={[styles.inputRowContainer,{flexDirection: 'row'}]}>
-                      <Text>Billing Date</Text>
+                    <View style={[styles.inputRowContainer,{flexDirection: 'row', alignItems: 'center'}]}>
+                      <Text style={{width: '50%'}}>Billing Date</Text>
                       <Picker
                         selectedValue={creditCard.billingDate}
                         style={{height: 50, width: '50%'}}
@@ -186,51 +188,60 @@ class Account extends Component {
                 </View>
               </ProgressStep>
               <ProgressStep
+                nextBtnTextStyle={{color: '#ccfbf0', fontSize: 18}}
+                previousBtnTextStyle={{color: '#ccfbf0', fontSize: 18}}
                 onPrevious={() => onNextStep(2)}
-                nextBtnDisabled={true}
+                onSubmit={() => handleRegisterAccount(this.props.account, this.props.account.user.uid, this.props.navigation)}
+                // nextBtnDisabled={true}
+                errors={false}
                 label="Third Step">
-                <View style={{alignItems: 'center'}}>
-                  <Text>Sallary Details</Text>
-                  <Input
-                    style={styles.inputStyle}
-                    autoCorrect={false}
-                    value={account.assets.toString()}
-                    // onChangeText={text => this.props.changeUsername(text)}
-                    onChangeText={text => changeAccountFieldValue('assets', Number(text))}
-                    leftIcon={{name: 'mail'}}
-                    autoCapitalize="none"
-                    errorStyle={{color: 'red'}}
-                    errorMessage={this.props.validationErrors.firstNameError}
-                    placeholderTextColor="rgba(225,225,225,0.7)"
-                    label="Initial Amount"
-                  />
-                  <Input
-                    style={styles.inputStyle}
-                    autoCorrect={false}
-                    value={sallary.amount.toString()}
-                    // onChangeText={text => this.props.changeUsername(text)}
-                    onChangeText={text => changeSallaryFieldValue('amount', Number(text))}
-                    leftIcon={{name: 'mail'}}
-                    autoCapitalize="none"
-                    errorStyle={{color: 'red'}}
-                    errorMessage={this.props.validationErrors.firstNameError}
-                    placeholderTextColor="rgba(225,225,225,0.7)"
-                    label="Sallary Amount"
-                  />
-                  <Text>Sallary pay Day</Text>
-                  <Picker
-                    selectedValue={sallary.paymentDate}
-                    style={{height: 50, width: 100}}
-                    onValueChange={itemValue =>
-                      changeSallaryFieldValue('paymentDate', itemValue)
-                    }>
-                    {renderDays()}
-                  </Picker>
-                  <TouchableOpacity
-                    onPress={() => handleRegisterAccount(this.props.account, this.props.account.user.uid, this.props.navigation)}
-                    style={styles.buttonContainer}>
-                    <Text style={styles.buttonStyle}>ADD</Text>
-                  </TouchableOpacity>
+                <View style={styles.innerTabWrapper}>
+                  <View style={{alignItems: 'center'}}>
+                    <View style={styles.inputRowContainer}>
+                      <Text style={{width: '50%'}}>{'Sallary & Assets Details'}</Text>
+                    </View>
+                    <View style={[styles.inputRowContainer,{flexDirection: 'row', alignItems: 'center'}]}>
+                      <Input
+                        style={styles.inputStyle}
+                        autoCorrect={false}
+                        value={account.assets.toString()}
+                        placeholder="Initial Amount"
+                        // onChangeText={text => this.props.changeUsername(text)}
+                        onChangeText={text => changeAccountFieldValue('assets', Number(text))}
+                        leftIcon={{name: 'mail'}}
+                        autoCapitalize="none"
+                        errorStyle={{color: 'red'}}
+                        errorMessage={this.props.validationErrors.firstNameError}
+                        // label="Initial Amount"
+                        placeholderTextColor="rgba(225,225,225,0.7)"/>
+                    </View>
+                    <View style={styles.inputRowContainer}>
+                      <Input
+                        style={styles.inputStyle}
+                        autoCorrect={false}
+                        value={sallary.amount.toString()}
+                        placeholder="Sallary Amount"
+                        // onChangeText={text => this.props.changeUsername(text)}
+                        onChangeText={text => changeSallaryFieldValue('amount', Number(text))}
+                        leftIcon={{name: 'mail'}}
+                        autoCapitalize="none"
+                        errorStyle={{color: 'red'}}
+                        errorMessage={this.props.validationErrors.firstNameError}
+                        // label="Sallary Amount"
+                        placeholderTextColor="rgba(225,225,225,0.7)"/>
+                    </View>
+                    <View style={[styles.inputRowContainer,{flexDirection: 'row', alignItems: 'center'}]}>
+                      <Text style={{width: '50%'}}>Sallary pay Day</Text>
+                      <Picker
+                        selectedValue={sallary.paymentDate}
+                        style={{height: 50, width: 100}}
+                        onValueChange={itemValue =>
+                          changeSallaryFieldValue('paymentDate', itemValue)
+                        }>
+                        {renderDays()}
+                      </Picker>
+                    </View>
+                  </View>
                 </View>
               </ProgressStep>
             </ProgressSteps>
@@ -256,7 +267,7 @@ const styles = StyleSheet.create({
   },
   wrapper: {
     flex: 1,
-    marginTop: 40,
+    marginTop: 20,
     paddingLeft: 20,
     paddingRight: 20,
   },
@@ -269,18 +280,20 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     flexDirection: 'column',
-    borderWidth: 2,
     backgroundColor: 'green',
   },
   innerTabWrapper: {
     flexDirection: 'column',
-    // height: '100%',
-    marginBottom: 30,
+    height: 300,
+    marginBottom: 20,
     // borderWidth: 2,
   },
   inputRowContainer: {
+    justifyContent: 'center',
+    width: '100%',
     padding: 8,
     paddingLeft: 20,
+    // borderWidth: 2,
   },
   buttonContainerStyle: {
     backgroundColor: '#2980b6',
@@ -296,6 +309,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   inputStyle: {
+    width: '100%',
     // height: 40,
     // backgroundColor: 'rgba(225,225,225,0.2)',
     // marginBottom: 10,
