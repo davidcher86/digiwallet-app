@@ -42,7 +42,12 @@ class App extends Component {
           <NewTransactionModal onFabPress={onLoginPress()} />
           <View style={{flex: 1}}>
             <AppNavigator style={{height: '40'}} />
-            <FAB style={styles.fab} small icon="plus" onPress={() => store.dispatch(toggleNewTransactionModal())} />
+            <FAB
+              style={styles.fab}
+              small icon="plus"
+              onPress={() => {
+                store.dispatch(toggleNewTransactionModal());
+              }} />
           </View>
         </Provider>
         </TouchableWithoutFeedback>

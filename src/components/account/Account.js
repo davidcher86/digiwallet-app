@@ -15,7 +15,7 @@ class Account extends Component {
   getRememberedUser = async () => {
       try {
           const uid = await AsyncStorage.getItem('digiwalletUserUID');
-          console.log(uid);
+          // console.log(uid);
           this.props.changeUserFieldValue('uid', uid);
           return uid;
       } catch (error) {
@@ -25,8 +25,14 @@ class Account extends Component {
   };
 
   componentDidMount() {
-      this.getRememberedUser();
-
+      // this.getRememberedUser();
+      if (this.props.navigation.state.params.type === 'edit'
+          && this.props.identity.uid !== undefined
+          && this.props.identity.uid !== null) {
+            // console.log(this.props);
+            this.props.fetchAccount(this.props.identity.uid);
+            // console.log(this.props);
+      }
       // getRememberedUser()
       //   .then(res => {
       //     if (res !== null) {
@@ -43,6 +49,7 @@ class Account extends Component {
       pageSettings,
       account,
       validationErrors,
+      type,
       creditCard,
       sallary,
     } = this.props;
@@ -69,10 +76,10 @@ class Account extends Component {
     const onNextStep = next => {
       handleStep(next);
     };
-
+    console.log('type:', this.props.account);
     return (
       <KeyboardAvoidingView style={styles.containerStyle}>
-        <Header navigation={this.props.navigation} title="Account" />
+        {this.props.navigation.state.params.type === 'edit' && <Header navigation={this.props.navigation} title="Account" />}
         <ScrollView style={styles.scrollerWrapper}>
           <View style={styles.wrapper}>
             <ProgressSteps previousBtnStyle={{color: '#007aff', fontSize: 18}} nextBtnTextStyle={{color: '#007aff', fontSize: 18}} style={styles.progressbar} onSubmit={() => console.log('sdfgdsf')}>
@@ -166,9 +173,9 @@ class Account extends Component {
                     <View style={[styles.inputRowContainer,{flexDirection: 'row', alignItems: 'center'}]}>
                       <Text style={{width: '50%'}}>Card Type</Text>
                       <Picker
-                        selectedValue={creditCard.cardType}
+                        selectedValue={creditCard[0].cardType}
                         style={{height: 50, width: '50%'}}
-                        onValueChange={itemValue => changeCreditFieldValue('cardType', itemValue)}>
+                        onValueChange={itemValue => changeCreditFieldValue('cardType', itemValue, 0)}>
                         <Picker.Item label="Visa" value="visa" />
                         <Picker.Item label="Mastercard" value="mastercard" />
                       </Picker>
@@ -176,10 +183,10 @@ class Account extends Component {
                     <View style={[styles.inputRowContainer,{flexDirection: 'row', alignItems: 'center'}]}>
                       <Text style={{width: '50%'}}>Billing Date</Text>
                       <Picker
-                        selectedValue={creditCard.billingDate}
+                        selectedValue={creditCard[0].billingDate}
                         style={{height: 50, width: '50%'}}
                         onValueChange={itemValue =>
-                          changeCreditFieldValue('billingDate', itemValue)
+                          changeCreditFieldValue('billingDate', itemValue, 0)
                         }>
                         {renderDays()}
                       </Picker>
@@ -322,6 +329,7 @@ const mapStateToProps = state => {
   return {
     account: state.account,
     creditCard: state.account.creditCard,
+    identity: state.identity,
     pageSettings: state.account.pageSettings,
     user: state.account.user,
     sallary: state.account.sallary,

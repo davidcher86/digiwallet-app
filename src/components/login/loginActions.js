@@ -31,7 +31,7 @@ export const setIdentity = uid => {
   };
 };
 
-export const onSignInPress = (email, password, navigation) => {
+export const onRegister = (email, password, navigation) => {
   var data = {
     email: email,
     password: password,
@@ -44,7 +44,7 @@ export const onSignInPress = (email, password, navigation) => {
         firebaseAction(null, 'authentication', 'login', data).then(response => {
           dispatch(resetForm());
           rememberUser(response.user.uid);
-          return navigation.navigate('Account');
+          return navigation.navigate('Account', {type: 'new'});
         });
       })
       .catch(res => {

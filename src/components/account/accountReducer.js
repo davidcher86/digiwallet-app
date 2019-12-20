@@ -6,11 +6,13 @@ const initialState = {
     gender: 'male',
     birthDate: '2016-05-01',
   },
-  creditCard: {
-    cardType: 'visa',
-    billingDate: '1',
-    monthlyLiabilities: 0,
-  },
+  creditCard: [
+    {
+      cardType: 'visa',
+      billingDate: '1',
+      monthlyLiabilities: 0,
+    },
+  ],
   sallary: {
     paymentDate: '1',
     amount: 10000,
@@ -36,7 +38,9 @@ export default (state = initialState, action) => {
       user[action.field] = action.value;
       return Object.assign({}, state, {user: user});
     case 'UPDATE_ACCOUNT_FORM_CREDIT':
-      creditCard[action.field] = action.value;
+      var card = creditCard[action.index];
+      card[action.field] = action.value;
+      creditCard[action.index] = card;
       return Object.assign({}, state, {creditCard: creditCard});
     case 'UPDATE_ACCOUNT_FORM_SALLARY':
       sallary[action.field] = action.value;
@@ -46,6 +50,9 @@ export default (state = initialState, action) => {
         pageSettings.step = action.value;
       }
       return Object.assign({}, state, {pageSettings: pageSettings});
+    case 'SET_ACCOUNT_DETAILS':
+      console.log(action.account);
+      return Object.assign({}, state, action.account);
     default:
       return state;
   }

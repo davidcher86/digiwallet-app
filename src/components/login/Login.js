@@ -47,7 +47,7 @@ class LoginForm extends Component {
         {this.props.pageSettings.selectedTab === 'signIn' && (
           <TouchableOpacity
             style={styles.buttonContainer}
-            onPress={() => props.onSignInPress(
+            onPress={() => props.onRegister(
                             props.login.newEmail,
                             props.login.newPassword,
                             this.props.navigation)}>

@@ -32,7 +32,7 @@ const DrawerWithLogoutButton = props => (
     </TouchableHighlight>
     <TouchableHighlight
       style={styles.navButton}
-      onPress={() => props.navigation.navigate('Account')}>
+      onPress={() => props.navigation.navigate('Account', {type: 'edit'})}>
       <Text>Account</Text>
     </TouchableHighlight>
     <TouchableHighlight
@@ -109,6 +109,7 @@ const PrimaryNav = createDrawerNavigator(
   {
     contentComponent: DrawerWithLogoutButton,
     headerMode: 'none',
+    unmountInactiveRoutes: true,
   },
 );
 
@@ -145,6 +146,18 @@ const styles = StyleSheet.create({
     // backgroundColor: 'red',
     position: 'absolute',
     bottom: 0,
+  },
+  fab: {
+    flex: 1,
+    position: 'absolute',
+    // padding: 5,
+    // alignSelf: 'center',
+    // backgroundColor: '#fff',
+    // width: 70,
+    // height: 70,
+    // borderRadius: 35,
+    // bottom: 25,
+    // zIndex: 50,
   },
 });
 

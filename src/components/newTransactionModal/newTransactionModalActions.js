@@ -35,8 +35,10 @@ export const changeFieldValue = (field, value) => {
   };
 };
 
-export const handleAddNewTransactionAccount = (newTransaction, uid) => dispatch => {
-  console.log('add new transaction');
+export const handleAddNewTransactionAccount = (
+  newTransaction,
+  uid,
+) => dispatch => {
   var data = {
     transactionType: newTransaction.transactionType,
     amount: newTransaction.amount,
@@ -64,7 +66,6 @@ export const handleAddNewTransactionAccount = (newTransaction, uid) => dispatch 
     .ref(`/users/${uid}/account/transactions`)
     .push(data)
     .then(res => {
-      console.log(res);
       dispatch(resetNewTransactionForm());
       dispatch(closeNewTransactionModal());
       dispatch(fetchTransactions(uid));

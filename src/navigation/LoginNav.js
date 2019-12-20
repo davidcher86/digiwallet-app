@@ -21,14 +21,15 @@ const LoginStack = createStackNavigator(
     Account: {
       screen: Account,
       navigationOptions: {
-        title: 'Regiter Account',
-        headerStyle: {
-          backgroundColor: '#f4511e',
-        },
-        headerTintColor: '#fff',
-        headerTitleStyle: {
-          fontWeight: 'bold',
-        },
+        header: null,
+        // title: 'Regiter Account',
+        // headerStyle: {
+        //   backgroundColor: '#f4511e',
+        // },
+        // headerTintColor: '#fff',
+        // headerTitleStyle: {
+        //   fontWeight: 'bold',
+        // },
       },
     },
   },
