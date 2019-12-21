@@ -39,17 +39,30 @@ export const handleAddNewTransactionAccount = (
   newTransaction,
   uid,
 ) => dispatch => {
+  console.log('newTransaction:', newTransaction);
   var data = {
     transactionType: newTransaction.transactionType,
     amount: newTransaction.amount,
     paymentType: newTransaction.paymentType,
     paymentDetails: newTransaction.paymentDetails,
-    date: newTransaction.date,
+    date:
+      newTransaction.date.getFullYear() +
+      '-' +
+      (newTransaction.date.getMonth() + 1) +
+      '-' +
+      newTransaction.date.getDate() +
+      ' ' +
+      newTransaction.date.getHours() +
+      ':' +
+      newTransaction.date.getMinutes() +
+      ':' +
+      newTransaction.date.getSeconds(),
+    // date: newTransaction.date,
     description: newTransaction.description,
     mainCategory: newTransaction.mainCategory,
     subCategory: newTransaction.subCategory,
   };
-
+  console.log('data:', data);
   //  firebaseAction(uid, 'transactions', 'push', data)
   //   .then(res => {
   //     console.log(res);

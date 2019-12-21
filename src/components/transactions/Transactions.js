@@ -16,9 +16,9 @@ import {
   Button,
 } from 'native-base';
 
-import {FAB} from 'react-native-paper';
-import Header from './../common/Header';
 import * as actions from './transactionsActions';
+import Fab from './../common/Fab';
+import Header from './../common/Header';
 
 class TransactionItem extends Component {
   render() {
@@ -29,7 +29,7 @@ class TransactionItem extends Component {
       transactionItem,
       deleteTransaction,
     } = this.props;
-    // console.log('pageSettings', pageSettings);
+    console.log(transactionItem);
     var isOpened = pageSettings.isOpenIndex === transactionItem.uid;
     return (
       <View style={styles.transactionItemContainer} thumbnail>
@@ -144,6 +144,7 @@ class Transactions extends Component {
       <View style={styles.transacionListContainer}>
         <Header navigation={this.props.navigation} title="Transaction" />
         <View>{renderTransactions(this.props)}</View>
+        <Fab />
       </View>
     );
   }

@@ -70,7 +70,7 @@ class NewTransactionModal extends Component {
     };
     var date = new Date();
     var maxDate = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
-    console.log(maxDate);
+    // console.log(maxDate);
     return (
       <KeyboardAvoidingView style={styles.containerStyle}>
         <View>

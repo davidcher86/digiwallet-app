@@ -7,9 +7,9 @@ import {ProgressSteps, ProgressStep} from 'react-native-progress-steps';
 import DatePicker from 'react-native-datepicker';
 // import Picker from '@react-native-community/picker';
 
-// import {rememberUser} from './../../Actions';
-import Header from './../common/Header';
 import * as actions from './accountActions';
+import Header from './../common/Header';
+import Fab from './../common/Fab';
 
 class Account extends Component {
   getRememberedUser = async () => {
@@ -50,7 +50,7 @@ class Account extends Component {
       account,
       validationErrors,
       type,
-      creditCard,
+      creditCards,
       sallary,
     } = this.props;
 
@@ -61,6 +61,7 @@ class Account extends Component {
       changeSallaryFieldValue,
       handleRegisterAccount,
       handlePickerChange,
+      handleUpdaeAccount,
       changeAccountFieldValue,
       changeCreditFieldValue,
     } = this.props;
@@ -76,13 +77,13 @@ class Account extends Component {
     const onNextStep = next => {
       handleStep(next);
     };
-    console.log('type:', this.props.account);
+    console.log('props:', user);
     return (
       <KeyboardAvoidingView style={styles.containerStyle}>
         {this.props.navigation.state.params.type === 'edit' && <Header navigation={this.props.navigation} title="Account" />}
         <ScrollView style={styles.scrollerWrapper}>
           <View style={styles.wrapper}>
-            <ProgressSteps previousBtnStyle={{color: '#007aff', fontSize: 18}} nextBtnTextStyle={{color: '#007aff', fontSize: 18}} style={styles.progressbar} onSubmit={() => console.log('sdfgdsf')}>
+            <ProgressSteps previousBtnStyle={{color: '#007aff', fontSize: 18}} nextBtnTextStyle={{color: '#007aff', fontSize: 18}} style={styles.progressbar}>
               <ProgressStep
                 nextBtnTextStyle={{color: '#ccfbf0', fontSize: 18}}
                 previousBtnTextStyle={{color: '#ccfbf0', fontSize: 18}}
@@ -173,7 +174,7 @@ class Account extends Component {
                     <View style={[styles.inputRowContainer,{flexDirection: 'row', alignItems: 'center'}]}>
                       <Text style={{width: '50%'}}>Card Type</Text>
                       <Picker
-                        selectedValue={creditCard[0].cardType}
+                        selectedValue={creditCards[0].cardType}
                         style={{height: 50, width: '50%'}}
                         onValueChange={itemValue => changeCreditFieldValue('cardType', itemValue, 0)}>
                         <Picker.Item label="Visa" value="visa" />
@@ -183,7 +184,7 @@ class Account extends Component {
                     <View style={[styles.inputRowContainer,{flexDirection: 'row', alignItems: 'center'}]}>
                       <Text style={{width: '50%'}}>Billing Date</Text>
                       <Picker
-                        selectedValue={creditCard[0].billingDate}
+                        selectedValue={creditCards[0].billingDate}
                         style={{height: 50, width: '50%'}}
                         onValueChange={itemValue =>
                           changeCreditFieldValue('billingDate', itemValue, 0)
@@ -198,8 +199,14 @@ class Account extends Component {
                 nextBtnTextStyle={{color: '#ccfbf0', fontSize: 18}}
                 previousBtnTextStyle={{color: '#ccfbf0', fontSize: 18}}
                 onPrevious={() => onNextStep(2)}
-                onSubmit={() => handleRegisterAccount(this.props.account, this.props.account.user.uid, this.props.navigation)}
-                // nextBtnDisabled={true}
+                finishBtnText={this.props.navigation.state.params.type === 'new' ? 'Submit' : 'Edit'}
+                onSubmit={() => {
+                  if (this.props.navigation.state.params.type === 'new') {
+                    handleRegisterAccount(this.props.account, this.props.identity.uid, this.props.navigation);
+                  } else if (this.props.navigation.state.params.type === 'edit') {
+                    handleUpdaeAccount(this.props.account, this.props.identity.uid);
+                  }
+                }}
                 errors={false}
                 label="Third Step">
                 <View style={styles.innerTabWrapper}>
@@ -254,6 +261,7 @@ class Account extends Component {
             </ProgressSteps>
           </View>
         </ScrollView>
+        <Fab />
       </KeyboardAvoidingView>
     );
   }
@@ -328,7 +336,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => {
   return {
     account: state.account,
-    creditCard: state.account.creditCard,
+    creditCards: state.account.creditCards,
     identity: state.identity,
     pageSettings: state.account.pageSettings,
     user: state.account.user,

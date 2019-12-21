@@ -6,7 +6,7 @@ import firebase from 'firebase';
 
 import * as actions from './dashboardActions';
 import Header from './../common/Header';
-import {FAB} from 'react-native-paper';
+import Fab from './../common/Fab';
 
 class Dashboard extends Component {
   static navigationOptions = {
@@ -33,7 +33,7 @@ class Dashboard extends Component {
         <View style={styles.containerStyle}>
           <Text>{'Dashboard'}</Text>
         </View>
-        {/* <FAB style={styles.fab} small icon="plus" onPress={onLoginPress()} /> */}
+        <Fab />
       </View>
     );
   }

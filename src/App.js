@@ -4,15 +4,12 @@ import {Provider} from 'react-redux';
 import ReduxThunk from 'redux-thunk';
 import {createStore, applyMiddleware} from 'redux';
 import {StyleSheet, View, Modal, SafeAreaView, KeyboardAvoidingView, Keyboard, TouchableWithoutFeedback} from 'react-native';
-import {connect} from 'react-redux';
 
 import reducers from './redux';
 import AppNavigator from './navigation/AppNavigation';
 import NewTransactionModal from './components/newTransactionModal/NewTransactionModal';
 import {onLoginPress} from './components/systemControl/systemControlActions';
-import {FAB} from 'react-native-paper';
 import firebase from 'firebase';
-import {toggleNewTransactionModal} from './components/newTransactionModal/newTransactionModalActions';
 
 class App extends Component {
   componentDidMount() {
@@ -31,27 +28,20 @@ class App extends Component {
 
   render() {
     const store = createStore(reducers, {}, applyMiddleware(ReduxThunk));
-
     var state = store.getState();
-    // console.log(state.identity);
+
     const {systemControl} = state;
     return (
-      <SafeAreaView style={{flex: 1}}>
+      <KeyboardAvoidingView style={{flex: 1}}>
         <TouchableWithoutFeedback style={{flex: 1}} onPress={Keyboard.dismiss}>
         <Provider store={store}>
           <NewTransactionModal onFabPress={onLoginPress()} />
           <View style={{flex: 1}}>
             <AppNavigator style={{height: '40'}} />
-            <FAB
-              style={styles.fab}
-              small icon="plus"
-              onPress={() => {
-                store.dispatch(toggleNewTransactionModal());
-              }} />
           </View>
         </Provider>
         </TouchableWithoutFeedback>
-      </SafeAreaView>
+      </KeyboardAvoidingView>
     );
   }
 }

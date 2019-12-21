@@ -3,11 +3,10 @@ import React, { Component } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { Button, Input, Icon  } from 'react-native-elements';
 import { connect } from 'react-redux';
-import firebase from 'firebase';
-import {FAB} from 'react-native-paper';
 
 import * as actions from './homePageActions';
 import Header from './../common/Header';
+import Fab from './../common/Fab';
 
 class HomePage extends Component {
     static navigationOptions = {
@@ -15,14 +14,14 @@ class HomePage extends Component {
     }
 
     render() {
-        console.log(this.props.identity);
+        // console.log(this.props.identity);
         return (
             <View style={{flex: 1}}>
                 <Header navigation={this.props.navigation} title="Home"/>
                 <View style={styles.containerStyle}>
                     <Text>{'HomePage'}</Text>
                 </View>
-                {/* <FAB style={styles.fab} small icon="plus" onPress={onLoginPress()} /> */}
+                <Fab />
             </View>
         );
     }

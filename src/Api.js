@@ -38,7 +38,7 @@ export function firebaseAction(
         return data;
       });
     case 'edit':
-      break;
+      return dataRef.update(data);
     case 'add':
       return dataRef.set(data);
     case 'push':

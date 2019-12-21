@@ -38,11 +38,11 @@ export const onRegister = (email, password, navigation) => {
   };
   return dispatch => {
     dispatch(changeLoading(true));
-
     firebaseAction(null, 'authentication', 'register', data)
       .then(r => {
         firebaseAction(null, 'authentication', 'login', data).then(response => {
           dispatch(resetForm());
+          dispatch(setIdentity(response.user.uid));
           rememberUser(response.user.uid);
           return navigation.navigate('Account', {type: 'new'});
         });

@@ -58,7 +58,7 @@ export const handlePickerChange = (itemValue, itemIndex) => {
 export const handleRegisterAccount = (account, uid, navigation) => dispatch => {
   const json = {
     sallary: account.sallary,
-    creditCards: account.creditCard,
+    creditCards: account.creditCards,
     details: account.user,
     transactions: account.transactions,
     assets: account.assets,
@@ -66,12 +66,11 @@ export const handleRegisterAccount = (account, uid, navigation) => dispatch => {
 
   firebaseAction(uid, 'account', 'add', json)
     .then(res => {
-      console.log(res);
       navigation.navigate('HomePage');
       return res;
     })
     .catch(err => {
-      console.log(err);
+      console.log('Error register new account, Exception:', err);
     });
 };
 
@@ -88,38 +87,55 @@ export const fetchAccount = uid => {
     // .then(res => {
     //   console.log(res);
     // })
-    console.log('fetchAccount');
+
     const dataRef = firebase.database().ref(`/users/${uid}/account`);
-    dataRef.once('value').then(function(snapshot) {
+    dataRef
+      .once('value')
+      .then(function(snapshot) {
         var res = snapshot.val();
-        console.log(res);
         var account = {
           assets: res.assets,
           creditCards: res.creditCards,
-          details: res.details,
+          user: res.details,
           sallary: res.sallary,
         };
+
         dispatch(setAccountDetails(account));
       })
       .catch(r => {
-        console.log('Error:fetching account from Firebase, Exception: ' + r);
+        console.log('Error fetching account from Firebase, Exception: ' + r);
       });
   };
 };
 
-export const handleEditAccount = account => dispatch => {
+export const handleUpdaeAccount = (account, uid) => dispatch => {
   console.log('edit: ', account);
   const json = {
     sallary: account.sallary,
-    creditCard: account.creditCard,
+    creditCards: account.creditCards,
     details: account.user,
-    capital: account.amount,
-    transactions: account.transactions,
-    liability: account.liability,
     assets: account.assets,
   };
 
-  // firebase.database().ref(`/users/${currentUser.uid}/account/${account.uid}`)
+  firebase
+    .database()
+    .ref(`/users/${uid}/account`)
+    .update({
+      'assets': account.assets,
+      'details': account.user,
+      'sallary': account.sallary,
+      'creditCards': account.creditCards,
+    })
+    .then(res => {
+      console.log(res);
+    });
+  // const jsonToSend = {acount: json};
+  // console.log(jsonToSend);
+  // return firebaseAction(uid, 'account', 'edit', null, jsonToSend).then(res => {
+  //   console.log(res);
+  // });
+
+  // firebase.database().ref(`/users/${uid}/account`)
   //     .set(json)
   //     .then(res => {
   //         console.log(res);
