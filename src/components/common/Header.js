@@ -1,9 +1,17 @@
 import React from 'react';
-import {Header} from 'react-native-elements';
-
-import HamburgerMenu from './Hamburger';
+import {Header, Icon} from 'react-native-elements';
 
 const MyHeader = props => {
+  const HamburgerMenu = props => {
+    return (
+      <Icon
+        color="#fff"
+        name="menu"
+        onPress={() => props.navigation.toggleDrawer()}
+      />
+    );
+  };
+
   return (
     <Header
       leftComponent={<HamburgerMenu navigation={props.navigation} />}

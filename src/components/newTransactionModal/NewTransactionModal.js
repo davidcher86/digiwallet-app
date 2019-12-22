@@ -13,7 +13,6 @@ import {
 import {Button, Input, Icon} from 'react-native-elements';
 import {connect} from 'react-redux';
 import firebase from 'firebase';
-import {FAB} from 'react-native-paper';
 import DatePicker from 'react-native-datepicker';
 
 import * as actions from './newTransactionModalActions';
@@ -73,7 +72,7 @@ class NewTransactionModal extends Component {
     // console.log(maxDate);
     return (
       <KeyboardAvoidingView style={styles.containerStyle}>
-        <View>
+        <View >
           <Modal
             animationType="slide"
             transparent={true}
@@ -81,7 +80,7 @@ class NewTransactionModal extends Component {
             style={{padding: 10}}
             visible={isModalOpen}
             onRequestClose={() => closeNewTransactionModal()}>
-            <ScrollView style={styles.modalInnerContainerStyle}>
+            <ScrollView style={styles.modalInnerContainerStyle} showsVerticalScrollIndicator={false}>
               <View style={styles.inputContainer}>
                 <Text style={styles.pickerLabel}>Transaction Type</Text>
                 <Picker
@@ -97,7 +96,7 @@ class NewTransactionModal extends Component {
                 <Input
                   placeholder="Amount"
                   style={styles.inputStyle}
-                  value={newTransaction.amount}
+                  value={newTransaction.amount.toString()}
                   onChangeText={text => changeFieldValue('amount', text)}
                   // leftIcon={{ name: 'maijl' }}
                   errorStyle={{color: 'red'}}
@@ -241,6 +240,7 @@ const styles = StyleSheet.create({
     height: '100%',
     justifyContent: 'flex-start',
     flexDirection: 'column',
+    // zIndex: 40,
   },
   buttonContainerStyle: {
     backgroundColor: '#2980b6',
@@ -250,15 +250,16 @@ const styles = StyleSheet.create({
   modalInnerContainerStyle: {
     flex: 1,
     flexDirection: 'column',
-    height: '80%',
+    // height: '95%',
     marginRight: 30,
     marginLeft: 30,
-    backgroundColor: '#ede3f2',
+    // backgroundColor: '#ede3f2',
+    backgroundColor: '#aff0ffcc',
     borderRadius: 15,
-    borderWidth: 0.5,
+    // borderWidth: 0.5,
     marginTop: 35,
     marginBottom: 75,
-    opacity: 0.8,
+    opacity: 0.9,
     padding: 8,
   },
   inputContainer: {
@@ -266,9 +267,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     width: '100%',
-    marginTop: 8,
+    marginTop: 4,
     borderRadius: 10,
     backgroundColor: 'pink',
+    marginBottom: 7,
   },
   inputStyle: {
     // borderWidth: 2,
@@ -284,37 +286,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: '40%',
   },
-  fabContainerStyle: {
-    height: '20%',
-    width: '100%',
-    backgroundColor: 'yellow',
-  },
   buttonContainer: {
     width: '100%',
     backgroundColor: 'green',
-    marginTop: 16,
+    marginTop: 8,
+    marginBottom: 8,
     borderRadius: 15,
     padding: 8,
     alignItems: 'center',
-  },
-  fab: {
-    // flex: 1,
-    // borderRadius: 200,
-    // position: 'absolute',
-    // bottom: 20,
-    // right: 20,
-    // justifyContent: 'center',
-    // alignItems: 'center',
-    // backgroundColor: '#686cc3',
-    height: 50,
-    width: 50,
-    borderRadius: 200,
-    position: 'absolute',
-    bottom: 20,
-    right: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#686cc3',
   },
 });
 

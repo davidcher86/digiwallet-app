@@ -15,13 +15,15 @@ import {toggleNewTransactionModal} from './../newTransactionModal/newTransaction
 
 class Fab extends Component {
   render() {
+    console.log(this.props);
     return (
       <View style={styles.containerStyle}>
         <FAB
-          style={styles.fab}
+          style={[styles.fab, this.props.newTransaction.isModalOpen ? {opacity: 0.2} : {}]}
           small
           onPress={() => this.props.toggleNewTransactionModal()}
-          icon="plus" />
+          icon="plus"
+        />
       </View>
     );
   }
@@ -30,6 +32,7 @@ class Fab extends Component {
 const styles = StyleSheet.create({
   containerStyle: {
     flex: 1,
+    zIndex: 10,
   },
   fab: {
     height: 50,

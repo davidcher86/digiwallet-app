@@ -39,7 +39,6 @@ export const handleAddNewTransactionAccount = (
   newTransaction,
   uid,
 ) => dispatch => {
-  console.log('newTransaction:', newTransaction);
   var data = {
     transactionType: newTransaction.transactionType,
     amount: newTransaction.amount,

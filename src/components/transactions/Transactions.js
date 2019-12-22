@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, TouchableOpacity, FlatList, StyleSheet, Image} from 'react-native';
+import {View, TouchableOpacity, FlatList, ScrollView, StyleSheet, Image} from 'react-native';
 import {Input, Icon} from 'react-native-elements';
 import {connect} from 'react-redux';
 import {
@@ -7,7 +7,6 @@ import {
   Content,
   List,
   ListItem,
-  ScrollView,
   Thumbnail,
   Text,
   Left,
@@ -29,7 +28,7 @@ class TransactionItem extends Component {
       transactionItem,
       deleteTransaction,
     } = this.props;
-    console.log(transactionItem);
+    // console.log(transactionItem);
     var isOpened = pageSettings.isOpenIndex === transactionItem.uid;
     return (
       <View style={styles.transactionItemContainer} thumbnail>
@@ -52,7 +51,7 @@ class TransactionItem extends Component {
               onPress={() => openTransaction(transactionItem.uid)}>
               <Image
                 style={{width: 20, height: 20}}
-                source={require('./../../img/more-icn.png')}/>
+                source={require('./../../img/more-icn.png')} />
             </TouchableOpacity>
             <TouchableOpacity
               transparent
@@ -143,7 +142,7 @@ class Transactions extends Component {
     return (
       <View style={styles.transacionListContainer}>
         <Header navigation={this.props.navigation} title="Transaction" />
-        <View>{renderTransactions(this.props)}</View>
+        <ScrollView>{renderTransactions(this.props)}</ScrollView>
         <Fab />
       </View>
     );

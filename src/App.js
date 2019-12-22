@@ -10,27 +10,30 @@ import AppNavigator from './navigation/AppNavigation';
 import NewTransactionModal from './components/newTransactionModal/NewTransactionModal';
 import {onLoginPress} from './components/systemControl/systemControlActions';
 import firebase from 'firebase';
-
+// import {APP_BACKGROUND_COLOR} from './styles/styles';
 class App extends Component {
   componentDidMount() {
     console.log('firebase initilised');
-    firebase.initializeApp({
-      apiKey: 'AIzaSyBuhrwvn0lV7B-ugmVEmEXYHsIa_8e-mko',
-      authDomain: 'authproj-3e757.firebaseapp.com',
-      databaseURL: 'https://authproj-3e757.firebaseio.com',
-      projectId: 'authproj-3e757',
-      storageBucket: 'authproj-3e757.appspot.com',
-      messagingSenderId: '107699463403',
-      appId: '1:107699463403:web:4ed1a7a0fb64e596684aae',
-      measurementId: 'G-B372DNG4CY',
-    });
+    if (!firebase.apps.length) {
+      firebase.initializeApp({
+        apiKey: 'AIzaSyBuhrwvn0lV7B-ugmVEmEXYHsIa_8e-mko',
+        authDomain: 'authproj-3e757.firebaseapp.com',
+        databaseURL: 'https://authproj-3e757.firebaseio.com',
+        projectId: 'authproj-3e757',
+        storageBucket: 'authproj-3e757.appspot.com',
+        messagingSenderId: '107699463403',
+        appId: '1:107699463403:web:4ed1a7a0fb64e596684aae',
+        measurementId: 'G-B372DNG4CY',
+      });
+    } else {
+      firebase.app();
+    }
   }
 
   render() {
     const store = createStore(reducers, {}, applyMiddleware(ReduxThunk));
     var state = store.getState();
 
-    const {systemControl} = state;
     return (
       <KeyboardAvoidingView style={{flex: 1}}>
         <TouchableWithoutFeedback style={{flex: 1}} onPress={Keyboard.dismiss}>

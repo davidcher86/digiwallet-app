@@ -7,6 +7,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 
 import * as loginActions from './loginActions';
 import {getRememberedUser} from './../common/Actions';
+// import * as constants from './../../styles';
 // import {setIdentity} from './../identity/identityActions';
 
 class LoginForm extends Component {

@@ -1,7 +1,7 @@
 const initialState = {
   identity: null,
   signedIn: true,
-  appControk: {
+  appControl: {
     newTransactionModalOpen: true,
   },
 };

@@ -2,54 +2,98 @@ import {createDrawerNavigator} from 'react-navigation';
 import React, {Component} from 'react';
 import {FAB} from 'react-native-paper';
 import {Input, Icon} from 'react-native-elements';
+// import {
+//   ScrollView,
+//   DrawerItems,
+//   View,
+//   Button,
+//   StyleSheet,
+//   TouchableHighlight,
+//   Text,
+// } from 'react-native';
 import {
-  ScrollView,
-  DrawerItems,
   View,
-  Button,
-  StyleSheet,
-  TouchableHighlight,
   Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  Platform,
 } from 'react-native';
-
 import Account from './../components/account/Account';
 import HomePage from './../components/homePage/HomePage';
 import Dashboard from './../components/dashboard/Dashboard';
 import Transactions from './../components/transactions/Transactions';
 import {removeUID} from './../components/common/Actions';
 
-const DrawerWithLogoutButton = props => (
-  <View style={styles.navContainer}>
-    <TouchableHighlight
-      style={styles.navButton}
-      onPress={() => props.navigation.navigate('HomePage')}>
-      <Text>HomePage</Text>
-    </TouchableHighlight>
-    <TouchableHighlight
-      style={styles.navButton}
-      onPress={() => props.navigation.navigate('Dashboard')}>
-      <Text>Dashboard</Text>
-    </TouchableHighlight>
-    <TouchableHighlight
-      style={styles.navButton}
-      onPress={() => props.navigation.navigate('Account', {type: 'edit'})}>
-      <Text>Account</Text>
-    </TouchableHighlight>
-    <TouchableHighlight
-      style={styles.navButton}
-      onPress={() => props.navigation.navigate('Transactions')}>
-      <Text>Transactions</Text>
-    </TouchableHighlight>
-    <TouchableHighlight
-      style={styles.logoutButton}
-      onPress={() => {
-        removeUID();
-        props.navigation.navigate('Login');
-      }}>
-      <Text>Logout</Text>
-    </TouchableHighlight>
-  </View>
-);
+class DrawerContainer extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+
+  render() {
+    const {navigate} = this.props.navigation;
+
+    return (
+      <View style={styles.container}>
+        <View style={styles.containertopRow}>
+          <Image
+            style={styles.imageTopRow}
+            source={{
+              uri:
+                'https://cdn.pixabay.com/photo/2014/04/05/12/20/man-316917_960_720.jpg',
+            }}
+          />
+        </View>
+        <View style={styles.containerBottom}>
+          <TouchableOpacity
+            onPress={() => navigate('HomePage')}
+            style={styles.containerBottomItem}>
+            <View style={styles.button}>
+              <Text style={styles.txtBottom}>Home</Text>
+            </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() => navigate('Dashboard')}
+            style={styles.containerBottomItem}>
+            <View style={styles.button}>
+              <Text style={styles.txtBottom}>Dashboard</Text>
+            </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() => navigate('Account', {type: 'edit'})}
+            style={styles.containerBottomItem}>
+            <View style={styles.button}>
+              <Text style={styles.txtBottom}>Account</Text>
+            </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() => navigate('Transactions')}
+            style={styles.containerBottomItem}>
+            <View style={styles.button}>
+              <Text style={styles.txtBottom}>Transactions</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.containerLogout}>
+          <TouchableOpacity
+            onPress={() => {
+              removeUID();
+              navigate('Login');
+            }}
+            style={styles.containerBottomItemLogout}>
+            <View style={styles.button}>
+              <Text style={styles.txtBottom}>Logout</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  }
+}
 
 const PrimaryNav = createDrawerNavigator(
   {
@@ -107,57 +151,88 @@ const PrimaryNav = createDrawerNavigator(
     },
   },
   {
-    contentComponent: DrawerWithLogoutButton,
+    // contentComponent: DrawerWithLogoutButton,
+    contentComponent: DrawerContainer,
     headerMode: 'none',
     unmountInactiveRoutes: true,
   },
 );
 
 const styles = StyleSheet.create({
-  navContainer: {
+  container: {
     flex: 1,
+    backgroundColor: '#17BED0',
+    zIndex: 50,
+  },
+  containertopRow: {
+    borderBottomWidth: 1,
+    borderColor: '#ddd',
+    marginTop: 20,
+    marginBottom: 20,
+    paddingBottom: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  txtBottom: {
+    marginLeft: 10,
+    color: '#E6FAFF',
+    fontSize: 15,
+    fontWeight: '100',
+  },
+  imageTopRow: {
+    height: 80,
+    width: 80,
+    ...Platform.select({
+      ios: {
+        borderRadius: 80 / 2,
+      },
+      android: {
+        borderRadius: 80,
+      },
+    }),
+  },
+  icon: {
+    height: 25,
+    width: 25,
+    marginRight: 10,
+  },
+  button: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+  },
+
+  containertopRowText: {
     flexDirection: 'column',
+    marginLeft: 5,
   },
-  navButton: {
-    // marginBottom: 30,
-    marginTop: 10,
-    // flex: 1,
-    padding: 4,
-    width: '100%',
-    // borderWidth: 2,
-    height: 40,
-    borderColor: 'black',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'green',
-    top: 0,
+
+  containerBottom: {
+    backgroundColor: '#17BED0',
   },
-  logoutButton: {
-    // alignSelf: 'flex-end',
-    // borderWidth: 2,
-    height: 40,
-    width: '100%',
+  containerBottomItem: {
+    padding: 10,
     alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'red',
-    // marginBottom: 30,
-    // marginTop: 30,
-    // justifyContent: 'space-between',
-    // backgroundColor: 'red',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    borderBottomColor: '#E6FAFF',
+    borderBottomWidth: 0.5,
+  },
+  containerLogout: {
     position: 'absolute',
     bottom: 0,
+    borderTopWidth: 1,
+    borderColor: '#ddd',
+    width: '100%',
+    alignItems: 'center',
   },
-  fab: {
-    flex: 1,
-    position: 'absolute',
-    // padding: 5,
-    // alignSelf: 'center',
-    // backgroundColor: '#fff',
-    // width: 70,
-    // height: 70,
-    // borderRadius: 35,
-    // bottom: 25,
-    // zIndex: 50,
+  containerBottomItemLogout: {
+    padding: 10,
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    borderBottomColor: '#E6FAFF',
+    borderBottomWidth: 0.5,
   },
 });
 
