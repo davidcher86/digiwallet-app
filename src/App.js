@@ -3,9 +3,11 @@ import React, {Component} from 'react';
 import {Provider} from 'react-redux';
 import ReduxThunk from 'redux-thunk';
 import {createStore, applyMiddleware} from 'redux';
+import {CirclesLoader, PulseLoader, TextLoader, DotsLoader} from 'react-native-indicator';
 import {StyleSheet, View, Modal, SafeAreaView, KeyboardAvoidingView, Keyboard, TouchableWithoutFeedback} from 'react-native';
 
 import reducers from './redux';
+import Loader from './components/common/Loader';
 import AppNavigator from './navigation/AppNavigation';
 import NewTransactionModal from './components/newTransactionModal/NewTransactionModal';
 import {onLoginPress} from './components/systemControl/systemControlActions';
@@ -38,6 +40,7 @@ class App extends Component {
       <KeyboardAvoidingView style={{flex: 1}}>
         <TouchableWithoutFeedback style={{flex: 1}} onPress={Keyboard.dismiss}>
         <Provider store={store}>
+          <Loader />
           <NewTransactionModal onFabPress={onLoginPress()} />
           <View style={{flex: 1}}>
             <AppNavigator style={{height: '40'}} />

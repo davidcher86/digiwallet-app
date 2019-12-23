@@ -44,12 +44,24 @@ export const deleteTransaction = (transactionUID, userUID) => {
   };
 };
 
+export const startLoading = () => {
+  return {
+    type: 'DISPLAY_LOADER',
+  };
+};
+
+export const endLoading = () => {
+  return {
+    type: 'HIDE_LOADER',
+  };
+};
 export const fetchTransactions = (uid) => {
     return dispatch => {
       // firebaseAction(uid, 'transactions', 'read', null, setTransactions)
       // .then(res => {
       //   console.log(res);
       // })
+      dispatch(startLoading());
       const dataRef = firebase.database().ref(`/users/${uid}/account/transactions`);
       dataRef.once('value').then(function(snapshot) {
         var res = snapshot.val();
@@ -59,6 +71,7 @@ export const fetchTransactions = (uid) => {
           fixedList.push(res[item]);
         }
         dispatch(setTransactions(fixedList));
+        dispatch(endLoading());
       });
     };
 };
