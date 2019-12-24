@@ -2,7 +2,7 @@ const initialState = {
   username: '',
   password: '',
   pageSettings: {
-    loading: false,
+    // loading: false,
     selectedTab: 'login',
   },
   newPassword: '',
@@ -26,8 +26,8 @@ export default (state = initialState, action) => {
       return Object.assign({}, state, {username: action.value});
     case 'CHANGE_PASSWORD_FIELD':
       return Object.assign({}, state, {password: action.value});
-    case 'CHANGE_LOADING_STATE':
-      return Object.assign({}, state, {loading: action.value});
+    // case 'CHANGE_LOADING_STATE':
+    //   return Object.assign({}, state, {loading: action.value});
     case 'CHANGE_ERROR':
       return Object.assign({}, state, {error: action.value});
     case 'CHANGE_TAB':

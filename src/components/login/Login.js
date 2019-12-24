@@ -22,13 +22,13 @@ class LoginForm extends Component {
   }
 
   renderButton(props) {
-    if (props.login.loading) {
-      return (
-        <View style={styles.buttonContainerStyle}>
-          <Button style={styles.buttonStyle} title="Loading button" loading />
-        </View>
-      );
-    }
+    // if (props.login.loading) {
+    //   return (
+    //     <View style={styles.buttonContainerStyle}>
+    //       <Button style={styles.buttonStyle} title="Loading button" loading />
+    //     </View>
+    //   );
+    // }
 
     return (
       <View style={styles.buttonContainerStyle}>

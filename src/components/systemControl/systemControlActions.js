@@ -14,3 +14,15 @@ export const toggleNewTransactionModal = () => {
     type: 'TOGGLE_NEW_TRANSACTION',
   };
 };
+
+export const startLoading = () => {
+  return {
+    type: 'DISPLAY_LOADER',
+  };
+};
+
+export const endLoading = () => {
+  return {
+    type: 'HIDE_LOADER',
+  };
+};

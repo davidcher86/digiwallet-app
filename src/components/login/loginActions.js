@@ -1,5 +1,6 @@
 import {rememberUser} from './../common/Actions';
 import {firebaseAction} from './../../Api';
+import {startLoading, endLoading} from './systemControl/systemControlActions';
 // import {setIdentity} from './../identity/identityActions';
 
 export const changeUsername = value => {
@@ -37,13 +38,14 @@ export const onRegister = (email, password, navigation) => {
     password: password,
   };
   return dispatch => {
-    dispatch(changeLoading(true));
+    dispatch(startLoading());
     firebaseAction(null, 'authentication', 'register', data)
       .then(r => {
         firebaseAction(null, 'authentication', 'login', data).then(response => {
           dispatch(resetForm());
           dispatch(setIdentity(response.user.uid));
           rememberUser(response.user.uid);
+          dispatch(endLoading());
           return navigation.navigate('Account', {type: 'new'});
         });
       })
@@ -51,6 +53,7 @@ export const onRegister = (email, password, navigation) => {
         console.log('Error: ', res);
         dispatch(resetForm());
         dispatch(handleError(res.toString()));
+        dispatch(endLoading());
         return null;
       });
   };
@@ -63,8 +66,7 @@ export const onLoginPress = (email, password, navigation) => {
   };
 
   return dispatch => {
-    dispatch(changeLoading(true));
-
+    dispatch(startLoading());
     firebaseAction(null, 'authentication', 'login', data)
       .then(res => {
         if (res.user !== null) {
@@ -72,6 +74,7 @@ export const onLoginPress = (email, password, navigation) => {
           navigation.navigate('HomePage');
           dispatch(setIdentity(res.user.uid));
         }
+        dispatch(startLoading());
         dispatch(resetForm());
         return res;
       })
@@ -79,17 +82,18 @@ export const onLoginPress = (email, password, navigation) => {
         console.log('Error: ', res);
         dispatch(resetForm());
         dispatch(handleError(res.toString()));
+        dispatch(startLoading());
         return null;
       });
   };
 };
 
-export const changeLoading = value => {
-  return {
-    type: 'CHANGE_LOADING_STATE',
-    value,
-  };
-};
+// export const changeLoading = value => {
+//   return {
+//     type: 'CHANGE_LOADING_STATE',
+//     value,
+//   };
+// };
 
 export const handleError = value => {
   return {

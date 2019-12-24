@@ -1,4 +1,5 @@
 import {firebaseAction} from './../../Api';
+import {startLoading, endLoading} from './systemControl/systemControlActions';
 import firebase from 'firebase';
 
 export const changeAccountFieldValue = (field, value) => {
@@ -64,9 +65,11 @@ export const handleRegisterAccount = (account, uid, navigation) => dispatch => {
     assets: account.assets,
   };
 
+  dispatch(startLoading());
   firebaseAction(uid, 'account', 'add', json)
     .then(res => {
       navigation.navigate('HomePage');
+      dispatch(endLoading());
       return res;
     })
     .catch(err => {
@@ -89,6 +92,8 @@ export const fetchAccount = uid => {
     // })
 
     const dataRef = firebase.database().ref(`/users/${uid}/account`);
+
+    dispatch(startLoading());
     dataRef
       .once('value')
       .then(function(snapshot) {
@@ -101,6 +106,7 @@ export const fetchAccount = uid => {
         };
 
         dispatch(setAccountDetails(account));
+        dispatch(endLoading());
       })
       .catch(r => {
         console.log('Error fetching account from Firebase, Exception: ' + r);
@@ -109,7 +115,7 @@ export const fetchAccount = uid => {
 };
 
 export const handleUpdaeAccount = (account, uid) => dispatch => {
-  console.log('edit: ', account);
+  // console.log('edit: ', account);
   const json = {
     sallary: account.sallary,
     creditCards: account.creditCards,
@@ -117,6 +123,7 @@ export const handleUpdaeAccount = (account, uid) => dispatch => {
     assets: account.assets,
   };
 
+  dispatch(startLoading());
   firebase
     .database()
     .ref(`/users/${uid}/account`)
@@ -128,6 +135,7 @@ export const handleUpdaeAccount = (account, uid) => dispatch => {
     })
     .then(res => {
       console.log(res);
+      dispatch(endLoading());
     });
   // const jsonToSend = {acount: json};
   // console.log(jsonToSend);

@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 import {firebaseAction} from './../../Api';
+import {startLoading, endLoading} from './systemControl/systemControlActions';
 import firebase from 'firebase';
 
 export const setTransactions = (transactions) => {
@@ -38,23 +39,26 @@ export const openTransaction = (uid) => {
 
 export const deleteTransaction = (transactionUID, userUID) => {
   return async dispatch => {
+    dispatch(startLoading());
     await firebase.database().ref(`/users/${userUID}/account/transactions/${transactionUID}`).remove();
     dispatch(fetchTransactions(userUID));
+    dispatch(endLoading());
     return null;
   };
 };
 
-export const startLoading = () => {
-  return {
-    type: 'DISPLAY_LOADER',
-  };
-};
+// export const startLoading = () => {
+//   return {
+//     type: 'DISPLAY_LOADER',
+//   };
+// };
 
-export const endLoading = () => {
-  return {
-    type: 'HIDE_LOADER',
-  };
-};
+// export const endLoading = () => {
+//   return {
+//     type: 'HIDE_LOADER',
+//   };
+// };
+
 export const fetchTransactions = (uid) => {
     return dispatch => {
       // firebaseAction(uid, 'transactions', 'read', null, setTransactions)
