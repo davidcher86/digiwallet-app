@@ -24,6 +24,7 @@ import HomePage from './../components/homePage/HomePage';
 import Dashboard from './../components/dashboard/Dashboard';
 import Transactions from './../components/transactions/Transactions';
 import {removeUID} from './../components/common/Actions';
+import TransactionsStack from './BottomTransactionNav';
 
 class DrawerContainer extends Component {
   constructor(props) {
@@ -33,7 +34,7 @@ class DrawerContainer extends Component {
 
   render() {
     const {navigate} = this.props.navigation;
-
+    // console.log(this.props);
     return (
       <View style={styles.container}>
         <View style={styles.containertopRow}>
@@ -71,7 +72,7 @@ class DrawerContainer extends Component {
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={() => navigate('Transactions')}
+            onPress={() => navigate('Album')}
             style={styles.containerBottomItem}>
             <View style={styles.button}>
               <Text style={styles.txtBottom}>Transactions</Text>
@@ -136,7 +137,8 @@ const PrimaryNav = createDrawerNavigator(
       },
     },
     Transactions: {
-      screen: Transactions,
+      // screen: Transactions,
+      screen: TransactionsStack,
       navigationOptions: {
         drawerLabel: 'Transactions',
         drawerLockMode: 'locked-closed',
