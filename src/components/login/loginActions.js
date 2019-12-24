@@ -1,6 +1,6 @@
 import {rememberUser} from './../common/Actions';
 import {firebaseAction} from './../../Api';
-import {startLoading, endLoading} from './systemControl/systemControlActions';
+import {startLoading, endLoading} from './../systemControl/systemControlActions';
 // import {setIdentity} from './../identity/identityActions';
 
 export const changeUsername = value => {
@@ -74,7 +74,7 @@ export const onLoginPress = (email, password, navigation) => {
           navigation.navigate('HomePage');
           dispatch(setIdentity(res.user.uid));
         }
-        dispatch(startLoading());
+        dispatch(endLoading());
         dispatch(resetForm());
         return res;
       })
@@ -82,7 +82,7 @@ export const onLoginPress = (email, password, navigation) => {
         console.log('Error: ', res);
         dispatch(resetForm());
         dispatch(handleError(res.toString()));
-        dispatch(startLoading());
+        dispatch(endLoading());
         return null;
       });
   };

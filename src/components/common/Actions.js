@@ -1,7 +1,9 @@
 import {AsyncStorage} from 'react-native';
+import {startLoading, endLoading} from './../systemControl/systemControlActions';
 
 export const getRememberedUser = async () => {
   try {
+
     const uid = await AsyncStorage.getItem('digiwalletUserUID');
 
     return uid;

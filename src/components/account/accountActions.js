@@ -1,5 +1,5 @@
 import {firebaseAction} from './../../Api';
-import {startLoading, endLoading} from './systemControl/systemControlActions';
+import {startLoading, endLoading} from './../systemControl/systemControlActions';
 import firebase from 'firebase';
 
 export const changeAccountFieldValue = (field, value) => {
