@@ -1,5 +1,12 @@
 import React, {Component} from 'react';
-import {View, TouchableOpacity, FlatList, ScrollView, StyleSheet, Image} from 'react-native';
+import {
+  View,
+  TouchableOpacity,
+  FlatList,
+  ScrollView,
+  StyleSheet,
+  Image,
+} from 'react-native';
 import {Input, Icon} from 'react-native-elements';
 import {connect} from 'react-redux';
 import {
@@ -51,15 +58,19 @@ class TransactionItem extends Component {
               onPress={() => openTransaction(transactionItem.uid)}>
               <Image
                 style={{width: 20, height: 20}}
-                source={require('./../../img/more-icn.png')} />
+                source={require('./../../img/more-icn.png')}
+              />
             </TouchableOpacity>
             <TouchableOpacity
               transparent
               style={styles.deleteBtn}
-              onPress={() => deleteTransaction(transactionItem.uid, identity.uid)}>
+              onPress={() =>
+                deleteTransaction(transactionItem.uid, identity.uid)
+              }>
               <Image
                 style={{width: 20, height: 20}}
-                source={require('./../../img/remove-icn.png')}/>
+                source={require('./../../img/remove-icn.png')}
+              />
             </TouchableOpacity>
           </View>
         </View>
@@ -91,17 +102,6 @@ class TransactionItem extends Component {
 }
 
 class Transactions extends Component {
-  // static navigationOptions = {
-  //   title: 'Transactions',
-  //   headerStyle: {
-  //     backgroundColor: '#f4511e',
-  //   },
-  //   headerTintColor: '#fff',
-  //   headerTitleStyle: {
-  //     fontWeight: 'bold',
-  //   },
-  // };
-
   // componentWillReceiveProps(nextProps, nextState) {
   //   console.log('oldProps', this.props.transactionsList.length);
   //   console.log('nextProps', nextProps.transactionsList.length);
@@ -119,30 +119,24 @@ class Transactions extends Component {
       openTransaction,
       deleteTransaction,
     } = this.props;
-    // console.log('transactions: ', transactions);
 
-    const renderTransactions = props => {
-      var itemList = [];
-      if (props.transactionsList.length > 0) {
-        itemList = props.transactionsList.map((item, key) => (
-          <TransactionItem
-            key={key}
-            pageSettings={pageSettings}
-            openTransaction={openTransaction}
-            identity={identity}
-            deleteTransaction={deleteTransaction}
-            transactionItem={item}
-          />
-        ));
-      }
-
-      return itemList;
-    };
-    // console.log('transactionsList', this.props.transactionsList);
     return (
       <View style={styles.transacionListContainer}>
         <Header navigation={this.props.navigation} title="Transaction" />
-        <ScrollView>{renderTransactions(this.props)}</ScrollView>
+        <FlatList
+          data={transactionsList}
+          keyExtractor={item => item.uid}
+          renderItem={({item}) => (
+            <TransactionItem
+              // key={key}
+              pageSettings={pageSettings}
+              openTransaction={openTransaction}
+              identity={identity}
+              deleteTransaction={deleteTransaction}
+              transactionItem={item}
+            />
+          )}
+          keyExtractor={item => item.id} />
         <Fab />
       </View>
     );

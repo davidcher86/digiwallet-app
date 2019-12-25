@@ -8,7 +8,7 @@ class Loader extends Component {
     return (
       <View style={[styles.containerStyle, (this.props.systemControl.appControl.loaderOn ? {height: '100%'} : {height: '0%'})]}>
         {this.props.systemControl.appControl.loaderOn && <View style={styles.loaderContainerStyle}>
-            <LineDotsLoader size={15} color={'#1e90ff'} betweenSpace={6} />
+            <LineDotsLoader size={15} color={'#f7f9f7'} betweenSpace={6} />
             <TextLoader text="Loading" />
           </View>}
       </View>
@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
     height: '100%',
-    backgroundColor: 'rgba(212, 212, 212, 0.8)',
+    backgroundColor: 'rgba(9, 74, 26, 0.8)',
   },
 });
 
