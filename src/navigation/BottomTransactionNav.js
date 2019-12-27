@@ -22,39 +22,56 @@ class BottomTransactionsStack extends Component {
     const {navigate} = this.props.navigation;
     return (
       <View style={styles.container}>
-        <Text>daily</Text>
-        <Text>monthly</Text>
-        <Text>yearly</Text>
+        <View style={styles.tabContainer}>
+          <TouchableOpacity
+            onPress={() => navigate('Daily')}
+            style={styles.containerBottomItem}>
+            <View style={styles.button}>
+              <Text>daily</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.tabContainer}>
+          <TouchableOpacity
+            onPress={() => navigate('Weekly')}
+            style={styles.containerBottomItem}>
+            <View style={styles.button}>
+              <Text>Weekly</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.tabContainer}>
+          <TouchableOpacity
+            onPress={() => navigate('monthly')}
+            style={styles.containerBottomItem}>
+            <View style={styles.button}>
+              <Text>monthly</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.tabContainer}>
+          <TouchableOpacity
+            onPress={() => navigate('Other')}
+            style={styles.containerBottomItem}>
+            <View style={styles.button}>
+              <Text>Other</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }
 }
 
-// const TransactionsStack = createBottomTabNavigator(
-//   {
-//     Album: {screen: Transactions},
-//     Library: {screen: Transactions},
-//     History: {screen: Transactions},
-//     Cart: {screen: Transactions},
-//   },
-//   {
-//     initialRouteName: 'Album',
-//     tabBarComponent: <BottomStackContainer />,
-//     // activeColor: '#f0edf6',
-//     // inactiveColor: '#3e2465',
-//     // barStyle: {backgroundColor: '#694fad'},
-//   },
-// );
-
 const TransactionsStack = createBottomTabNavigator(
   {
-    Album: {screen: Transactions},
-    Library: {screen: Transactions},
-    History: {screen: Transactions},
-    Cart: {screen: Transactions},
+    Daily: {screen: Transactions},
+    Weekly: {screen: Transactions},
+    Monthly: {screen: Transactions},
+    Other: {screen: Transactions},
   },
   {
-    // initialRouteName: 'Album',
+    initialRouteName: 'Daily',
     tabBarComponent: BottomTransactionsStack,
     activeColor: '#f0edf6',
     inactiveColor: '#fffff',
@@ -64,54 +81,21 @@ const TransactionsStack = createBottomTabNavigator(
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 1,
+    flexDirection: 'row',
     width: '100%',
-    height: 40,
+    height: 60,
     backgroundColor: '#17BED0',
-    zIndex: 50,
+    zIndex: 50,    
+    justifyContent: 'center',
+    alignItems: 'center',
   },
+  tabContainer: {
+    width: '25%',
+  },
+  button: {
+    alignSelf: 'center',
+    borderWidth: 2
+  }
 });
 export default TransactionsStack;
-// const LoginStack = createStackNavigator(
-//   {
-//     LoginScreen: {
-//       screen: LoginForm,
-//       navigationOptions: {
-//         header: null,
-//         // title: 'Authentication',
-//         // headerStyle: {
-//         //   backgroundColor: '#f4511e',
-//         // },
-//         // headerTintColor: '#fff',
-//         // headerTitleStyle: {
-//         //   fontWeight: 'bold',
-//         // },
-//       },
-//     },
-//     Account: {
-//       screen: Account,
-//       navigationOptions: {
-//         header: null,
-//         // title: 'Regiter Account',
-//         // headerStyle: {
-//         //   backgroundColor: '#f4511e',
-//         // },
-//         // headerTintColor: '#fff',
-//         // headerTitleStyle: {
-//         //   fontWeight: 'bold',
-//         // },
-//       },
-//     },
-//   },
-//   // {
-//   //   headerMode: 'float',
-//   //   initialRouteName: 'LoginScreen',
-//   //   navigationOptions: {
-//   //     headerStyle: {backgroundColor: '#E73536'},
-//   //     title: 'You are not logged in',
-//   //     headerTintColor: 'white',
-//   //   },
-//   // },
-// );
-
-// export default LoginStack;
