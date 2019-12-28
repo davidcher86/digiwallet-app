@@ -21,57 +21,87 @@ class BottomTransactionsStack extends Component {
   render() {
     const {navigate} = this.props.navigation;
 
-    const ifSelected = (key) => {
+    const ifSelected = key => {
       const index = this.props.navigation.state.index;
-      const keyName = this.props.navigation.state.routes[index].key
-      
+      const keyName = this.props.navigation.state.routes[index].key;
+
       return keyName === key;
-    }
+    };
 
     return (
       <View style={styles.container}>
-        <View style={[styles.tabContainer, (ifSelected('Daily') ? styles.selectedTab : '')]}>
+        <View
+          style={[
+            styles.tabContainer,
+            ifSelected('Daily') ? styles.selectedTab : '',
+          ]}>
           <TouchableOpacity
             onPress={() => navigate('Daily')}
             style={styles.containerBottomItem}>
             <View style={styles.button}>
-              <Text>Daily</Text>
+              <Text style={ifSelected('Daily') ? {color: 'red'} : {}}>
+                Daily
+              </Text>
             </View>
           </TouchableOpacity>
         </View>
-        <View style={[styles.tabContainer, (ifSelected('Weekly') ? styles.selectedTab : '')]}>
+        <View
+          style={[
+            styles.tabContainer,
+            ifSelected('Weekly') ? styles.selectedTab : '',
+          ]}>
           <TouchableOpacity
             onPress={() => navigate('Weekly')}
             style={styles.containerBottomItem}>
             <View style={styles.button}>
-              <Text>Weekly</Text>
+              <Text style={ifSelected('Weekly') ? {color: 'red'} : {}}>
+                Weekly
+              </Text>
             </View>
           </TouchableOpacity>
         </View>
-        <View style={[styles.tabContainer, (ifSelected('Monthly') ? styles.selectedTab : '')]}>
+        <View
+          style={[
+            styles.tabContainer,
+            ifSelected('Monthly') ? styles.selectedTab : '',
+          ]}>
           <TouchableOpacity
             onPress={() => navigate('Monthly')}
             style={styles.containerBottomItem}>
             <View style={styles.button}>
-              <Text>Monthly</Text>
+              <Text style={ifSelected('Monthly') ? {color: 'red'} : {}}>
+                Monthly
+              </Text>
             </View>
           </TouchableOpacity>
         </View>
-        <View style={[styles.tabContainer, (ifSelected('Other') ? styles.selectedTab : '')]}>
+        <View
+          style={[
+            styles.tabContainer,
+            ifSelected('Other') ? styles.selectedTab : '',
+          ]}>
           <TouchableOpacity
             onPress={() => navigate('Other')}
             style={styles.containerBottomItem}>
             <View style={styles.button}>
-              <Text>Other</Text>
+              <Text style={ifSelected('Other') ? {color: 'red'} : {}}>
+                Other
+              </Text>
             </View>
           </TouchableOpacity>
         </View>
-        <View style={[styles.tabContainer, (ifSelected('Total') ? styles.selectedTab : '')]}>
+        <View
+          style={[
+            styles.tabContainer,
+            ifSelected('Total') ? styles.selectedTab : '',
+          ]}>
           <TouchableOpacity
             onPress={() => navigate('Total')}
             style={styles.containerBottomItem}>
             <View style={styles.button}>
-              <Text>Total</Text>
+              <Text style={ifSelected('Total') ? {color: 'red'} : {}}>
+                Total
+              </Text>
             </View>
           </TouchableOpacity>
         </View>
@@ -104,24 +134,24 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 60,
     backgroundColor: '#17BED0',
-    zIndex: 50,    
+    zIndex: 50,
     justifyContent: 'center',
     alignItems: 'center',
   },
   tabContainer: {
     justifyContent: 'center',
     width: '20%',
-    height: '100%'
+    height: '100%',
   },
-  selectedTab:{
+  selectedTab: {
     color: 'red',
     // backgroundColor: 'red',
     borderBottomWidth: 5,
-    borderBottomColor: 'red'
+    borderBottomColor: 'red',
   },
   button: {
     alignSelf: 'center',
     // borderWidth: 2
-  }
+  },
 });
 export default TransactionsStack;

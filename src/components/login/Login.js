@@ -70,8 +70,8 @@ class LoginForm extends Component {
           <View style={styles.wrapper}>
             <View style={styles.mainIconContainerStyle}>
               <Image
-                style={{width: 100, height: 100}}
-                source={require('./../../img/login-main-icn.png')}/>
+                style={{width: 130, height: 130}}
+                source={require('./../../img/login-main-icn-2.png')}/>
             </View>
             <View style={styles.tabContainerStyle}>
               <Text

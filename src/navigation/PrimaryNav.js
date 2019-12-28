@@ -154,6 +154,7 @@ const PrimaryNav = createDrawerNavigator(
   },
   {
     // contentComponent: DrawerWithLogoutButton,
+    initialRouteName: 'Transactions',
     contentComponent: DrawerContainer,
     headerMode: 'none',
     unmountInactiveRoutes: true,
