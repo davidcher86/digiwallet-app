@@ -135,8 +135,7 @@ class Transactions extends Component {
               deleteTransaction={deleteTransaction}
               transactionItem={item}
             />
-          )}
-          keyExtractor={item => item.id} />
+          )} />
         <Fab />
       </View>
     );
