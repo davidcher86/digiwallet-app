@@ -20,41 +20,76 @@ class BottomTransactionsStack extends Component {
 
   render() {
     const {navigate} = this.props.navigation;
+
+    const ifSelected = (key) => {
+      const index = this.props.navigation.state.index;
+      const keyName = this.props.navigation.state.routes[index].key
+      
+      return keyName === key;
+    }
+
     return (
       <View style={styles.container}>
-        <Text>daily</Text>
-        <Text>monthly</Text>
-        <Text>yearly</Text>
+        <View style={[styles.tabContainer, (ifSelected('Daily') ? styles.selectedTab : '')]}>
+          <TouchableOpacity
+            onPress={() => navigate('Daily')}
+            style={styles.containerBottomItem}>
+            <View style={styles.button}>
+              <Text>Daily</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+        <View style={[styles.tabContainer, (ifSelected('Weekly') ? styles.selectedTab : '')]}>
+          <TouchableOpacity
+            onPress={() => navigate('Weekly')}
+            style={styles.containerBottomItem}>
+            <View style={styles.button}>
+              <Text>Weekly</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+        <View style={[styles.tabContainer, (ifSelected('Monthly') ? styles.selectedTab : '')]}>
+          <TouchableOpacity
+            onPress={() => navigate('Monthly')}
+            style={styles.containerBottomItem}>
+            <View style={styles.button}>
+              <Text>Monthly</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+        <View style={[styles.tabContainer, (ifSelected('Other') ? styles.selectedTab : '')]}>
+          <TouchableOpacity
+            onPress={() => navigate('Other')}
+            style={styles.containerBottomItem}>
+            <View style={styles.button}>
+              <Text>Other</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+        <View style={[styles.tabContainer, (ifSelected('Total') ? styles.selectedTab : '')]}>
+          <TouchableOpacity
+            onPress={() => navigate('Total')}
+            style={styles.containerBottomItem}>
+            <View style={styles.button}>
+              <Text>Total</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }
 }
 
-// const TransactionsStack = createBottomTabNavigator(
-//   {
-//     Album: {screen: Transactions},
-//     Library: {screen: Transactions},
-//     History: {screen: Transactions},
-//     Cart: {screen: Transactions},
-//   },
-//   {
-//     initialRouteName: 'Album',
-//     tabBarComponent: <BottomStackContainer />,
-//     // activeColor: '#f0edf6',
-//     // inactiveColor: '#3e2465',
-//     // barStyle: {backgroundColor: '#694fad'},
-//   },
-// );
-
 const TransactionsStack = createBottomTabNavigator(
   {
-    Album: {screen: Transactions},
-    Library: {screen: Transactions},
-    History: {screen: Transactions},
-    Cart: {screen: Transactions},
+    Daily: {screen: Transactions},
+    Weekly: {screen: Transactions},
+    Monthly: {screen: Transactions},
+    Other: {screen: Transactions},
+    Total: {screen: Transactions},
   },
   {
-    // initialRouteName: 'Album',
+    initialRouteName: 'Daily',
     tabBarComponent: BottomTransactionsStack,
     activeColor: '#f0edf6',
     inactiveColor: '#fffff',
@@ -64,54 +99,29 @@ const TransactionsStack = createBottomTabNavigator(
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 1,
+    flexDirection: 'row',
     width: '100%',
-    height: 40,
+    height: 60,
     backgroundColor: '#17BED0',
-    zIndex: 50,
+    zIndex: 50,    
+    justifyContent: 'center',
+    alignItems: 'center',
   },
+  tabContainer: {
+    justifyContent: 'center',
+    width: '20%',
+    height: '100%'
+  },
+  selectedTab:{
+    color: 'red',
+    // backgroundColor: 'red',
+    borderBottomWidth: 5,
+    borderBottomColor: 'red'
+  },
+  button: {
+    alignSelf: 'center',
+    // borderWidth: 2
+  }
 });
 export default TransactionsStack;
-// const LoginStack = createStackNavigator(
-//   {
-//     LoginScreen: {
-//       screen: LoginForm,
-//       navigationOptions: {
-//         header: null,
-//         // title: 'Authentication',
-//         // headerStyle: {
-//         //   backgroundColor: '#f4511e',
-//         // },
-//         // headerTintColor: '#fff',
-//         // headerTitleStyle: {
-//         //   fontWeight: 'bold',
-//         // },
-//       },
-//     },
-//     Account: {
-//       screen: Account,
-//       navigationOptions: {
-//         header: null,
-//         // title: 'Regiter Account',
-//         // headerStyle: {
-//         //   backgroundColor: '#f4511e',
-//         // },
-//         // headerTintColor: '#fff',
-//         // headerTitleStyle: {
-//         //   fontWeight: 'bold',
-//         // },
-//       },
-//     },
-//   },
-//   // {
-//   //   headerMode: 'float',
-//   //   initialRouteName: 'LoginScreen',
-//   //   navigationOptions: {
-//   //     headerStyle: {backgroundColor: '#E73536'},
-//   //     title: 'You are not logged in',
-//   //     headerTintColor: 'white',
-//   //   },
-//   // },
-// );
-
-// export default LoginStack;
