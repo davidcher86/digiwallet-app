@@ -4,6 +4,7 @@ import {
   TouchableOpacity,
   FlatList,
   Animated,
+  Easing,
   ScrollView,
   StyleSheet,
   Image,
@@ -42,14 +43,14 @@ class TransactionItem extends Component {
   expandItem = () => {
     Animated.timing(this.state.itemHeight, {
       toValue: 80,
-      duration: 300,
+      duration: 400,
       easing: Easing.linear,
       // useNativeDriver: true
     }).start();
 
     Animated.timing(this.state.itemPadding, {
       toValue: 6,
-      duration: 300,
+      duration: 100,
       easing: Easing.linear,
       // useNativeDriver: true
     }).start();
@@ -58,26 +59,34 @@ class TransactionItem extends Component {
   closeItem = () => {
     Animated.timing(this.state.itemHeight, {
       toValue: 0,
-      duration: 300,
+      duration: 200,
       easing: Easing.linear,
       // useNativeDriver: true
     }).start();
 
     Animated.timing(this.state.itemPadding, {
       toValue: 0,
-      duration: 300,
+      duration: 100,
       easing: Easing.linear,
       // useNativeDriver: true
     }).start();
   };
 
-  toggleItemExpand (uid) {
-      if (this.props.pageSettings.isOpenIndex === uid) {
-        this.props.openTransaction(null);
-      } else {
-        this.props.openTransaction(uid);
-      }
-  };
+  toggleItemExpand(uid) {
+    if (this.props.pageSettings.isOpenIndex === uid) {
+      this.props.openTransaction(null);
+      this.closeItem();
+    } else {
+      this.props.openTransaction(uid);
+      this.expandItem();
+    }
+  }
+
+  componentDidUpdate() {
+    if (this.props.pageSettings.isOpenIndex !== this.props.transactionItem.uid) {
+      this.closeItem();
+    }
+  }
 
   render() {
     const {
@@ -87,7 +96,7 @@ class TransactionItem extends Component {
       transactionItem,
       deleteTransaction,
     } = this.props;
-    // console.log(transactionItem);
+
     var isOpened = pageSettings.isOpenIndex === transactionItem.uid;
     return (
       <Animated.View style={styles.transactionItemContainer} thumbnail>
@@ -130,7 +139,7 @@ class TransactionItem extends Component {
         <Animated.View
           style={[
             styles.itemHiddenSection,
-            {height: this.state.itemHeight, padding: this.state.itemPadding}
+            {height: this.state.itemHeight, padding: this.state.itemPadding},
             // isOpened ? {height: 80, padding: 6} : {height: 0, padding: 0},
           ]}>
           <View style={styles.headerHiddenSection}>
@@ -189,7 +198,8 @@ class Transactions extends Component {
               deleteTransaction={deleteTransaction}
               transactionItem={item}
             />
-          )} />
+          )}
+        />
         <Fab />
       </View>
     );

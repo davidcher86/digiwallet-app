@@ -16,7 +16,7 @@ class Loader extends Component {
   fadeIn = () => {
     Animated.timing(this.state.fadeAnim, {
       toValue: 0.8,
-      duration: 300,
+      duration: 250,
       easing: Easing.linear,
       // useNativeDriver: true
     }).start();
@@ -25,7 +25,7 @@ class Loader extends Component {
   fadeOut = () => {
     Animated.timing(this.state.fadeAnim, {
       toValue: 0,
-      duration: 300,
+      duration: 250,
       easing: Easing.linear,
       // useNativeDriver: true
     }).start();
@@ -53,7 +53,9 @@ class Loader extends Component {
               source={require('./../../img/login-main-icn-2.png')}
             />
           </View>
-          <LineDotsLoader size={15} color={'#f7f9f7'} betweenSpace={6} />
+          <View style={{marginTop: 20, marginBottom: 20}}>
+            <LineDotsLoader size={18} color={'#f7f9f7'} betweenSpace={6} />
+          </View>
           <TextLoader text="Loading" />
         </Animated.View>
       </Animated.View>
@@ -80,8 +82,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#12844a',
   },
   mainIconContainerStyle: {
-
-  }
+    // borderWidth: 2,
+    marginBottom: 20,
+    // position: 'absolute',
+    // top: '20%',
+  },
 });
 
 const mapStateToProps = state => {
