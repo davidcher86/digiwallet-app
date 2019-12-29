@@ -3,6 +3,7 @@ import {
   View,
   TouchableOpacity,
   FlatList,
+  Animated,
   ScrollView,
   StyleSheet,
   Image,
@@ -27,6 +28,57 @@ import Fab from './../common/Fab';
 import Header from './../common/Header';
 
 class TransactionItem extends Component {
+  constructor() {
+    super();
+    this.state = {
+      itemHeight: new Animated.Value(0),
+      itemPadding: new Animated.Value(0),
+    };
+    this.expandItem = this.expandItem.bind(this);
+    this.closeItem = this.closeItem.bind(this);
+    this.toggleItemExpand = this.toggleItemExpand.bind(this);
+  }
+
+  expandItem = () => {
+    Animated.timing(this.state.itemHeight, {
+      toValue: 80,
+      duration: 300,
+      easing: Easing.linear,
+      // useNativeDriver: true
+    }).start();
+
+    Animated.timing(this.state.itemPadding, {
+      toValue: 6,
+      duration: 300,
+      easing: Easing.linear,
+      // useNativeDriver: true
+    }).start();
+  };
+
+  closeItem = () => {
+    Animated.timing(this.state.itemHeight, {
+      toValue: 0,
+      duration: 300,
+      easing: Easing.linear,
+      // useNativeDriver: true
+    }).start();
+
+    Animated.timing(this.state.itemPadding, {
+      toValue: 0,
+      duration: 300,
+      easing: Easing.linear,
+      // useNativeDriver: true
+    }).start();
+  };
+
+  toggleItemExpand (uid) {
+      if (this.props.pageSettings.isOpenIndex === uid) {
+        this.props.openTransaction(null);
+      } else {
+        this.props.openTransaction(uid);
+      }
+  };
+
   render() {
     const {
       pageSettings,
@@ -38,7 +90,7 @@ class TransactionItem extends Component {
     // console.log(transactionItem);
     var isOpened = pageSettings.isOpenIndex === transactionItem.uid;
     return (
-      <View style={styles.transactionItemContainer} thumbnail>
+      <Animated.View style={styles.transactionItemContainer} thumbnail>
         <View style={styles.itemVissibleSection}>
           <View style={styles.leftSection}>
             <Text>{transactionItem.date}</Text>
@@ -54,8 +106,9 @@ class TransactionItem extends Component {
               source={{uri: './../../img/more-icn.png'}}/> */}
             <TouchableOpacity
               transparent
-              style={styles.openBtn}
-              onPress={() => openTransaction(transactionItem.uid)}>
+              onPress={() => this.toggleItemExpand(transactionItem.uid)}
+              // onPress={() => openTransaction(transactionItem.uid)}
+              style={styles.openBtn}>
               <Image
                 style={{width: 20, height: 20}}
                 source={require('./../../img/more-icn.png')}
@@ -74,10 +127,11 @@ class TransactionItem extends Component {
             </TouchableOpacity>
           </View>
         </View>
-        <View
+        <Animated.View
           style={[
             styles.itemHiddenSection,
-            isOpened ? {height: 80, padding: 6} : {height: 0, padding: 0},
+            {height: this.state.itemHeight, padding: this.state.itemPadding}
+            // isOpened ? {height: 80, padding: 6} : {height: 0, padding: 0},
           ]}>
           <View style={styles.headerHiddenSection}>
             <Text>Payment - </Text>
@@ -95,8 +149,8 @@ class TransactionItem extends Component {
             <Text>Description:</Text>
             <Text>{transactionItem.description}</Text>
           </View>
-        </View>
-      </View>
+        </Animated.View>
+      </Animated.View>
     );
   }
 }

@@ -79,6 +79,9 @@ const styles = StyleSheet.create({
     height: '100%',
     backgroundColor: '#12844a',
   },
+  mainIconContainerStyle: {
+
+  }
 });
 
 const mapStateToProps = state => {
