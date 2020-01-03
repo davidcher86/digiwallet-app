@@ -1,4 +1,4 @@
-import {createStackNavigator} from 'react-navigation';
+import {createStackNavigator} from 'react-navigation-stack';
 import LoginForm from './../components/login/Login';
 import Account from './../components/account/Account';
 
@@ -7,7 +7,7 @@ const LoginStack = createStackNavigator(
     LoginScreen: {
       screen: LoginForm,
       navigationOptions: {
-        header: null,
+        headerShown: null,
         // title: 'Authentication',
         // headerStyle: {
         //   backgroundColor: '#f4511e',
@@ -21,7 +21,7 @@ const LoginStack = createStackNavigator(
     Account: {
       screen: Account,
       navigationOptions: {
-        header: null,
+        headerShown: null,
         // title: 'Regiter Account',
         // headerStyle: {
         //   backgroundColor: '#f4511e',

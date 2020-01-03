@@ -2,7 +2,6 @@ import {
   createDrawerNavigator,
   createAppContainer,
   createSwitchNavigator,
-  createStackNavigator,
 } from 'react-navigation';
 import HomePage from './../components/homePage/HomePage';
 import Dashboard from './../components/dashboard/Dashboard';

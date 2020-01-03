@@ -1,4 +1,4 @@
-import {createDrawerNavigator} from 'react-navigation';
+import {createDrawerNavigator} from 'react-navigation-drawer';
 import React, {Component} from 'react';
 import {FAB} from 'react-native-paper';
 import {Input, Icon} from 'react-native-elements';
@@ -140,7 +140,7 @@ const PrimaryNav = createDrawerNavigator(
       // screen: Transactions,
       screen: TransactionsStack,
       navigationOptions: {
-        drawerLabel: 'Transactions',
+        drawerLabel: 'HomePage',
         drawerLockMode: 'locked-closed',
         headerStyle: {
           backgroundColor: '#f4511e',
@@ -154,7 +154,7 @@ const PrimaryNav = createDrawerNavigator(
   },
   {
     // contentComponent: DrawerWithLogoutButton,
-    initialRouteName: 'Transactions',
+    initialRouteName: 'HomePage',
     contentComponent: DrawerContainer,
     headerMode: 'none',
     unmountInactiveRoutes: true,
