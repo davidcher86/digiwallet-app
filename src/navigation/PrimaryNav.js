@@ -34,7 +34,7 @@ class DrawerContainer extends Component {
 
   render() {
     const {navigate} = this.props.navigation;
-    // console.log(this.props);
+    console.log(this.props);
     return (
       <View style={styles.container}>
         <View style={styles.containertopRow}>
@@ -155,6 +155,8 @@ const PrimaryNav = createDrawerNavigator(
   {
     // contentComponent: DrawerWithLogoutButton,
     initialRouteName: 'HomePage',
+    drawerType: 'slide',
+    drawerWidth: 100,
     contentComponent: DrawerContainer,
     headerMode: 'none',
     unmountInactiveRoutes: true,
@@ -165,7 +167,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#17BED0',
-    zIndex: 50,
+    zIndex: 500,
   },
   containertopRow: {
     borderBottomWidth: 1,

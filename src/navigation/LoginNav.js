@@ -7,7 +7,7 @@ const LoginStack = createStackNavigator(
     LoginScreen: {
       screen: LoginForm,
       navigationOptions: {
-        headerShown: null,
+        headerShown: false,
         // title: 'Authentication',
         // headerStyle: {
         //   backgroundColor: '#f4511e',
@@ -21,7 +21,7 @@ const LoginStack = createStackNavigator(
     Account: {
       screen: Account,
       navigationOptions: {
-        headerShown: null,
+        headerShown: false,
         // title: 'Regiter Account',
         // headerStyle: {
         //   backgroundColor: '#f4511e',

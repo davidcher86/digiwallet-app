@@ -8,7 +8,7 @@ const MyHeader = props => {
       <Icon
         color="#fff"
         name="menu"
-        onPress={() => props.navigation.toggleDrawer()}
+        onPress={() => props.navigation.dispatch(props.navigation.actions.openDrawer())}
       />
     );
   };

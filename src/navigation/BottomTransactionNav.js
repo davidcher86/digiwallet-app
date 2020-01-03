@@ -1,4 +1,4 @@
-import {createBottomTabNavigator} from 'react-navigation-tabs';
+import {createBottomTabNavigator, createMaterialTopTabNavigator} from 'react-navigation-tabs';
 import {createAppContainer} from 'react-navigation';
 import React, {Component} from 'react';
 import {
@@ -110,8 +110,8 @@ class BottomTransactionsStack extends Component {
   }
 }
 
-const TransactionsStack = createBottomTabNavigator(
-// const TransactionsStack = createMaterialTopTabNavigator(
+// const TransactionsStack = createBottomTabNavigator(
+const TransactionsStack = createMaterialTopTabNavigator(
   {
     Daily: {screen: Transactions},
     Weekly: {screen: Transactions},
