@@ -1,5 +1,7 @@
 import {createBottomTabNavigator, createMaterialTopTabNavigator} from 'react-navigation-tabs';
 import {createAppContainer} from 'react-navigation';
+import Fab from './../components/common/Fab';
+
 import React, {Component} from 'react';
 import {
   View,
@@ -105,6 +107,7 @@ class BottomTransactionsStack extends Component {
             </View>
           </TouchableOpacity>
         </View>
+        <Fab onPress={() => {console.log('sdfsdf')}} />
       </View>
     );
   }

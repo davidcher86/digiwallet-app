@@ -32,10 +32,11 @@ class Fab extends Component {
 const styles = StyleSheet.create({
   containerStyle: {
     flex: 1,
-    zIndex: 10,
+    zIndex: 1000,
   },
   fab: {
     height: 50,
+    zIndex: 1020,
     width: 50,
     borderRadius: 200,
     position: 'absolute',

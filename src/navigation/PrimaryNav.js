@@ -84,11 +84,28 @@ class DrawerContainer extends Component {
         <View style={styles.containerLogout}>
           <TouchableOpacity
             onPress={() => {
+              navigate('Settings');
+            }}
+            style={styles.containerBottomItemLogout}>
+            <View style={styles.button}>
+              <Image
+                style={{width: 20, height: 20}}
+                source={require('./../img/settings-icon.png')}
+              />
+              <Text style={styles.txtBottom}>Settings</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
               removeUID();
               navigate('Login');
             }}
             style={styles.containerBottomItemLogout}>
             <View style={styles.button}>
+              <Image
+                style={{width: 20, height: 20}}
+                source={require('./../img/logout-icon.png')}
+              />
               <Text style={styles.txtBottom}>Logout</Text>
             </View>
           </TouchableOpacity>
@@ -288,6 +305,7 @@ const styles = StyleSheet.create({
   txtBottom: {
     marginLeft: 10,
     color: '#E6FAFF',
+    textAlign: 'center',
     fontSize: 15,
     fontWeight: '100',
   },
@@ -318,7 +336,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     marginLeft: 5,
   },
-
   containerBottom: {
     backgroundColor: '#17BED0',
   },
@@ -332,7 +349,9 @@ const styles = StyleSheet.create({
   },
   containerLogout: {
     position: 'absolute',
+    flexDirection: 'row',
     bottom: 0,
+    justifyContent: 'center',
     borderTopWidth: 1,
     borderColor: '#ddd',
     width: '100%',
@@ -340,8 +359,10 @@ const styles = StyleSheet.create({
   },
   containerBottomItemLogout: {
     padding: 10,
+    width: '50%',
     alignItems: 'center',
     flexDirection: 'row',
+    flex: 1,
     justifyContent: 'flex-start',
     borderBottomColor: '#E6FAFF',
     borderBottomWidth: 0.5,

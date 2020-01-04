@@ -200,7 +200,7 @@ class Transactions extends Component {
             />
           )}
         />
-        <Fab />
+        {/* <Fab /> */}
       </View>
     );
   }
