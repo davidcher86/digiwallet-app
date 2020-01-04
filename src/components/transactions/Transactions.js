@@ -98,10 +98,16 @@ class TransactionItem extends Component {
     } = this.props;
 
     var isOpened = pageSettings.isOpenIndex === transactionItem.uid;
+    // console.log(transactionItem);
     return (
       <Animated.View style={styles.transactionItemContainer} thumbnail>
         <View style={styles.itemVissibleSection}>
-          <View style={styles.leftSection}>
+          <View style={styles.left1Section}>
+            <Image
+              style={{width: 20, height: 20}}
+              source={require('./../../img/arrow-down-ico.png')} />
+          </View>
+          <View style={styles.left2Section}>
             <Text>{transactionItem.date}</Text>
           </View>
           <View style={styles.bodySection}>
@@ -147,11 +153,11 @@ class TransactionItem extends Component {
           </View>
           <View style={styles.upperHiddenSection}>
             <Text>
-              {'Credit Card: ' + transactionItem.paymentDetails.cardType}
+              {'Credit Card: ' + (transactionItem.paymentDetails !== undefined ? transactionItem.paymentDetails.cardType : '')}
             </Text>
             <Text>
               {'Amount of Payments: ' +
-                transactionItem.paymentDetails.paymentAmount}
+              (transactionItem.paymentDetails !== undefined ? transactionItem.paymentDetails.paymentAmount : '')}
             </Text>
           </View>
           <View style={styles.bottomHiddenSection}>
@@ -267,7 +273,7 @@ const styles = StyleSheet.create({
   bodySection: {
     // borderWidth: 2,
     alignItems: 'center',
-    width: '50%',
+    width: '25%',
     justifyContent: 'center',
     // height: 50,
     // borderColor: 'green',
@@ -275,14 +281,24 @@ const styles = StyleSheet.create({
     // right: 0,
     // flex: 1,
   },
-  leftSection: {
+  left1Section: {
     alignItems: 'center',
     justifyContent: 'center',
     // alignSelf: 'flex-start',
     // flex: 2,
     // padding: 10,
     // borderWidth: 2,
-    width: '30%',
+    width: '10%',
+    // height: 50,
+  },
+  left2Section: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    // alignSelf: 'flex-start',
+    // flex: 2,
+    // padding: 10,
+    // borderWidth: 2,
+    width: '45%',
     // height: 50,
   },
   openBtn: {

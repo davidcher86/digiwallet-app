@@ -90,8 +90,7 @@ class DrawerContainer extends Component {
             <View style={styles.button}>
               <Image
                 style={{width: 20, height: 20}}
-                source={require('./../img/settings-icon.png')}
-              />
+                source={require('./../img/settings-icon.png')} />
               <Text style={styles.txtBottom}>Settings</Text>
             </View>
           </TouchableOpacity>
@@ -104,8 +103,7 @@ class DrawerContainer extends Component {
             <View style={styles.button}>
               <Image
                 style={{width: 20, height: 20}}
-                source={require('./../img/logout-icon.png')}
-              />
+                source={require('./../img/logout-icon.png')} />
               <Text style={styles.txtBottom}>Logout</Text>
             </View>
           </TouchableOpacity>

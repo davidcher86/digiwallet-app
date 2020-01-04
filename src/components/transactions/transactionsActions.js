@@ -61,6 +61,7 @@ export const deleteTransaction = (transactionUID, userUID) => {
 
 export const fetchTransactions = (uid) => {
     return dispatch => {
+      console.log('sdsdv');
       // firebaseAction(uid, 'transactions', 'read', null, setTransactions)
       // .then(res => {
       //   console.log(res);
