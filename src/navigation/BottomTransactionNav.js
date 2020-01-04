@@ -124,6 +124,7 @@ const TransactionsStack = createMaterialTopTabNavigator(
     tabBarComponent: BottomTransactionsStack,
     activeColor: '#f0edf6',
     inactiveColor: '#fffff',
+    tabBarPosition: 'bottom',
     // barStyle: {backgroundColor: '#694fad'},
   },
 );

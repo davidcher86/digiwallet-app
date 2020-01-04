@@ -1,4 +1,5 @@
 import {createDrawerNavigator} from 'react-navigation-drawer';
+import {createStackNavigator} from 'react-navigation-stack';
 import React, {Component} from 'react';
 import {FAB} from 'react-native-paper';
 import {Input, Icon} from 'react-native-elements';
@@ -23,6 +24,7 @@ import Account from './../components/account/Account';
 import HomePage from './../components/homePage/HomePage';
 import Dashboard from './../components/dashboard/Dashboard';
 import Transactions from './../components/transactions/Transactions';
+import BottomTransactionsStack from './BottomTransactionNav';
 import {removeUID} from './../components/common/Actions';
 import TransactionsStack from './BottomTransactionNav';
 
@@ -34,7 +36,7 @@ class DrawerContainer extends Component {
 
   render() {
     const {navigate} = this.props.navigation;
-    console.log(this.props);
+
     return (
       <View style={styles.container}>
         <View style={styles.containertopRow}>
@@ -96,7 +98,112 @@ class DrawerContainer extends Component {
   }
 }
 
+class NavigationDrawerStructure extends Component {
+  //Structure for the navigatin Drawer
+  toggleDrawer = () => {
+    //Props to open/close the drawer
+    this.props.navigationProps.toggleDrawer();
+  };
+  render() {
+    return (
+      <View style={{flexDirection: 'row'}}>
+        <TouchableOpacity onPress={this.toggleDrawer.bind(this)}>
+          {/*Donute Button Image */}
+          <Text>dsdg</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+}
+
+const HomePage_StackNavigator = createStackNavigator({
+  //All the screen from the Screen1 will be indexed here
+  First: {
+    screen: HomePage,
+    navigationOptions: ({navigation}) => ({
+      title: 'Demo Screen 1',
+      headerShown: false,
+    }),
+  },
+});
+
+const Dashboard_StackNavigator = createStackNavigator({
+  //All the screen from the Screen2 will be indexed here
+  Second: {
+    screen: Dashboard,
+    navigationOptions: ({navigation}) => ({
+      title: 'Demo Screen 2',
+      headerShown: false,
+    }),
+  },
+});
+
+const Account_StackNavigator = createStackNavigator({
+  //All the screen from the Screen2 will be indexed here
+  Second: {
+    screen: Account,
+    navigationOptions: ({navigation}) => ({
+      title: 'Demo Screen 2',
+      headerShown: false,
+    }),
+  },
+});
+
+const Transactions_StackNavigator = createStackNavigator({
+  //All the screen from the Screen2 will be indexed here
+  Second: {
+    screen: BottomTransactionsStack,
+    // screen: Transactions,
+    navigationOptions: ({navigation}) => ({
+      title: 'Demo Screen 2',
+      headerShown: false,
+    }),
+  },
+});
+
 const PrimaryNav = createDrawerNavigator(
+  {
+    //Drawer Optons and indexing
+    HomePage: {
+      //Title
+      screen: HomePage_StackNavigator,
+      navigationOptions: {
+        drawerLabel: 'Demo Screen 1',
+      },
+    },
+    Dashboard: {
+      //Title
+      screen: Dashboard_StackNavigator,
+      navigationOptions: {
+        drawerLabel: 'Demo Screen 2',
+      },
+    },
+    Account: {
+      //Title
+      screen: Account_StackNavigator,
+      navigationOptions: {
+        drawerLabel: 'Demo Screen 2',
+      },
+    },
+    Transactions: {
+      //Title
+      screen: Transactions_StackNavigator,
+      navigationOptions: {
+        drawerLabel: 'Demo Screen 2',
+      },
+    },
+  },
+  {
+    // contentComponent: DrawerWithLogoutButton,
+    initialRouteName: 'HomePage',
+    contentComponent: DrawerContainer,
+    edgeWidth: 25,
+    headerMode: 'none',
+    unmountInactiveRoutes: true,
+  },
+);
+
+const PrvimaryNav = createDrawerNavigator(
   {
     HomePage: {
       screen: HomePage,

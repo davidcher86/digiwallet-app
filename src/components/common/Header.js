@@ -3,7 +3,6 @@ import {Header, Icon} from 'react-native-elements';
 
 const MyHeader = props => {
   const HamburgerMenu = props => {
-    console.log(props.navigation);
     return (
       <Icon
         color="#fff"
