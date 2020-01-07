@@ -96,7 +96,7 @@ class NewTransactionModal extends Component {
                 <Input
                   placeholder="Amount"
                   style={styles.inputStyle}
-                  value={newTransaction.amount.toString()}
+                  value={(newTransaction.amount === 0 ? '' : newTransaction.amount.toString())}
                   onChangeText={text => changeFieldValue('amount', text)}
                   // leftIcon={{ name: 'maijl' }}
                   errorStyle={{color: 'red'}}
