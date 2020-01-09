@@ -61,11 +61,6 @@ export const deleteTransaction = (transactionUID, userUID) => {
 
 export const fetchTransactions = (uid) => {
     return dispatch => {
-      console.log('sdsdv');
-      // firebaseAction(uid, 'transactions', 'read', null, setTransactions)
-      // .then(res => {
-      //   console.log(res);
-      // })
       dispatch(startLoading());
       const dataRef = firebase.database().ref(`/users/${uid}/account/transactions`);
       dataRef.once('value').then(function(snapshot) {

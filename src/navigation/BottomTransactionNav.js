@@ -1,6 +1,7 @@
 import {createBottomTabNavigator, createMaterialTopTabNavigator} from 'react-navigation-tabs';
 import {createAppContainer} from 'react-navigation';
 import Fab from './../components/common/Fab';
+import {connect} from 'react-redux';
 
 import React, {Component} from 'react';
 import {
@@ -12,12 +13,17 @@ import {
   Platform,
 } from 'react-native';
 
+import * as actions from './../components/transactions/transactionsActions';
 import Transactions from './../components/transactions/Transactions';
 
 class BottomTransactionsStack extends Component {
   constructor(props) {
     super(props);
     this.state = {};
+  }
+
+  componentDidMount() {
+    this.props.fetchTransactions(this.props.identity.uid);
   }
 
   render() {
@@ -113,6 +119,20 @@ class BottomTransactionsStack extends Component {
   }
 }
 
+const mapStateToProps = state => {
+  return {
+    trans: state.transactions,
+    transactionsList: state.transactions.transactions,
+    pageSettings: state.transactions.pageSettings,
+    identity: state.identity,
+  };
+};
+
+const BottomTransactionsNav = connect(
+  mapStateToProps,
+  actions,
+)(BottomTransactionsStack);
+
 // const TransactionsStack = createBottomTabNavigator(
 const TransactionsStack = createMaterialTopTabNavigator(
   {
@@ -124,7 +144,8 @@ const TransactionsStack = createMaterialTopTabNavigator(
   },
   {
     initialRouteName: 'Daily',
-    tabBarComponent: BottomTransactionsStack,
+    tabBarComponent: BottomTransactionsNav,
+    // tabBarComponent: BottomTransactionsStack,
     activeColor: '#f0edf6',
     inactiveColor: '#fffff',
     tabBarPosition: 'bottom',
@@ -159,4 +180,18 @@ const styles = StyleSheet.create({
     // borderWidth: 2
   },
 });
+
+// const mapStateToProps = state => {
+//   return {
+//     trans: state.transactions,
+//     transactionsList: state.transactions.transactions,
+//     pageSettings: state.transactions.pageSettings,
+//     identity: state.identity,
+//   };
+// };
+
+// export default connect(
+//   mapStateToProps,
+//   actions,
+// )(TransactionsStack);
 export default TransactionsStack;

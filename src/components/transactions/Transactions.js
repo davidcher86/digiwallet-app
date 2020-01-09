@@ -100,7 +100,7 @@ class TransactionItem extends Component {
     var isOpened = pageSettings.isOpenIndex === transactionItem.uid;
     // console.log(transactionItem);
     return (
-      <Animated.View style={styles.transactionItemContainer} thumbnail>
+      <Animated.View key={transactionItem.uid} style={styles.transactionItemContainer} thumbnail>
         <View style={styles.itemVissibleSection}>
           <View style={styles.left1Section}>
             <Image
@@ -171,14 +171,9 @@ class TransactionItem extends Component {
 }
 
 class Transactions extends Component {
-  // componentWillReceiveProps(nextProps, nextState) {
-  //   console.log('oldProps', this.props.transactionsList.length);
-  //   console.log('nextProps', nextProps.transactionsList.length);
+  // componentDidMount() {
+  //   this.props.fetchTransactions(this.props.identity.uid);
   // }
-
-  componentDidMount() {
-    this.props.fetchTransactions(this.props.identity.uid);
-  }
 
   render() {
     const {
@@ -194,10 +189,11 @@ class Transactions extends Component {
         <Header navigation={this.props.navigation} title="Transaction" />
         <FlatList
           data={transactionsList}
-          keyExtractor={item => item.uid}
+          keyExtractor={(item, index) => 'key_' + index}
+          // keyExtractor={item => item.uid}
           renderItem={({item}) => (
             <TransactionItem
-              // key={key}
+              key={item.uid}
               pageSettings={pageSettings}
               openTransaction={openTransaction}
               identity={identity}
