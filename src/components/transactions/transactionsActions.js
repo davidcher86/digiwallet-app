@@ -10,20 +10,6 @@ export const setTransactions = (transactions) => {
   };
 };
 
-
-const fetch = async uid => {
-  try {
-    const dataRef = firebase.database().ref(`/users/${uid}/account/transactions`);
-
-    await dataRef.on('value', snapshot => {
-      var res = snapshot.val();
-      return res;
-    });
-  } catch (error) {
-    console.log('error while setting AsyncStorage item', error);
-  }
-};
-
 export const setOpenIndex = (uid) => {
   return {
     type: 'CHANGE_OPEN_INDEX',
@@ -46,18 +32,6 @@ export const deleteTransaction = (transactionUID, userUID) => {
     return null;
   };
 };
-
-// export const startLoading = () => {
-//   return {
-//     type: 'DISPLAY_LOADER',
-//   };
-// };
-
-// export const endLoading = () => {
-//   return {
-//     type: 'HIDE_LOADER',
-//   };
-// };
 
 export const fetchTransactions = (uid) => {
     return dispatch => {

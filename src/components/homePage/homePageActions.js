@@ -1,9 +1,12 @@
-import {startLoading, endLoading} from './../systemControl/systemControlActions';
+import {
+  startLoading,
+  endLoading,
+} from './../systemControl/systemControlActions';
 import firebase from 'firebase';
 
-export const setData = data => {
+export const recievehData = data => {
   return {
-    type: 'SET_DATA',
+    type: 'RECIEVE_DATA',
     data,
   };
 };
@@ -13,11 +16,16 @@ export const fetchData = uid => {
     dispatch(startLoading());
     const dataRef = firebase.database().ref(`/users/${uid}/account`);
 
-    dataRef.once('value').then(function(snapshot) {
-      var res = snapshot.val();
-
-      dispatch(setData(res));
-      dispatch(endLoading());
-    });
+    dataRef
+      .once('value')
+      .then(function(snapshot) {
+        var res = snapshot.val();
+        console.log(res);
+        dispatch(recievehData(res));
+        dispatch(endLoading());
+      })
+      .catch(fail => {
+        console.log(fail);
+      });
   };
 };

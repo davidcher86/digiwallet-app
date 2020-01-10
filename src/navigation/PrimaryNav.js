@@ -153,11 +153,13 @@ const Dashboard_StackNavigator = createStackNavigator({
   },
 });
 
+const EDIT = 'EDIT';
 const Account_StackNavigator = createStackNavigator({
   //All the screen from the Screen2 will be indexed here
   Second: {
     screen: Account,
-    navigationOptions: ({navigation}) => ({
+    params: {type: EDIT},
+    navigationOptions: ({route, navigation}) => ({
       title: 'Demo Screen 2',
       headerShown: false,
     }),

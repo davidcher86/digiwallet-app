@@ -46,7 +46,7 @@ export const onRegister = (email, password, navigation) => {
           dispatch(setIdentity(response.user.uid));
           rememberUser(response.user.uid);
           dispatch(endLoading());
-          return navigation.navigate('Account', {type: 'new'});
+          return navigation.navigate('Account', {type: 'NEW'});
         });
       })
       .catch(res => {

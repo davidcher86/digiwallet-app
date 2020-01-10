@@ -4,18 +4,24 @@ import {View, TouchableOpacity, Text, Image, ScrollView, KeyboardAvoidingView, S
 import {Button, Input, Icon} from 'react-native-elements';
 import {connect} from 'react-redux';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import firebase from 'firebase';
 
 import * as loginActions from './loginActions';
 import {getRememberedUser} from './../common/Actions';
-// import * as constants from './../../styles';
-// import {setIdentity} from './../identity/identityActions';
 
 class LoginForm extends Component {
   componentDidMount() {
     getRememberedUser()
-      .then(res => {
-        if (res !== null) {
-          this.props.setIdentity(res);
+      .then(uid => {
+        if (uid !== null) {
+          this.props.setIdentity(uid);
+          var lastConnected = new Date();
+          const updateRef = firebase.database().ref(`/users/${uid}/account`);
+
+          updateRef.update({lastConnected}).then(res => {
+            this.props.navigation.navigate('PrimaryNav');
+            return res;
+          });
           this.props.navigation.navigate('PrimaryNav');
         }
       });

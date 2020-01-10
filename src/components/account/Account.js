@@ -1,8 +1,9 @@
 /* eslint-disable prettier/prettier */
 import React, {Component} from 'react';
-import {View, TouchableOpacity, Text, Picker, Item, StyleSheet, KeyboardAvoidingView, ScrollView, AsyncStorage} from 'react-native';
+import {View, TouchableOpacity, Text, Picker, Item, StyleSheet, KeyboardAvoidingView, ScrollView} from 'react-native';
 import {Button, Input, Icon} from 'react-native-elements';
 import {connect} from 'react-redux';
+import AsyncStorage from '@react-native-community/async-storage';
 import {ProgressSteps, ProgressStep} from 'react-native-progress-steps';
 import DatePicker from 'react-native-datepicker';
 // import Picker from '@react-native-community/picker';
@@ -10,6 +11,9 @@ import DatePicker from 'react-native-datepicker';
 import * as actions from './accountActions';
 import Header from './../common/Header';
 import Fab from './../common/Fab';
+
+const EDIT = 'EDIT';
+const NEW = 'NEW';
 
 class Account extends Component {
   getRememberedUser = async () => {
@@ -26,7 +30,8 @@ class Account extends Component {
 
   componentDidMount() {
       // this.getRememberedUser();
-      if (this.props.navigation.state.params.type === 'edit'
+      console.log(this.props);
+      if (this.props.navigation.state.params.type === EDIT
           && this.props.identity.uid !== undefined
           && this.props.identity.uid !== null) {
             // console.log(this.props);
@@ -77,10 +82,12 @@ class Account extends Component {
     const onNextStep = next => {
       handleStep(next);
     };
-    console.log('props:', user);
+    console.log(this.props.navigation.getParam('type'));
+    var formType = this.props.navigation.getParam('type');
+
     return (
       <KeyboardAvoidingView style={styles.containerStyle}>
-        {this.props.navigation.state.params.type === 'edit' && <Header navigation={this.props.navigation} title="Account" />}
+        {formType === EDIT && <Header navigation={this.props.navigation} title="Account" />}
         <ScrollView style={styles.scrollerWrapper}>
           <View style={styles.wrapper}>
             <ProgressSteps previousBtnStyle={{color: '#007aff', fontSize: 18}} nextBtnTextStyle={{color: '#007aff', fontSize: 18}} style={styles.progressbar}>
@@ -199,11 +206,11 @@ class Account extends Component {
                 nextBtnTextStyle={{color: '#ccfbf0', fontSize: 18}}
                 previousBtnTextStyle={{color: '#ccfbf0', fontSize: 18}}
                 onPrevious={() => onNextStep(2)}
-                finishBtnText={this.props.navigation.state.params.type === 'new' ? 'Submit' : 'Edit'}
+                finishBtnText={formType === NEW ? 'Submit' : 'Edit'}
                 onSubmit={() => {
-                  if (this.props.navigation.state.params.type === 'new') {
+                  if (formType === NEW) {
                     handleRegisterAccount(this.props.account, this.props.identity.uid, this.props.navigation);
-                  } else if (this.props.navigation.state.params.type === 'edit') {
+                  } else if (formType === EDIT) {
                     handleUpdaeAccount(this.props.account, this.props.identity.uid);
                   }
                 }}

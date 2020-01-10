@@ -13,13 +13,29 @@ class HomePage extends Component {
         drawerLabel: 'Screen One',
     }
 
+    componentDidMount() {
+        this.props.fetchData(this.props.identity.uid);
+    }
+
     render() {
-        // console.log(this.props.identity);
+        const {homePage} = this.props;
+        console.log('props:', this.props);
         return (
             <View style={{flex: 1}}>
                 <Header navigation={this.props.navigation} title="Home"/>
                 <View style={styles.containerStyle}>
-                    <Text>{'HomePage'}</Text>
+                    <View style={styles.rowContainer}>
+                        <Text>{'Current Assets - '}</Text>
+                        <Text>{homePage.assets}</Text>
+                    </View>
+                    <View style={styles.rowContainer}>
+                        <Text>{'Current Month Debt - '}</Text>
+                        <Text>{homePage.currentMonthDebt}</Text>
+                    </View>
+                    <View style={styles.rowContainer}>
+                        <Text>{'Total Debt - '}</Text>
+                        <Text>{homePage.totalDebt}</Text>
+                    </View>
                 </View>
                 <Fab />
             </View>
@@ -32,6 +48,9 @@ const styles = StyleSheet.create({
         padding: 20,
         flex: 1,
         // backgroundColor: 'yellow'
+    },
+    rowContainer: {
+
     },
   });
 
