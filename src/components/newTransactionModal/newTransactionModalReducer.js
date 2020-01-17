@@ -13,6 +13,7 @@ const initialState = {
     cardType: 'Visa',
     paymentAmount: 1,
   },
+  selectedCreditCard: null,
   description: '',
   date: new Date(),
 };
@@ -24,6 +25,8 @@ export default (state = initialState, action) => {
       return Object.assign({}, state, {isModalOpen: !state.isModalOpen});
     case 'UPDATE_NEW_TRANSACTION_FORM':
       return Object.assign({}, state, {[action.field]: action.value});
+    case 'UPDATE_SELECTED_CREDIT_CARD':
+      return Object.assign({}, state, {selectedCreditCard: action.creditCard});
     case 'UPDATE_PAYMENT_DETAILS_FORM':
       paymentDetails[action.field] = action.value;
       return Object.assign({}, state, {paymentDetails: paymentDetails});

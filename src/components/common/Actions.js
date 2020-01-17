@@ -1,5 +1,8 @@
 import AsyncStorage from '@react-native-community/async-storage';
-import {startLoading, endLoading} from './../systemControl/systemControlActions';
+import {
+  startLoading,
+  endLoading,
+} from './../systemControl/systemControlActions';
 
 export const getRememberedUser = async () => {
   try {
@@ -25,4 +28,14 @@ export const removeUID = async uid => {
   } catch (error) {
     console.log('error while removing AsyncStorage item ', error);
   }
+};
+
+export const randomString = length => {
+  var result = '';
+  var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  var charactersLength = characters.length;
+  for (var i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
 };

@@ -19,6 +19,13 @@ export const resetNewTransactionForm = () => {
   };
 };
 
+export const changeSelectedCeridetCard = creditCard => {
+  return {
+    type: 'UPDATE_SELECTED_CREDIT_CARD',
+    creditCard,
+  };
+};
+
 export const changePaymentDetailsFieldValue = (field, value) => {
   return {
     type: 'UPDATE_PAYMENT_DETAILS_FORM',
@@ -39,39 +46,19 @@ export const handleAddNewTransactionAccount = (
   newTransaction,
   uid,
 ) => dispatch => {
+  var dt = new Date();
+
   var data = {
     transactionType: newTransaction.transactionType,
     amount: newTransaction.amount,
     paymentType: newTransaction.paymentType,
-    paymentDetails: newTransaction.paymentDetails,
-    date:
-      newTransaction.date.getFullYear() +
-      '-' +
-      (newTransaction.date.getMonth() + 1) +
-      '-' +
-      newTransaction.date.getDate() +
-      ' ' +
-      newTransaction.date.getHours() +
-      ':' +
-      newTransaction.date.getMinutes() +
-      ':' +
-      newTransaction.date.getSeconds(),
-    // date: newTransaction.date,
+    date: dt.toISOString(),
+    paymentsAmount: newTransaction.paymentDetails.paymentAmount,
+    creditCardId: newTransaction.paymentDetails.creditCardId,
     description: newTransaction.description,
     mainCategory: newTransaction.mainCategory,
     subCategory: newTransaction.subCategory,
   };
-  console.log('data:', data);
-  //  firebaseAction(uid, 'transactions', 'push', data)
-  //   .then(res => {
-  //     console.log(res);
-  //     dispatch(resetNewTransactionForm());
-  //     dispatch(closeNewTransactionModal());
-  //     return res;
-  //   })
-  //   .catch(err => {
-  //     console.log(err);
-  //   });
 
   firebase
     .database()

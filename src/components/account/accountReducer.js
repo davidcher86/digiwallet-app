@@ -1,3 +1,5 @@
+import {randomString} from './../common/Actions';
+
 const initialState = {
   user: {
     uid: null,
@@ -8,9 +10,11 @@ const initialState = {
   },
   creditCards: [
     {
+      id: randomString(20),
+      name: 'Card1',
       cardType: 'visa',
       billingDate: '1',
-      monthlyLiabilities: 0,
+      // monthlyLiabilities: 0,
     },
   ],
   sallary: {
@@ -27,6 +31,8 @@ const initialState = {
   pageSettings: {
     step: 0,
   },
+  registerData: {},
+  formType: 'NEW',
 };
 
 export default (state = initialState, action) => {

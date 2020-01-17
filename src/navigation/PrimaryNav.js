@@ -66,7 +66,7 @@ class DrawerContainer extends Component {
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={() => navigate('Account', {type: 'edit'})}
+            onPress={() => navigate('Account', {type: 'EDIT'})}
             style={styles.containerBottomItem}>
             <View style={styles.button}>
               <Text style={styles.txtBottom}>Account</Text>

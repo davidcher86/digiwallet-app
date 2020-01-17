@@ -10,7 +10,7 @@ import DatePicker from 'react-native-datepicker';
 
 import * as actions from './accountActions';
 import Header from './../common/Header';
-import Fab from './../common/Fab';
+import {randomString} from './../common/Actions';
 
 const EDIT = 'EDIT';
 const NEW = 'NEW';
@@ -29,22 +29,30 @@ class Account extends Component {
   };
 
   componentDidMount() {
-      // this.getRememberedUser();
-      console.log(this.props);
+      switch (this.props.navigation.state.params.type) {
+        case EDIT:
+          // console.log('EDIT');
+          // console.log(this.props.identity.uid !== undefined && this.props.identity.uid !== null);
+          if (this.props.identity.uid !== undefined && this.props.identity.uid !== null) {
+            this.props.changeAccountFieldValue('formType', EDIT);
+            this.props.fetchAccount(this.props.identity.uid);
+          }
+          break;
+        case NEW:
+          // console.log('NEW');
+          // const loginData = this.props.navigation.getParam('data');
+          // const data = {email: loginData.newEmail, newPassword: loginData.newPassword};
+          this.props.changeAccountFieldValue('formType', NEW);
+          // if (this.props.navigation.getParam('registered')) {
+          //   this.props.changeAccountFieldValue('registerData', data);
+          // }
+          break;
+      }
       if (this.props.navigation.state.params.type === EDIT
           && this.props.identity.uid !== undefined
           && this.props.identity.uid !== null) {
-            // console.log(this.props);
             this.props.fetchAccount(this.props.identity.uid);
-            // console.log(this.props);
       }
-      // getRememberedUser()
-      //   .then(res => {
-      //     if (res !== null) {
-      //       this.props.setIdentity(res);
-      //       this.props.navigation.navigate('PrimaryNav');
-      //     }
-      //   });
   }
 
 
@@ -82,12 +90,12 @@ class Account extends Component {
     const onNextStep = next => {
       handleStep(next);
     };
-    console.log(this.props.navigation.getParam('type'));
-    var formType = this.props.navigation.getParam('type');
-
+    // console.log(this.props.navigation.getParam('type'));
+    // var formType = this.props.navigation.getParam('type');
+    // console.log('props', this.props.account);
     return (
       <KeyboardAvoidingView style={styles.containerStyle}>
-        {formType === EDIT && <Header navigation={this.props.navigation} title="Account" />}
+        {account.formType === EDIT && <Header navigation={this.props.navigation} title="Account" />}
         <ScrollView style={styles.scrollerWrapper}>
           <View style={styles.wrapper}>
             <ProgressSteps previousBtnStyle={{color: '#007aff', fontSize: 18}} nextBtnTextStyle={{color: '#007aff', fontSize: 18}} style={styles.progressbar}>
@@ -177,6 +185,18 @@ class Account extends Component {
                   <View style={{alignItems: 'center'}}>
                     <View style={styles.inputRowContainer}>
                       <Text>Credit Card Details</Text>
+                      <Input
+                        placeholder="Last Name"
+                        style={styles.inputStyle}
+                        value={creditCards[0].name}
+                        onChangeText={text => changeCreditFieldValue('name', text, 0)}
+                        // leftIcon={{ name: 'maijl' }}
+                        errorStyle={{color: 'red'}}
+                        // label="Last Name"
+                        errorMessage={validationErrors.lastNameError}/>
+                    </View>
+                    <View style={[styles.inputRowContainer,{flexDirection: 'row', alignItems: 'center'}]}>
+                      <Text>Name</Text>
                     </View>
                     <View style={[styles.inputRowContainer,{flexDirection: 'row', alignItems: 'center'}]}>
                       <Text style={{width: '50%'}}>Card Type</Text>
@@ -206,11 +226,11 @@ class Account extends Component {
                 nextBtnTextStyle={{color: '#ccfbf0', fontSize: 18}}
                 previousBtnTextStyle={{color: '#ccfbf0', fontSize: 18}}
                 onPrevious={() => onNextStep(2)}
-                finishBtnText={formType === NEW ? 'Submit' : 'Edit'}
+                finishBtnText={account.formType === NEW ? 'Submit' : 'Edit'}
                 onSubmit={() => {
-                  if (formType === NEW) {
+                  if (account.formType === NEW) {
                     handleRegisterAccount(this.props.account, this.props.identity.uid, this.props.navigation);
-                  } else if (formType === EDIT) {
+                  } else if (account.formType === EDIT) {
                     handleUpdaeAccount(this.props.account, this.props.identity.uid);
                   }
                 }}
@@ -268,7 +288,6 @@ class Account extends Component {
             </ProgressSteps>
           </View>
         </ScrollView>
-        <Fab />
       </KeyboardAvoidingView>
     );
   }

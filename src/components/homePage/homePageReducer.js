@@ -5,15 +5,22 @@ const initialState = {
     currentMonthDebt: 0,
     totalAssets: 0,
     userDetails: null,
-    creditCards: []
-}
+    creditCards: [],
+    creditCardList: [],
+};
 
 export default (state = initialState, action) => {
     switch (action.type) {
         case 'RECIEVE_DATA':
             var data = action.data;
             // return state;
-            return Object.assign({}, state, { assets: data.assets, lastUpdate: data.lastUpdate, creditCards: data.creditCards, userDetails: data.details });
+            return Object.assign({}, state, {
+                assets: data.assets,
+                lastUpdate: data.lastUpdate,
+                creditCards: data.creditCards,
+                userDetails: data.details ,
+                creditCardList: data.creditCards,
+            });
         // case 'CHANGE_PASSWORD_FIELD':
         //     return Object.assign({}, state, { password: action.value });
         // case 'CHANGE_LOADING_STATE':

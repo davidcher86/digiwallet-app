@@ -28,14 +28,6 @@ class LoginForm extends Component {
   }
 
   renderButton(props) {
-    // if (props.login.loading) {
-    //   return (
-    //     <View style={styles.buttonContainerStyle}>
-    //       <Button style={styles.buttonStyle} title="Loading button" loading />
-    //     </View>
-    //   );
-    // }
-
     return (
       <View style={styles.buttonContainerStyle}>
         {this.props.pageSettings.selectedTab === 'login' && (
@@ -54,6 +46,7 @@ class LoginForm extends Component {
         {this.props.pageSettings.selectedTab === 'signIn' && (
           <TouchableOpacity
             style={styles.buttonContainer}
+            // onPress={() => this.props.navigation.navigate('Account', {type: 'NEW', data: props.login})}>
             onPress={() => props.onRegister(
                             props.login.newEmail,
                             props.login.newPassword,

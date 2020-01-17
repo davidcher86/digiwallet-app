@@ -22,6 +22,12 @@ class NewTransactionModal extends Component {
     return console.log('sdfsdfssdfsdf');
   };
 
+  componentDidUpdate(prevProp) {
+    if (this.props.profile.creditCardList.length > 0 && this.props.profile.creditCardList.length === prevProp.profile.creditCardList.length && this.props.newTransaction.selectedCreditCard === null) {
+      this.props.changeSelectedCeridetCard(this.props.profile.creditCardList[0]);
+    }
+  }
+
   render() {
     const {isModalOpen, categoryList, subCategory} = this.props.newTransaction;
     const {
@@ -33,17 +39,9 @@ class NewTransactionModal extends Component {
       changeFieldValue,
       closeNewTransactionModal,
       identity,
+      profile,
       onFabPress,
     } = this.props;
-    // console.log('identity: ', identity);
-
-    const renderDays = () => {
-      var arr = [];
-      for (var i = 1; i <= 31; i++) {
-        arr.push(<Picker.Item key={i} label={i.toString()} value={i} />);
-      }
-      return arr;
-    };
 
     const renderMainCategories = () => {
       var mainCategories = [];
@@ -58,18 +56,22 @@ class NewTransactionModal extends Component {
     const renderSubCategories = () => {
       var subCategories = [];
       let mainCategory = newTransaction.mainCategory;
-      // console.log('mainCategory', mainCategory);
+
       if (mainCategory !== null && mainCategory !== '') {
         newTransaction.categoryList[mainCategory].forEach(category => {
           subCategories.push(<Picker.Item key={category} label={category} value={category} />);
         });
       }
-      // console.log('subCategories', subCategories);
+
       return subCategories;
     };
     var date = new Date();
     var maxDate = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
-    // console.log(maxDate);
+
+    const creditCardList = profile.creditCards;
+    if (creditCardList.length > 0 && newTransaction.selectedCreditCard !== null) {
+      newTransaction.paymentDetails.creditCardId = newTransaction.selectedCreditCard.id;
+    }
     return (
       <KeyboardAvoidingView style={styles.containerStyle}>
         <View >
@@ -170,12 +172,32 @@ class NewTransactionModal extends Component {
 
               {newTransaction.paymentType === 'credit' && (
                 <View style={[styles.inputContainer, {flexDirection: 'column'}]}>
+                  <View style={{flexDirection: 'row'}}>
+                    <Text style={[styles.pickerLabel, {alignSelf: 'center'}]}>Choose Card</Text>
+                    <Picker
+                      selectedValue={creditCardList}
+                      onValueChange={(itemValue, itemIndex) => changeFieldValue('selectedCreditCard', itemValue)}
+                      style={{width: '50%'}} >
+                        {creditCardList.map(item => <Picker.Item key={item.id} label={item.name.toString()} value={item.id} />)}
+                    </Picker>
+                  </View>
                   <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                    <Text style={{width: '50%', paddingLeft: 8}}>Card Type</Text>
-                    <Text style={{width: '50%', paddingLeft: 8}}>Number of Payments</Text>
+                    {/* <Text style={{width: '50%', paddingLeft: 8}}>Card Type</Text> */}
+                    <Text style={[styles.pickerLabel, {width: '50%'}]}>Number of Payments</Text>
+                    <View style={{width: '40%'}}>
+                      <Input
+                        placeholder="#"
+                        value={newTransaction.paymentDetails.paymentAmount}
+                        onChangeText={text => changePaymentDetailsFieldValue('paymentAmount', text)}
+                        // leftIcon={{ name: 'maijl' }}
+                        // errorMessage={validationErrors.lastNameError}
+                        // label="Number of Payments"
+                        errorStyle={{color: 'red'}} />
+                    </View>
                   </View>
                   <View style={{flexDirection: 'row'}}>
-                    <Picker
+                    {/* <Picker
+                      // selectedValue={newTransaction.selectedCreditCard.cardType}
                       selectedValue={paymentDetails.cardType}
                       style={{width: '50%'}}
                       onValueChange={itemValue =>
@@ -183,8 +205,8 @@ class NewTransactionModal extends Component {
                       }>
                       <Picker.Item label="Visa" value="visa" />
                       <Picker.Item label="Mastercard" value="mastercard" />
-                    </Picker>
-                    <View style={{width: '50%'}}>
+                    </Picker> */}
+                    {/* <View style={{width: '50%'}}>
                       <Input
                         placeholder="#"
                         value={newTransaction.paymentAmount}
@@ -193,7 +215,7 @@ class NewTransactionModal extends Component {
                         // errorMessage={validationErrors.lastNameError}
                         // label="Number of Payments"
                         errorStyle={{color: 'red'}} />
-                    </View>
+                    </View> */}
                   </View>
                 </View>
               )}
@@ -302,7 +324,9 @@ const mapStateToProps = state => {
     newTransaction: state.newTransactionModal,
     systemControl: state.systemControl,
     identity: state.identity,
+    profile: state.profile,
     paymentDetails: state.newTransactionModal.paymentDetails,
+    creditCardList: state.profile.creditCardList,
   };
 };
 

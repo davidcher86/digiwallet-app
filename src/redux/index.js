@@ -14,7 +14,7 @@ export default combineReducers({
     login: loginReducer,
     dashboard: dashboardReducer,
     transactions: transactionsReducer,
-    homePage: homePage,
+    profile: homePage,
     account: accountReducer,
     newTransactionModal: newTransactionModalReducer,
     systemControl: systemControl,

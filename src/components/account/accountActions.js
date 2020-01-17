@@ -1,5 +1,8 @@
 import {firebaseAction} from './../../Api';
-import {startLoading, endLoading} from './../systemControl/systemControlActions';
+import {
+  startLoading,
+  endLoading,
+} from './../systemControl/systemControlActions';
 import firebase from 'firebase';
 
 export const changeAccountFieldValue = (field, value) => {
@@ -65,6 +68,19 @@ export const handleRegisterAccount = (account, uid, navigation) => dispatch => {
     assets: account.assets,
   };
 
+  if (json.creditCards.length > 0) {
+    for (var i = 0; i < json.creditCards.length; i++) {
+      let dt = new Date();
+      dt.setDate(json.creditCards[i].billingDate);
+
+      if (new Date() > dt) {
+        dt.setMonth(dt.getMonth() + 1);
+      }
+
+      json.creditCards[i].nextDebtDate = dt.toISOString();
+    }
+  }
+
   dispatch(startLoading());
   firebaseAction(uid, 'account', 'add', json)
     .then(res => {
@@ -98,14 +114,18 @@ export const fetchAccount = uid => {
       .once('value')
       .then(function(snapshot) {
         var res = snapshot.val();
-        var account = {
-          assets: res.assets,
-          creditCards: res.creditCards,
-          user: res.details,
-          sallary: res.sallary,
-        };
+        // console.log(res);
+        // console.log(res !== null && res.assets !== undefined);
+        if (res !== null && res.assets !== null) {
+          var account = {
+            assets: res.assets,
+            creditCards: res.creditCards,
+            user: res.details,
+            sallary: res.sallary,
+          };
 
-        dispatch(setAccountDetails(account));
+          dispatch(setAccountDetails(account));
+        }
         dispatch(endLoading());
       })
       .catch(r => {
@@ -128,10 +148,10 @@ export const handleUpdaeAccount = (account, uid) => dispatch => {
     .database()
     .ref(`/users/${uid}/account`)
     .update({
-      'assets': account.assets,
-      'details': account.user,
-      'sallary': account.sallary,
-      'creditCards': account.creditCards,
+      assets: account.assets,
+      details: account.user,
+      sallary: account.sallary,
+      creditCards: account.creditCards,
     })
     .then(res => {
       console.log(res);
