@@ -50,11 +50,11 @@ export const handleAddNewTransactionAccount = (
 
   var data = {
     transactionType: newTransaction.transactionType,
-    amount: newTransaction.amount,
+    amount: Number(newTransaction.amount),
     paymentType: newTransaction.paymentType,
     date: dt.toISOString(),
-    paymentsAmount: newTransaction.paymentDetails.paymentAmount,
-    creditCardId: newTransaction.paymentDetails.creditCardId,
+    paymentsAmount: Number(newTransaction.paymentAmount),
+    creditCardId: newTransaction.creditCardId,
     description: newTransaction.description,
     mainCategory: newTransaction.mainCategory,
     subCategory: newTransaction.subCategory,

@@ -4,6 +4,7 @@ import {
   View,
   TouchableOpacity,
   Text,
+  TextInput,
   Modal,
   StyleSheet,
   KeyboardAvoidingView,
@@ -67,11 +68,12 @@ class NewTransactionModal extends Component {
     };
     var date = new Date();
     var maxDate = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
-
     const creditCardList = profile.creditCards;
-    if (creditCardList.length > 0 && newTransaction.selectedCreditCard !== null) {
-      newTransaction.paymentDetails.creditCardId = newTransaction.selectedCreditCard.id;
+
+    if (creditCardList !== undefined && creditCardList.length > 0 && newTransaction.selectedCreditCard !== null) {
+      newTransaction.creditCardId = newTransaction.selectedCreditCard.id;
     }
+
     return (
       <KeyboardAvoidingView style={styles.containerStyle}>
         <View >
@@ -95,9 +97,11 @@ class NewTransactionModal extends Component {
               </View>
 
               <View style={styles.inputContainer}>
-                <Input
+                <Text style={styles.pickerLabel}>Amount</Text>
+                <TextInput
                   placeholder="Amount"
                   style={styles.inputStyle}
+                  keyboardType="numeric"
                   value={(newTransaction.amount === 0 ? '' : newTransaction.amount.toString())}
                   onChangeText={text => changeFieldValue('amount', text)}
                   // leftIcon={{ name: 'maijl' }}
@@ -184,11 +188,12 @@ class NewTransactionModal extends Component {
                   <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                     {/* <Text style={{width: '50%', paddingLeft: 8}}>Card Type</Text> */}
                     <Text style={[styles.pickerLabel, {width: '50%'}]}>Number of Payments</Text>
-                    <View style={{width: '40%'}}>
-                      <Input
+                    <View style={{width: '50%'}}>
+                      <TextInput
                         placeholder="#"
-                        value={newTransaction.paymentDetails.paymentAmount}
-                        onChangeText={text => changePaymentDetailsFieldValue('paymentAmount', text)}
+                        keyboardType="numeric"
+                        value={newTransaction.paymentAmount.toString()}
+                        onChangeText={text => changeFieldValue('paymentAmount', text)}
                         // leftIcon={{ name: 'maijl' }}
                         // errorMessage={validationErrors.lastNameError}
                         // label="Number of Payments"
@@ -285,7 +290,7 @@ const styles = StyleSheet.create({
     padding: 8,
   },
   inputContainer: {
-    justifyContent: 'center',
+    // justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
     width: '100%',
@@ -303,10 +308,10 @@ const styles = StyleSheet.create({
   },
   pickerLabel: {
     // fontStyle: 'bold',
-    // borderWidth: 2,
+    borderWidth: 2,
     paddingLeft: 6,
-    justifyContent: 'center',
-    width: '40%',
+    // justifyContent: 'center',
+    width: '50%',
   },
   buttonContainer: {
     width: '100%',

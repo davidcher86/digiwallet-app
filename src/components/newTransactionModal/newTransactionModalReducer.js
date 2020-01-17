@@ -9,13 +9,14 @@ const initialState = {
   mainCategory: '',
   subCategory: '',
   paymentType: 'credit',
-  paymentDetails: {
-    cardType: 'Visa',
-    paymentAmount: 1,
-  },
+  paymentAmount: 1,
+  // paymentDetails: {
+  //   cardType: 'Visa',
+  //   paymentAmount: 1,
+  // },
   selectedCreditCard: null,
   description: '',
-  date: new Date(),
+  // date: new Date(),
 };
 
 export default (state = initialState, action) => {

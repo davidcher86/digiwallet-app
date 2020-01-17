@@ -20,7 +20,7 @@ export const fetchData = (uid, navigation) => {
       .once('value')
       .then(function(snapshot) {
         var res = snapshot.val();
-        // console.log('res', res);
+        console.log('res', res);
         // console.log('uid', uid);
         if (res && res.assets !== null) {
           dispatch(recievehData(res));

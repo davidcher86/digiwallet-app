@@ -7,6 +7,8 @@ const initialState = {
     userDetails: null,
     creditCards: [],
     creditCardList: [],
+
+    credit: [],    
 };
 
 export default (state = initialState, action) => {
@@ -20,6 +22,8 @@ export default (state = initialState, action) => {
                 creditCards: data.creditCards,
                 userDetails: data.details ,
                 creditCardList: data.creditCards,
+
+                credit: data.creditDebt,
             });
         // case 'CHANGE_PASSWORD_FIELD':
         //     return Object.assign({}, state, { password: action.value });

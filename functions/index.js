@@ -35,10 +35,10 @@ exports.updateNewTransaction = functions.database
       }
 
       if (newItem !==null) {
-        newItem.lastUpdated = new Date();
+        newItem.lastUpdated = newItem.date;
         newItem.paymentsRemain = newItem.paymentsAmount;
         newItem.creditCardId = newItem.creditCardId;
-        newItem.amountRemain = newItem.amount;
+        newItem.amountRemain = Number(newItem.amount);
         newItem.monthlyPayment = newItem.amount / newItem.paymentsRemain;
       }
     }
