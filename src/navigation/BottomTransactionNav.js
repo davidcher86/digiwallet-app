@@ -44,7 +44,7 @@ class BottomTransactionsStack extends Component {
             ifSelected('Daily') ? styles.selectedTab : '',
           ]}>
           <TouchableOpacity
-            onPress={() => navigate('Daily')}
+            onPress={() => navigate('Daily', {group: 'Daily'})}
             style={styles.containerBottomItem}>
             <View style={styles.button}>
               <Text style={ifSelected('Daily') ? {color: 'red'} : {}}>
@@ -56,14 +56,14 @@ class BottomTransactionsStack extends Component {
         <View
           style={[
             styles.tabContainer,
-            ifSelected('Weekly') ? styles.selectedTab : '',
+            ifSelected('Weakly') ? styles.selectedTab : '',
           ]}>
           <TouchableOpacity
-            onPress={() => navigate('Weekly')}
+            onPress={() => navigate('Weakly', {group: 'Weakly'})}
             style={styles.containerBottomItem}>
             <View style={styles.button}>
-              <Text style={ifSelected('Weekly') ? {color: 'red'} : {}}>
-                Weekly
+              <Text style={ifSelected('Weakly') ? {color: 'red'} : {}}>
+                Weakly
               </Text>
             </View>
           </TouchableOpacity>
@@ -74,7 +74,7 @@ class BottomTransactionsStack extends Component {
             ifSelected('Monthly') ? styles.selectedTab : '',
           ]}>
           <TouchableOpacity
-            onPress={() => navigate('Monthly')}
+            onPress={() => navigate('Monthly', {group: 'Monthly'})}
             style={styles.containerBottomItem}>
             <View style={styles.button}>
               <Text style={ifSelected('Monthly') ? {color: 'red'} : {}}>
@@ -86,14 +86,14 @@ class BottomTransactionsStack extends Component {
         <View
           style={[
             styles.tabContainer,
-            ifSelected('Other') ? styles.selectedTab : '',
+            ifSelected('Yearly') ? styles.selectedTab : '',
           ]}>
           <TouchableOpacity
-            onPress={() => navigate('Other')}
+            onPress={() => navigate('Yearly', {group: 'Yearly'})}
             style={styles.containerBottomItem}>
             <View style={styles.button}>
-              <Text style={ifSelected('Other') ? {color: 'red'} : {}}>
-                Other
+              <Text style={ifSelected('Yearly') ? {color: 'red'} : {}}>
+              Yearly
               </Text>
             </View>
           </TouchableOpacity>
@@ -101,14 +101,14 @@ class BottomTransactionsStack extends Component {
         <View
           style={[
             styles.tabContainer,
-            ifSelected('Total') ? styles.selectedTab : '',
+            ifSelected('All') ? styles.selectedTab : '',
           ]}>
           <TouchableOpacity
-            onPress={() => navigate('Total')}
+            onPress={() => navigate('All', {group: 'All'})}
             style={styles.containerBottomItem}>
             <View style={styles.button}>
-              <Text style={ifSelected('Total') ? {color: 'red'} : {}}>
-                Total
+              <Text style={ifSelected('All') ? {color: 'red'} : {}}>
+                All
               </Text>
             </View>
           </TouchableOpacity>
@@ -136,11 +136,26 @@ const BottomTransactionsNav = connect(
 // const TransactionsStack = createBottomTabNavigator(
 const TransactionsStack = createMaterialTopTabNavigator(
   {
-    Daily: {screen: Transactions},
-    Weekly: {screen: Transactions},
-    Monthly: {screen: Transactions},
-    Other: {screen: Transactions},
-    Total: {screen: Transactions},
+    Daily: {
+      screen: Transactions,
+      // group: 'Daily',
+    },
+    Weakly: {
+      screen: Transactions,
+      // group: 'Weakly',
+    },
+    Monthly: {
+      screen: Transactions,
+      // group: 'Monthly',
+    },
+    Yearly: {
+      screen: Transactions,
+      // group: 'Yearly',
+    },
+    All: {
+      screen: Transactions,
+      // group: 'All',
+    },
   },
   {
     initialRouteName: 'Daily',
@@ -149,6 +164,7 @@ const TransactionsStack = createMaterialTopTabNavigator(
     activeColor: '#f0edf6',
     inactiveColor: '#fffff',
     tabBarPosition: 'bottom',
+    lazy: true,
     // barStyle: {backgroundColor: '#694fad'},
   },
 );

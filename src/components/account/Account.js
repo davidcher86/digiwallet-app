@@ -11,6 +11,7 @@ import DatePicker from 'react-native-datepicker';
 import * as actions from './accountActions';
 import Header from './../common/Header';
 import {randomString} from './../common/Actions';
+import { BACKGROUND_COLOR, LABEL_COLOR, INPUT_COLOR } from './../Styles';
 
 const EDIT = 'EDIT';
 const NEW = 'NEW';
@@ -108,13 +109,14 @@ class Account extends Component {
                 label="First Step">
                 <View style={styles.innerTabWrapper}>
                   <View style={styles.inputRowContainer}>
-                    <Text>Personal Data</Text>
+                    <Text style={styles.textLabels}>Personal Data</Text>
                   </View>
                   <View style={styles.inputRowContainer}>
                     <Input
-                      style={styles.inputStyle}
+                      style={{width: '100%'}}
                       autoCorrect={false}
                       placeholder="First Name"
+                      inputStyle={styles.inputStyle}
                       value={user.firstName}
                       onChangeText={text => changeUserFieldValue('firstName', text)}
                       // leftIcon={{ name: 'mail' }}
@@ -127,7 +129,8 @@ class Account extends Component {
                   <View style={styles.inputRowContainer}>
                     <Input
                       placeholder="Last Name"
-                      style={styles.inputStyle}
+                      style={{width: '100%'}}
+                      inputStyle={styles.inputStyle}
                       value={user.lastName}
                       onChangeText={text => changeUserFieldValue('lastName', text)}
                       // leftIcon={{ name: 'maijl' }}
@@ -136,17 +139,17 @@ class Account extends Component {
                       errorMessage={validationErrors.lastNameError}/>
                   </View>
                   <View style={{padding: 8, paddingLeft: 28, flexDirection: 'row', alignItems: 'center'}}>
-                    <Text style={{width: '50%'}}>Gender</Text>
+                    <Text style={{width: '50%', color: LABEL_COLOR}}>Gender</Text>
                     <Picker
                       selectedValue={user.gender}
-                      style={{height: 50, width: '50%'}}
+                      style={{height: 50, width: '50%', color: LABEL_COLOR}}
                       onValueChange={itemValue => changeUserFieldValue(itemValue)}>
                       <Picker.Item label="Male" value="male" />
                       <Picker.Item label="Female" value="female" />
                     </Picker>
                   </View>
                   <View style={{padding: 8, paddingRight: 18, paddingLeft: 28, flexDirection: 'row', alignItems: 'center'}}>
-                  <Text style={{width: '50%'}}>Date of Birth</Text>
+                  <Text style={{width: '50%', color: LABEL_COLOR}}>Date of Birth</Text>
                     <DatePicker
                       style={{width: '50%'}}
                       date={user.birthDate}
@@ -161,6 +164,9 @@ class Account extends Component {
                           left: 0,
                           top: 4,
                           marginLeft: 0,
+                        },
+                        dateText: {
+                          color: INPUT_COLOR,
                         },
                         dateInput: {
                           marginLeft: 36,
@@ -184,10 +190,12 @@ class Account extends Component {
                 <View style={styles.innerTabWrapper}>
                   <View style={{alignItems: 'center'}}>
                     <View style={styles.inputRowContainer}>
-                      <Text>Credit Card Details</Text>
+                      <Text style={styles.h2}>Credit Card Details</Text>
+                      <Text style={{width: '30%', color: LABEL_COLOR}}>Name</Text>
                       <Input
                         placeholder="Last Name"
-                        style={styles.inputStyle}
+                        style={{width: '70%'}}
+                        inputStyle={styles.inputStyle}
                         value={creditCards[0].name}
                         onChangeText={text => changeCreditFieldValue('name', text, 0)}
                         // leftIcon={{ name: 'maijl' }}
@@ -196,23 +204,20 @@ class Account extends Component {
                         errorMessage={validationErrors.lastNameError}/>
                     </View>
                     <View style={[styles.inputRowContainer,{flexDirection: 'row', alignItems: 'center'}]}>
-                      <Text>Name</Text>
-                    </View>
-                    <View style={[styles.inputRowContainer,{flexDirection: 'row', alignItems: 'center'}]}>
-                      <Text style={{width: '50%'}}>Card Type</Text>
+                      <Text style={{width: '50%', color: LABEL_COLOR}}>Card Type</Text>
                       <Picker
                         selectedValue={creditCards[0].cardType}
-                        style={{height: 50, width: '50%'}}
+                        style={{height: 50, width: '50%', color: INPUT_COLOR}}
                         onValueChange={itemValue => changeCreditFieldValue('cardType', itemValue, 0)}>
                         <Picker.Item label="Visa" value="visa" />
                         <Picker.Item label="Mastercard" value="mastercard" />
                       </Picker>
                     </View>
                     <View style={[styles.inputRowContainer,{flexDirection: 'row', alignItems: 'center'}]}>
-                      <Text style={{width: '50%'}}>Billing Date</Text>
+                      <Text style={{width: '50%', color: LABEL_COLOR}}>Billing Date</Text>
                       <Picker
                         selectedValue={creditCards[0].billingDate}
-                        style={{height: 50, width: '50%'}}
+                        style={{height: 50, width: '50%', color: INPUT_COLOR}}
                         onValueChange={itemValue =>
                           changeCreditFieldValue('billingDate', itemValue, 0)
                         }>
@@ -239,14 +244,15 @@ class Account extends Component {
                 <View style={styles.innerTabWrapper}>
                   <View style={{alignItems: 'center'}}>
                     <View style={styles.inputRowContainer}>
-                      <Text style={{width: '50%'}}>{'Sallary & Assets Details'}</Text>
+                      <Text style={{width: '50%', color: LABEL_COLOR}}>{'Sallary & Assets Details'}</Text>
                     </View>
                     <View style={[styles.inputRowContainer,{flexDirection: 'row', alignItems: 'center'}]}>
                       <Input
-                        style={styles.inputStyle}
+                        style={{width: '100%'}}
                         autoCorrect={false}
                         value={account.assets.toString()}
                         placeholder="Initial Amount"
+                        inputStyle={styles.inputStyle}
                         // onChangeText={text => this.props.changeUsername(text)}
                         onChangeText={text => changeAccountFieldValue('assets', Number(text))}
                         leftIcon={{name: 'mail'}}
@@ -258,10 +264,11 @@ class Account extends Component {
                     </View>
                     <View style={styles.inputRowContainer}>
                       <Input
-                        style={styles.inputStyle}
+                        style={{width: '100%'}}
                         autoCorrect={false}
                         value={sallary.amount.toString()}
                         placeholder="Sallary Amount"
+                        inputStyle={styles.inputStyle}
                         // onChangeText={text => this.props.changeUsername(text)}
                         onChangeText={text => changeSallaryFieldValue('amount', Number(text))}
                         leftIcon={{name: 'mail'}}
@@ -271,11 +278,11 @@ class Account extends Component {
                         // label="Sallary Amount"
                         placeholderTextColor="rgba(225,225,225,0.7)"/>
                     </View>
-                    <View style={[styles.inputRowContainer,{flexDirection: 'row', alignItems: 'center'}]}>
-                      <Text style={{width: '50%'}}>Sallary pay Day</Text>
+                    <View style={[styles.inputRowContainer,{flexDirection: 'row', justifyContent: 'center'}]}>
+                      <Text style={{width: '50%', color: LABEL_COLOR}}>Sallary pay Day</Text>
                       <Picker
                         selectedValue={sallary.paymentDate}
-                        style={{height: 50, width: 100}}
+                        style={{height: 50, width: '50%', color: INPUT_COLOR}}
                         onValueChange={itemValue =>
                           changeSallaryFieldValue('paymentDate', itemValue)
                         }>
@@ -302,7 +309,8 @@ const styles = StyleSheet.create({
   // },
   containerStyle: {
     flex: 1,
-    backgroundColor: '#00868b',
+    backgroundColor: BACKGROUND_COLOR,
+    // backgroundColor: '#00868b',
   },
   scrollerWrapper: {
   },
@@ -349,8 +357,17 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
   },
+  h2: {
+    color: LABEL_COLOR,
+    marginTop: 20,
+    marginBottom: 20,
+  },
+  textLabels: {
+    color: LABEL_COLOR,
+  },
   inputStyle: {
-    width: '100%',
+    // width: '100%',
+    color: INPUT_COLOR,
     // height: 40,
     // backgroundColor: 'rgba(225,225,225,0.2)',
     // marginBottom: 10,

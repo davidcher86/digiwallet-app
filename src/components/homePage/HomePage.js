@@ -1,12 +1,13 @@
 /* eslint-disable prettier/prettier */
 import React, { Component } from 'react';
-import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, Text, StyleSheet, FlatList } from 'react-native';
 import { Button, Input, Icon  } from 'react-native-elements';
 import { connect } from 'react-redux';
 
 import * as actions from './homePageActions';
 import Header from './../common/Header';
 import Fab from './../common/Fab';
+import { BACKGROUND_COLOR } from './../Styles';
 
 class HomePage extends Component {
     static navigationOptions = {
@@ -19,88 +20,73 @@ class HomePage extends Component {
 
     render() {
         const {profile} = this.props;
-        var totalCreditDebt = 0;
 
-        console.log('-----------------');
-        // for (var cardId in mapCards) {
-        var mapCredit = profile.credit;
-        console.log('profile', profile);
-        var cardsList = profile.creditCards;
-        // console.log('cardsList', cardsList);
-        for (var i = 0; i < cardsList.length; i++) {
-            var cardToHandle = null;
-            var creditCardDebtDt = cardsList[i].nextDebtDate;
-            // console.log('creditCardDebtDt', creditCardDebtDt);
-            if (new Date() > new Date(creditCardDebtDt)) {
-                cardToHandle = cardsList[i].id;
-            }
-            // console.log('cardToHandle', cardToHandle);
-            if (cardToHandle !== null) {
-                for (var item in mapCredit) {
-                    // console.log('lastUpdated', new Date(mapCredit[item].lastUpdated));
-                    // console.log('creditCardDebtDt', new Date(creditCardDebtDt));
-                    // console.log(new Date(mapCredit[item].lastUpdated) < new Date(creditCardDebtDt));
-                    // console.log(cardToHandle === mapCredit[item].creditCardId);
-                    // console.log('item', mapCredit[item]);
-                    if (cardToHandle === mapCredit[item].creditCardId && new Date(mapCredit[item].lastUpdated) < new Date(creditCardDebtDt)) {
-                    // if (cardToHandle === mapCredit[item].creditCardId && new Date(mapCredit[item].lastUpdated) < creditCardDebtDt) {
-                        var creditItem = cardsList[i];
-                        totalCreditDebt += creditItem.monthlyPayment;
-                        // console.log('totalCreditDebt ', totalCreditDebt);
-                        if (mapCredit[item].paymentsRemain - 1 > 0) {
-                            let dt = new Date();
-                            mapCredit[item].paymentsRemain = creditItem.paymentsRemain - 1;
-                            mapCredit[item].amountRemain = creditItem.amountRemain - creditItem.monthlyPayment;
-                            mapCredit[item].lastUpdated = dt.toISOString();
-                            console.log('Updated item ', mapCredit[item]);
-                        } else {
-                            console.log('Deleted item ', mapCredit[item]);
-                            delete mapCredit[item];
-                        }
-                    }
-                }
-            }
-            console.log('Monthly credit of ' + totalCreditDebt + ' reduced from total assets');
-            console.log('Updated credit list:', mapCredit);
-            console.log('-----------------');
-        }
-        // for (const item of map.values()) {
-        //     console.log(item);
-        // }
-        // map.forEach(item => {
-        //     console.log(item);
-        // });mapcards
+        console.log(BACKGROUND_COLOR);
+
         return (
             <View style={{flex: 1}}>
                 <Header navigation={this.props.navigation} title="Home"/>
                 <View style={styles.containerStyle}>
-                    <View style={styles.rowContainer}>
-                        <Text>{'Current Assets - '}</Text>
+                    <View style={styles.h1rowContainer}>
                         <Text>{profile.assets}</Text>
+                        <Text>{'Current Assets'}</Text>
                     </View>
-                    <View style={styles.rowContainer}>
-                        <Text>{'Current Month Debt - '}</Text>
-                        <Text>{profile.currentMonthDebt}</Text>
-                    </View>
-                    <View style={styles.rowContainer}>
-                        <Text>{'Total Debt - '}</Text>
-                        <Text>{profile.totalDebt}</Text>
+                    <View style={styles.h2rowContainer}>
+                        <View style={styles.h2RowItem}>
+                            <Text>{profile.currentMonthCredit}</Text>
+                            <Text>{'Current Month Debt'}</Text>
+                        </View>
+                        <View style={styles.h2RowItem}>
+                            <Text>{profile.totalCredit}</Text>
+                            <Text>{'Total Debt'}</Text>
+                        </View>
                     </View>
                 </View>
+                <View style={styles.creditListStyle}>
+                <FlatList
+                    data={profile.credit}
+                    keyExtractor={(item, index) => 'key_' + index}
+                    // keyExtractor={item => item.uid}
+                    // renderItem={({item}) => (
+                        // <TransactionItem
+                        // key={item.uid}
+                        // pageSettings={pageSettings}
+                        // openTransaction={openTransaction}
+                        // identity={identity}
+                        // deleteTransaction={deleteTransaction}
+                        // transactionItem={item}
+                        // />
+                        // )}
+                    />
                 <Fab />
+            </View>
             </View>
         );
     }
 }
-
 const styles = StyleSheet.create({
     containerStyle: {
         padding: 20,
         flex: 1,
-        // backgroundColor: 'yellow'
+        backgroundColor: BACKGROUND_COLOR,
     },
-    rowContainer: {
-
+    h1rowContainer: {
+        flexDirection: 'column',
+        alignItems: 'center',
+        borderWidth: 2,
+        height: 60,
+    },
+    h2rowContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    h2RowItem: {
+        height: 60,
+        borderWidth: 2,
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '50%',
     },
   });
 

@@ -10,6 +10,13 @@ export const setTransactions = (transactions) => {
   };
 };
 
+export const setSortedTransactions = (transactions) => {
+  return {
+    type: 'SET_SORTED_TRANSACTIONS_LIST',
+    transactions,
+  };
+};
+
 export const setOpenIndex = (uid) => {
   return {
     type: 'CHANGE_OPEN_INDEX',

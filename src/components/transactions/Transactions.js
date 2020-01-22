@@ -5,6 +5,7 @@ import {
   FlatList,
   Animated,
   Easing,
+  SectionList,
   ScrollView,
   StyleSheet,
   Image,
@@ -27,6 +28,7 @@ import {
 import * as actions from './transactionsActions';
 import Fab from './../common/Fab';
 import Header from './../common/Header';
+import { BACKGROUND_COLOR, LABEL_COLOR, INPUT_COLOR } from './../Styles';
 
 class TransactionItem extends Component {
   constructor() {
@@ -83,7 +85,9 @@ class TransactionItem extends Component {
   }
 
   componentDidUpdate() {
-    if (this.props.pageSettings.isOpenIndex !== this.props.transactionItem.uid) {
+    if (
+      this.props.pageSettings.isOpenIndex !== this.props.transactionItem.uid
+    ) {
       this.closeItem();
     }
   }
@@ -98,14 +102,18 @@ class TransactionItem extends Component {
     } = this.props;
 
     var isOpened = pageSettings.isOpenIndex === transactionItem.uid;
-    // console.log(transactionItem);
+
     return (
-      <Animated.View key={transactionItem.uid} style={styles.transactionItemContainer} thumbnail>
+      <Animated.View
+        key={transactionItem.uid}
+        style={styles.transactionItemContainer}
+        thumbnail>
         <View style={styles.itemVissibleSection}>
           <View style={styles.left1Section}>
             <Image
               style={{width: 20, height: 20}}
-              source={require('./../../img/arrow-down-ico.png')} />
+              source={require('./../../img/arrow-down-ico.png')}
+            />
           </View>
           <View style={styles.left2Section}>
             <Text>{transactionItem.date}</Text>
@@ -153,11 +161,16 @@ class TransactionItem extends Component {
           </View>
           <View style={styles.upperHiddenSection}>
             <Text>
-              {'Credit Card: ' + (transactionItem.paymentDetails !== undefined ? transactionItem.paymentDetails.cardType : '')}
+              {'Credit Card: ' +
+                (transactionItem.paymentDetails !== undefined
+                  ? transactionItem.paymentDetails.cardType
+                  : '')}
             </Text>
             <Text>
               {'Amount of Payments: ' +
-              (transactionItem.paymentDetails !== undefined ? transactionItem.paymentDetails.paymentAmount : '')}
+                (transactionItem.paymentDetails !== undefined
+                  ? transactionItem.paymentDetails.paymentAmount
+                  : '')}
             </Text>
           </View>
           <View style={styles.bottomHiddenSection}>
@@ -170,24 +183,123 @@ class TransactionItem extends Component {
   }
 }
 
+const monthNames = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+];
+
 class Transactions extends Component {
-  // componentDidMount() {
-  //   this.props.fetchTransactions(this.props.identity.uid);
-  // }
+  constructor() {
+    super();
+    this.state = {
+      list: [],
+    };
+    this.renderList = this.renderList.bind(this);
+  }
+
+  renderList(list, sort) {
+    var monthsList = {};
+    console.log('sort', sort);
+    for (var i = 0; i < list.length; i++) {
+      var dt = new Date(list[i].date);
+      var key = '';
+      switch (sort) {
+        case 'Daily':
+          key = dt.getDate() + ' ,' + monthNames[dt.getMonth()] + ' ,' + dt.getFullYear();
+          break;
+        case 'Weakly':
+        case 'Monthly':
+          key = monthNames[dt.getMonth()] + ' ,' + dt.getFullYear();
+          break;
+        case 'Yearly':
+          key = dt.getFullYear();
+          break;
+      }
+      // key = monthNames[dt.getMonth()] + ' ,' + dt.getFullYear();
+      if (monthsList[key] === undefined) {
+        monthsList[key] = [];
+      }
+      monthsList[key].push(list[i]);
+    }
+
+    var dataList = [];
+    Object.keys(monthsList).forEach(function(key, index) {
+      var data = [];
+      for (var j = 0; j < monthsList[key].length; j++) {
+        data.push(monthsList[key][j]);
+      }
+      dataList.push({title: key, data: data});
+    });
+
+    return dataList;
+  }
+
+  componentDidMount() {
+    const {transactionsList, navigation} = this.props;
+    var dataList = this.renderList(transactionsList, navigation.state.key);
+    // this.props.setSortedTransactions(dataList);
+    this.setState({list: dataList});
+  }
+
+  componentDidUpdate(prevProp, prevState) {
+    const {transactionsList, navigation} = this.props;
+    // console.log(transactionsList);
+    if (prevProp.transactionsList.length !== this.props.transactionsList.length) {
+      var dataList = this.renderList(transactionsList, navigation.state.key);
+      this.setState({list: dataList});
+      // this.props.setSortedTransactions(dataList);
+    }
+  }
+
+  FlatListItemSeparator = () => {
+    return (
+      //Item Separator
+      <View style={{height: 0.5, width: '100%', backgroundColor: '#C8C8C8'}} />
+    );
+  };
 
   render() {
     const {
       transactionsList,
       identity,
+      transactionsListSorted,
       pageSettings,
       openTransaction,
       deleteTransaction,
     } = this.props;
-
+    // console.log(this.props);
     return (
       <View style={styles.transacionListContainer}>
         <Header navigation={this.props.navigation} title="Transaction" />
-        <FlatList
+        <SectionList
+          ItemSeparatorComponent={this.FlatListItemSeparator}
+          keyExtractor={(item, index) => 'key_' + index}
+          renderSectionHeader={({section}) => (
+            <Text style={styles.SectionHeaderStyle}> {section.title} </Text>
+          )}
+          renderItem={({item}) => (
+            <TransactionItem
+              key={item.uid}
+              pageSettings={pageSettings}
+              openTransaction={openTransaction}
+              identity={identity}
+              deleteTransaction={deleteTransaction}
+              transactionItem={item}
+            />
+          )}
+          // sections={transactionsListSorted}
+          sections={this.state.list} />
+        {/* <FlatList
           data={transactionsList}
           keyExtractor={(item, index) => 'key_' + index}
           // keyExtractor={item => item.uid}
@@ -200,8 +312,8 @@ class Transactions extends Component {
               deleteTransaction={deleteTransaction}
               transactionItem={item}
             />
-          )}
-        />
+            )}
+        /> */}
         {/* <Fab /> */}
       </View>
     );
@@ -212,6 +324,7 @@ const styles = StyleSheet.create({
   transacionListContainer: {
     flex: 1,
     flexDirection: 'column',
+    backgroundColor: BACKGROUND_COLOR,
   },
   transactionItemContainer: {
     flexDirection: 'column',
@@ -229,6 +342,12 @@ const styles = StyleSheet.create({
     // marginVertical: 8,
     // marginHorizontal: 16,
     // backgroundColor: 'yellow',
+  },
+  SectionHeaderStyle: {
+    backgroundColor: '#CDDC89',
+    fontSize: 20,
+    padding: 5,
+    color: '#fff',
   },
   itemVissibleSection: {
     // flex: 1,
@@ -326,6 +445,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => {
   return {
     trans: state.transactions,
+    transactionsListSorted: state.transactions.sortedTransaction,
     transactionsList: state.transactions.transactions,
     pageSettings: state.transactions.pageSettings,
     identity: state.identity,

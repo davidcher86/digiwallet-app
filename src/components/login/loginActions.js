@@ -1,6 +1,10 @@
 import {rememberUser} from './../common/Actions';
 import {firebaseAction} from './../../Api';
-import {startLoading, endLoading} from './../systemControl/systemControlActions';
+import firebase from 'firebase';
+import {
+  startLoading,
+  endLoading,
+} from './../systemControl/systemControlActions';
 // import {setIdentity} from './../identity/identityActions';
 
 export const changeUsername = value => {
@@ -46,7 +50,10 @@ export const onRegister = (email, password, navigation) => {
           dispatch(setIdentity(response.user.uid));
           rememberUser(response.user.uid);
           dispatch(endLoading());
-          return navigation.navigate('Account', {type: 'NEW', registered: true});
+          return navigation.navigate('Account', {
+            type: 'NEW',
+            registered: true,
+          });
         });
       })
       .catch(res => {
@@ -85,6 +92,59 @@ export const onLoginPress = (email, password, navigation) => {
         dispatch(endLoading());
         return null;
       });
+  };
+};
+
+export const onFacebookRegister = navigation => {
+  return dispatch => {
+    var provider = new firebase.auth.FacebookAuthProvider();
+    // provider.setCustomParameters({
+    //   display: 'popup',
+    // });
+
+    dispatch(startLoading());
+    firebase
+      .auth()
+      .signInWithPopup(provider)
+      .then(function(result) {
+        // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+        var token = result.credential.accessToken;
+        // The signed-in user info.
+        var user = result.user;
+        dispatch(endLoading());
+        // ...
+      })
+      .catch(function(error) {
+        console.log(error);
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        // The email of the user's account used.
+        var email = error.email;
+        // The firebase.auth.AuthCredential type that was used.
+        var credential = error.credential;
+        dispatch(endLoading());
+        // ...
+      });
+
+    // firebaseAction(null, 'authentication', 'login', data)
+    //   .then(res => {
+    //     if (res.user !== null) {
+    //       rememberUser(res.user.uid);
+    //       navigation.navigate('HomePage');
+    //       dispatch(setIdentity(res.user.uid));
+    //     }
+    //     dispatch(endLoading());
+    //     dispatch(resetForm());
+    //     return res;
+    //   })
+    //   .catch(res => {
+    //     console.log('Error: ', res);
+    //     dispatch(resetForm());
+    //     dispatch(handleError(res.toString()));
+    //     dispatch(endLoading());
+    //     return null;
+    //   });
   };
 };
 

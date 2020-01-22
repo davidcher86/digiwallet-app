@@ -1,29 +1,29 @@
 /* eslint-disable prettier/prettier */
 const initialState = {
     assets: 0,
-    totalDebt: 0,
-    currentMonthDebt: 0,
+    totalCredit: 0,
+    currentMonthCredit: 0,
     totalAssets: 0,
     userDetails: null,
     creditCards: [],
     creditCardList: [],
 
-    credit: [],    
+    credit: [],
 };
 
 export default (state = initialState, action) => {
     switch (action.type) {
         case 'RECIEVE_DATA':
             var data = action.data;
-            // return state;
             return Object.assign({}, state, {
                 assets: data.assets,
                 lastUpdate: data.lastUpdate,
                 creditCards: data.creditCards,
                 userDetails: data.details ,
                 creditCardList: data.creditCards,
-
-                credit: data.creditDebt,
+                totalCredit: data.totalCredit,
+                currentMonthCredit: data.currentMonthCredit,
+                credit: data.fixedList,
             });
         // case 'CHANGE_PASSWORD_FIELD':
         //     return Object.assign({}, state, { password: action.value });

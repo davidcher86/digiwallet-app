@@ -5,9 +5,12 @@ import {Button, Input, Icon} from 'react-native-elements';
 import {connect} from 'react-redux';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import firebase from 'firebase';
+// import { AccessToken, LoginManager } from 'react-native-fbsdk';
+// import * as fb from 'react-native-firebase';
 
 import * as loginActions from './loginActions';
 import {getRememberedUser} from './../common/Actions';
+import { BACKGROUND_COLOR } from './../Styles';
 
 class LoginForm extends Component {
   componentDidMount() {
@@ -44,15 +47,23 @@ class LoginForm extends Component {
           </TouchableOpacity>
         )}
         {this.props.pageSettings.selectedTab === 'signIn' && (
-          <TouchableOpacity
-            style={styles.buttonContainer}
-            // onPress={() => this.props.navigation.navigate('Account', {type: 'NEW', data: props.login})}>
-            onPress={() => props.onRegister(
-                            props.login.newEmail,
-                            props.login.newPassword,
-                            this.props.navigation)}>
-            <Text style={styles.buttonStyle}>SIGN IN</Text>
-          </TouchableOpacity>
+          <View>
+            <TouchableOpacity
+              style={styles.buttonContainer}
+              // onPress={() => this.props.navigation.navigate('Account', {type: 'NEW', data: props.login})}>
+              onPress={() => props.onFacebookRegister(this.props.navigation)}>
+              <Text style={styles.buttonStyle}>facebook</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.buttonContainer}
+              // onPress={() => this.props.navigation.navigate('Account', {type: 'NEW', data: props.login})}>
+              onPress={() => props.onRegister(
+                              props.login.newEmail,
+                              props.login.newPassword,
+                              this.props.navigation)}>
+              <Text style={styles.buttonStyle}>SIGN IN</Text>
+            </TouchableOpacity>
+          </View>
         )}
       </View>
     );
@@ -184,7 +195,8 @@ class LoginForm extends Component {
 const styles = StyleSheet.create({
   containerStyle: {
     flex: 1,
-    backgroundColor: '#00868b',
+    backgroundColor: BACKGROUND_COLOR,
+    // backgroundColor: '#00868b',
   },
   scrollerWrapper: {
     flex: 1,

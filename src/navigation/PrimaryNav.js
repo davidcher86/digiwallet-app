@@ -36,7 +36,7 @@ class DrawerContainer extends Component {
 
   render() {
     const {navigate} = this.props.navigation;
-
+    // console.log(this.props);
     return (
       <View style={styles.container}>
         <View style={styles.containertopRow}>
@@ -74,7 +74,7 @@ class DrawerContainer extends Component {
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={() => navigate('Daily')}
+            onPress={() => navigate('Transactions', {group: 'Daily'})}
             style={styles.containerBottomItem}>
             <View style={styles.button}>
               <Text style={styles.txtBottom}>Transactions</Text>
@@ -113,23 +113,23 @@ class DrawerContainer extends Component {
   }
 }
 
-class NavigationDrawerStructure extends Component {
-  //Structure for the navigatin Drawer
-  toggleDrawer = () => {
-    //Props to open/close the drawer
-    this.props.navigationProps.toggleDrawer();
-  };
-  render() {
-    return (
-      <View style={{flexDirection: 'row'}}>
-        <TouchableOpacity onPress={this.toggleDrawer.bind(this)}>
-          {/*Donute Button Image */}
-          <Text>dsdg</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  }
-}
+// class NavigationDrawerStructure extends Component {
+//   //Structure for the navigatin Drawer
+//   toggleDrawer = () => {
+//     //Props to open/close the drawer
+//     this.props.navigationProps.toggleDrawer();
+//   };
+//   render() {
+//     return (
+//       <View style={{flexDirection: 'row'}}>
+//         <TouchableOpacity onPress={this.toggleDrawer.bind(this)}>
+//           {/*Donute Button Image */}
+//           <Text>dsdg</Text>
+//         </TouchableOpacity>
+//       </View>
+//     );
+//   }
+// }
 
 const HomePage_StackNavigator = createStackNavigator({
   //All the screen from the Screen1 will be indexed here
@@ -220,72 +220,72 @@ const PrimaryNav = createDrawerNavigator(
   },
 );
 
-const PrvimaryNav = createDrawerNavigator(
-  {
-    HomePage: {
-      screen: HomePage,
-      navigationOptions: {
-        drawerLabel: 'Home',
-        headerTitle: 'iohoiuh',
-        drawerLockMode: 'locked-closed',
-        // drawerLabel: () => null, //hide header if not needed so whole screen slide
-      },
-    },
-    Account: {
-      screen: Account,
-      navigationOptions: {
-        drawerLockMode: 'locked-closed',
-        drawerLabel: 'Account Details',
-        headerStyle: {
-          backgroundColor: '#f4511e',
-        },
-        headerTintColor: '#fff',
-        headerTitleStyle: {
-          fontWeight: 'bold',
-        },
-      },
-    },
-    Dashboard: {
-      screen: Dashboard,
-      navigationOptions: {
-        headerRight: <Text>Info</Text>,
-        drawerLabel: 'Dashboard',
-        drawerLockMode: 'locked-closed',
-        headerStyle: {
-          backgroundColor: '#f4511e',
-        },
-        headerTintColor: '#fff',
-        headerTitleStyle: {
-          fontWeight: 'bold',
-        },
-      },
-    },
-    Transactions: {
-      // screen: Transactions,
-      screen: TransactionsStack,
-      navigationOptions: {
-        drawerLabel: 'HomePage',
-        drawerLockMode: 'locked-closed',
-        headerStyle: {
-          backgroundColor: '#f4511e',
-        },
-        headerTintColor: '#fff',
-        headerTitleStyle: {
-          fontWeight: 'bold',
-        },
-      },
-    },
-  },
-  {
-    // contentComponent: DrawerWithLogoutButton,
-    initialRouteName: 'HomePage',
-    drawerType: 'slide',
-    drawerWidth: 100,
-    contentComponent: DrawerContainer,
-    headerMode: 'none',
-    unmountInactiveRoutes: true,
-  },
-);
+// const PrvimaryNav = createDrawerNavigator(
+//   {
+//     HomePage: {
+//       screen: HomePage,
+//       navigationOptions: {
+//         drawerLabel: 'Home',
+//         headerTitle: 'iohoiuh',
+//         drawerLockMode: 'locked-closed',
+//         // drawerLabel: () => null, //hide header if not needed so whole screen slide
+//       },
+//     },
+//     Account: {
+//       screen: Account,
+//       navigationOptions: {
+//         drawerLockMode: 'locked-closed',
+//         drawerLabel: 'Account Details',
+//         headerStyle: {
+//           backgroundColor: '#f4511e',
+//         },
+//         headerTintColor: '#fff',
+//         headerTitleStyle: {
+//           fontWeight: 'bold',
+//         },
+//       },
+//     },
+//     Dashboard: {
+//       screen: Dashboard,
+//       navigationOptions: {
+//         headerRight: <Text>Info</Text>,
+//         drawerLabel: 'Dashboard',
+//         drawerLockMode: 'locked-closed',
+//         headerStyle: {
+//           backgroundColor: '#f4511e',
+//         },
+//         headerTintColor: '#fff',
+//         headerTitleStyle: {
+//           fontWeight: 'bold',
+//         },
+//       },
+//     },
+//     Transactions: {
+//       // screen: Transactions,
+//       screen: TransactionsStack,
+//       navigationOptions: {
+//         drawerLabel: 'HomePage',
+//         drawerLockMode: 'locked-closed',
+//         headerStyle: {
+//           backgroundColor: '#f4511e',
+//         },
+//         headerTintColor: '#fff',
+//         headerTitleStyle: {
+//           fontWeight: 'bold',
+//         },
+//       },
+//     },
+//   },
+//   {
+//     // contentComponent: DrawerWithLogoutButton,
+//     initialRouteName: 'HomePage',
+//     drawerType: 'slide',
+//     drawerWidth: 100,
+//     contentComponent: DrawerContainer,
+//     headerMode: 'none',
+//     unmountInactiveRoutes: true,
+//   },
+// );
 
 const styles = StyleSheet.create({
   container: {

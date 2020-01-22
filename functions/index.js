@@ -2,9 +2,6 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 var fetch = require('node-fetch');
 
-// admin.initializeApp({
-//   credential: admin.credential.applicationDefault()
-// });
 admin.initializeApp(functions.config().firebase);
 
 const DELETE_ACTION = "DELETE";
@@ -35,14 +32,18 @@ exports.updateNewTransaction = functions.database
       }
 
       if (newItem !==null) {
-        newItem.lastUpdated = newItem.date;
+        var tmpDate = new Date(newItem.date);
+        // tmpDate.setDate(tmpDate.getDate() - 1);
+        newItem.lastUpdated = tmpDate;
+
+        // newItem.lastUpdated = newItem.date;
         newItem.paymentsRemain = newItem.paymentsAmount;
         newItem.creditCardId = newItem.creditCardId;
         newItem.amountRemain = Number(newItem.amount);
         newItem.monthlyPayment = newItem.amount / newItem.paymentsRemain;
       }
     }
-    console.log(newItem);
+
     if (actionType === null) {
       for (let item in before) {
         if (after !==null) {
@@ -91,52 +92,56 @@ exports.updateLastConnected = functions.database
   .onUpdate(async (change, context) => {
     const before = change.before.val();
     const after = change.after.val();
-    console.log('change on updatettttt', change);
 
     const dataRef = admin.database().ref(`/users/${context.params.uId}/account`);
       dataRef.once('value').then(function(snapshot) {
-        var res = snapshot.val();
-        console.log('all data', res);
+        var data = snapshot.val();
 
         // create cards debr dates
-        var mapCards = res.creditCards;
+        var cardsList = data.creditCards;
         var totalCreditDebt = 0;
-        var mapCredit = res.creditDebt;
-        for (var id in mapCards) {
-          if (new Date() > new Date(mapCards[id])) {
-              delete mapCards[id];
+        var mapCredit = data.creditDebt;
+
+        for (var i = 0; i < cardsList.length; i++) {
+          var cardToHandle = null;
+          var creditCardDebtDt = cardsList[i].nextDebtDate;
+
+          if (new Date() > new Date(creditCardDebtDt)) {
+            cardToHandle = cardsList[i].id;
           }
-        }
 
-        console.log('before', mapCredit);
-        for (var cardId in mapCards) {
-          console.log('creditCardDebtDt', creditCardDebtDt);
-          var creditCardDebtDt = new Date(mapCards[cardId]);
-          // console.log('creditCardDebtDt', creditCardDebtDt);
-          for (var item in mapCredit) {
-            console.log('item', item);
-            console.log('itemss', mapCredit[item]);
-            console.log(cardId + ' is ', mapCredit[item].creditCardId);
-            console.log(new Date(mapCredit[item].lastUpdated) < creditCardDebtDt);
-            if (cardId === mapCredit[item].creditCardId && new Date(mapCredit[item].lastUpdated) < creditCardDebtDt) {
-              var creditItem = mapCredit[item];
-              totalCreditDebt += Number(creditItem.monthlyPayment);
+          if (cardToHandle !== null) {
+            for (var item in mapCredit) {
+              if (cardToHandle === mapCredit[item].creditCardId && new Date(mapCredit[item].lastUpdated) < new Date(creditCardDebtDt)) {
+                var creditItem = mapCredit[item];
+                totalCreditDebt += mapCredit[item].monthlyPayment;
 
-              if (Number(mapCredit[item].paymentsRemain) - 1 > 0) {
-                let dt = new Date();
-                mapCredit[item].paymentsRemain = (Number(creditItem.paymentsRemain) - 1).toString();
-                mapCredit[item].amountRemain = (Number(creditItem.amountRemain) - creditItem.monthlyPayment).toString();
-                mapCredit[item].lastUpdated = dt.toISOString();
-                console.log('Updated item ', mapCredit[item]);
-              } else {
-                console.log('Deleted item ', mapCredit[item]);
-                delete mapCredit[item];
+                if (mapCredit[item].paymentsRemain - 1 > 0) {
+                  let dt = new Date();
+                  mapCredit[item].paymentsRemain = creditItem.paymentsRemain - 1;
+                  mapCredit[item].amountRemain = creditItem.amountRemain - creditItem.monthlyPayment;
+                  mapCredit[item].lastUpdated = dt.toISOString();
+                } else {
+                  delete mapCredit[item];
+                }
               }
             }
+
+            var dt = new Date(creditCardDebtDt);
+            dt.setMonth(dt.getMonth() + 1);
+            cardsList[i].nextDebtDate = dt;
           }
         }
-        console.log('Monthly credit of ' + totalCreditDebt + ' reduced from total assets');
-        console.log('after', mapCredit);
+
+        data.creditDebt = mapCredit;
+        data.cardsList = cardsList;
+        data.assets -= totalCreditDebt;
+
+        dataRef.update(data)
+          .then(res => {
+            console.log('Reduced Monthly credit: ' + totalCreditDebt + ', from account: ' + context.params.uId);
+            return res;
+          });
       });
     return dataRef;
   });

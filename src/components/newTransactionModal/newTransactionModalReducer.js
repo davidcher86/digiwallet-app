@@ -10,13 +10,8 @@ const initialState = {
   subCategory: '',
   paymentType: 'credit',
   paymentAmount: 1,
-  // paymentDetails: {
-  //   cardType: 'Visa',
-  //   paymentAmount: 1,
-  // },
   selectedCreditCard: null,
   description: '',
-  // date: new Date(),
 };
 
 export default (state = initialState, action) => {
@@ -28,9 +23,6 @@ export default (state = initialState, action) => {
       return Object.assign({}, state, {[action.field]: action.value});
     case 'UPDATE_SELECTED_CREDIT_CARD':
       return Object.assign({}, state, {selectedCreditCard: action.creditCard});
-    case 'UPDATE_PAYMENT_DETAILS_FORM':
-      paymentDetails[action.field] = action.value;
-      return Object.assign({}, state, {paymentDetails: paymentDetails});
     case 'CLOSE_NEW_TRANSACTION_MODAL':
       return Object.assign({}, state, {isModalOpen: false});
     case 'RESET_NEW_TRANSACTION_FORM':

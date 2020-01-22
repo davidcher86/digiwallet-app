@@ -26,14 +26,6 @@ export const changeSelectedCeridetCard = creditCard => {
   };
 };
 
-export const changePaymentDetailsFieldValue = (field, value) => {
-  return {
-    type: 'UPDATE_PAYMENT_DETAILS_FORM',
-    value,
-    field,
-  };
-};
-
 export const changeFieldValue = (field, value) => {
   return {
     type: 'UPDATE_NEW_TRANSACTION_FORM',
