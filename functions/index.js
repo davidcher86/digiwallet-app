@@ -96,18 +96,29 @@ exports.updateLastConnected = functions.database
     const dataRef = admin.database().ref(`/users/${context.params.uId}/account`);
       dataRef.once('value').then(function(snapshot) {
         var data = snapshot.val();
+        var nowDt = new Date();
 
         // create cards debr dates
         var cardsList = data.creditCards;
         var totalCreditDebt = 0;
         var mapCredit = data.creditDebt;
 
+        var sallary = data.sallary;
+        var paydayDt = nowDt;
+        paydayDt.setDate(sallary.paymentDate);
+
+        
         for (var i = 0; i < cardsList.length; i++) {
           var cardToHandle = null;
           var creditCardDebtDt = cardsList[i].nextDebtDate;
 
-          if (new Date() > new Date(creditCardDebtDt)) {
+          if (nowDt > new Date(creditCardDebtDt)) {
             cardToHandle = cardsList[i].id;
+          }
+
+          if (data.lastUpdated !== undefined && new Date(data.lastUpdated) > paydayDt && nowDt > paydayDt) {
+            data.amount += sallary.amount;
+            data.sallary.lastWUpdated = dt.toISOString();
           }
 
           if (cardToHandle !== null) {
