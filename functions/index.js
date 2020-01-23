@@ -97,28 +97,28 @@ exports.updateLastConnected = functions.database
       dataRef.once('value').then(function(snapshot) {
         var data = snapshot.val();
         var nowDt = new Date();
-
+        console.log('data', data);
         // create cards debr dates
         var cardsList = data.creditCards;
         var totalCreditDebt = 0;
         var mapCredit = data.creditDebt;
 
-        var sallary = data.sallary;
-        var paydayDt = nowDt;
-        paydayDt.setDate(sallary.paymentDate);
-
-        
+        console.log('sallary', data.sallary);
+        console.log(nowDt > new Date(data.sallary.paymentDate));
+        while (nowDt > new Date(data.sallary.paymentDate)) {
+          data.amount += data.sallary.amount;
+          var payDayDt = new Date(data.sallary.paymentDate)
+          payDayDt.setMonth(payDayDt.getMonth() + 1);
+          data.sallary.paymentDate = payDayDt.toISOString();
+          console.log('amount', data.amount);
+        }
+        console.log(data.amount);
         for (var i = 0; i < cardsList.length; i++) {
           var cardToHandle = null;
           var creditCardDebtDt = cardsList[i].nextDebtDate;
 
           if (nowDt > new Date(creditCardDebtDt)) {
             cardToHandle = cardsList[i].id;
-          }
-
-          if (data.lastUpdated !== undefined && new Date(data.lastUpdated) > paydayDt && nowDt > paydayDt) {
-            data.amount += sallary.amount;
-            data.sallary.lastWUpdated = dt.toISOString();
           }
 
           if (cardToHandle !== null) {
@@ -150,7 +150,9 @@ exports.updateLastConnected = functions.database
 
         dataRef.update(data)
           .then(res => {
-            console.log('Reduced Monthly credit: ' + totalCreditDebt + ', from account: ' + context.params.uId);
+            if (totalCreditDebt > 0) {
+              console.log('Reduced Monthly credit: ' + totalCreditDebt + ', from account: ' + context.params.uId);
+            }
             return res;
           });
       });
