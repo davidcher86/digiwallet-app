@@ -92,7 +92,7 @@ exports.updateLastConnected = functions.database
   .onUpdate(async (change, context) => {
     const before = change.before.val();
     const after = change.after.val();
-
+    console.log(after);
     const dataRef = admin.database().ref(`/users/${context.params.uId}/account`);
       dataRef.once('value').then(function(snapshot) {
         var data = snapshot.val();
@@ -106,13 +106,13 @@ exports.updateLastConnected = functions.database
         console.log('sallary', data.sallary);
         console.log(nowDt > new Date(data.sallary.paymentDate));
         while (nowDt > new Date(data.sallary.paymentDate)) {
-          data.amount += data.sallary.amount;
+          data.assets += data.sallary.amount;
           var payDayDt = new Date(data.sallary.paymentDate)
           payDayDt.setMonth(payDayDt.getMonth() + 1);
           data.sallary.paymentDate = payDayDt.toISOString();
-          console.log('amount', data.amount);
+          console.log('amount', data.assets);
         }
-        console.log(data.amount);
+        // console.log(data.assets);
         for (var i = 0; i < cardsList.length; i++) {
           var cardToHandle = null;
           var creditCardDebtDt = cardsList[i].nextDebtDate;
@@ -147,14 +147,14 @@ exports.updateLastConnected = functions.database
         data.creditDebt = mapCredit;
         data.cardsList = cardsList;
         data.assets -= totalCreditDebt;
-
-        dataRef.update(data)
-          .then(res => {
-            if (totalCreditDebt > 0) {
-              console.log('Reduced Monthly credit: ' + totalCreditDebt + ', from account: ' + context.params.uId);
-            }
-            return res;
-          });
+        console.lof('after', data);
+        if (totalCreditDebt > 0) {
+          dataRef.update(data)
+            .then(res => {
+                console.log('Reduced Monthly credit: ' + totalCreditDebt + ', from account: ' + context.params.uId);
+              return res;
+            });
+        }
       });
     return dataRef;
   });

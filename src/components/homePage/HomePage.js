@@ -20,8 +20,17 @@ class HomePage extends Component {
 
     render() {
         const {profile} = this.props;
-
-        console.log(BACKGROUND_COLOR);
+        console.log('pre', profile);
+        var nowDt = new Date();
+        if (profile.sallary !== undefined) {
+        while (nowDt > new Date(profile.sallary.paymentDate)) {
+            profile.assets += profile.sallary.amount;
+            var payDayDt = new Date(profile.sallary.paymentDate)
+            payDayDt.setMonth(payDayDt.getMonth() + 1);
+            profile.sallary.paymentDate = payDayDt.toISOString();
+        }
+    }
+        console.log('after', profile);
 
         return (
             <View style={{flex: 1}}>

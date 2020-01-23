@@ -24,6 +24,7 @@ export default (state = initialState, action) => {
                 totalCredit: data.totalCredit,
                 currentMonthCredit: data.currentMonthCredit,
                 credit: data.fixedList,
+                sallary: data.sallary,
             });
         // case 'CHANGE_PASSWORD_FIELD':
         //     return Object.assign({}, state, { password: action.value });
