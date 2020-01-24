@@ -73,8 +73,8 @@ export const handleRegisterAccount = (account, uid, navigation) => dispatch => {
   if (dtNow < new Date()) {
     dtNow.setMonth(dtNow.getMonth() + 1);
   }
-  json.sallary.nextPayDate = dtNow.toISOString();
-
+  json.sallary.paymentDate = dtNow.toISOString();
+  json.sallary.lastUpdated = dtNow.toISOString();
   if (json.creditCards.length > 0) {
     for (var i = 0; i < json.creditCards.length; i++) {
       let dt = new Date();
@@ -155,7 +155,7 @@ export const handleUpdaeAccount = (account, uid) => dispatch => {
   if (dtNow < new Date()) {
     dtNow.setMonth(dtNow.getMonth() + 1);
   }
-  account.sallary.nextPayDate = dtNow.toISOString();
+  account.sallary.paymentDate = dtNow.toISOString();
 
   dispatch(startLoading());
   firebase

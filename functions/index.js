@@ -87,6 +87,24 @@ exports.updateNewTransaction = functions.database
     return null;
   });
 
+const getMonthsDiffrence = (firstDate, laterDate) => {
+  var date1 = new Date(firstDate);
+  var date2 = new Date(laterDate);
+  var diffYears = date2.getFullYear() - date1.getFullYear();
+  var diffMonths = date2.getMonth() - date1.getMonth();
+  var diffDays = date2.getDate() - date1.getDate();
+
+  var months = (diffYears * 12 + diffMonths);
+  if (diffDays > 0) {
+      months += '.' + diffDays;
+  } else if (diffDays < 0) {
+      months--;
+      months += '.'+ (new Date(date2.getFullYear(), date2.getMonth(),0).getDate() + diffDays);
+  }
+
+  return Math.ceil(months);
+};
+
 exports.updateLastConnected = functions.database
   .ref('/users/{uId}/account/lastConnected')
   .onUpdate(async (change, context) => {
@@ -104,14 +122,26 @@ exports.updateLastConnected = functions.database
         var mapCredit = data.creditDebt;
         var sallaryPayDay = false;
 
-        while (nowDt > new Date(data.sallary.paymentDate)) {
-          data.assets += data.sallary.amount;
+        // while (nowDt > new Date(data.sallary.paymentDate)) {
+        //   data.assets += data.sallary.amount;
+        //   var payDayDt = new Date(data.sallary.paymentDate)
+        //   payDayDt.setMonth(payDayDt.getMonth() + 1);
+        //   data.sallary.paymentDate = payDayDt.toISOString();
+        //   sallaryPayDay = true;
+        // }
+        if (data.sallary && nowDt > new Date(data.sallary.paymentDate) && new Date(data.sallary.paymentDate) > new Date(data.sallary.lastUpdated)) {
+          var monthsAmount = getMonthsDiffrence(data.sallary.paymentDate, nowDt);
+
+          data.assets += (monthsAmount * data.sallary.amount);
           var payDayDt = new Date(data.sallary.paymentDate)
-          payDayDt.setMonth(payDayDt.getMonth() + 1);
+          console.log('payDayDt pre', payDayDt);
+          console.log('payDayDt pmonthsAmount', monthsAmount);
+          payDayDt.setMonth(payDayDt.getMonth() + monthsAmount);
+          console.log('payDayDt as ', payDayDt);
           data.sallary.paymentDate = payDayDt.toISOString();
-          sallaryPayDay = true;
+          data.sallary.lastUpdated = nowDt.toISOString();
         }
-        // console.log(data.assets);
+        console.log(data.assets);
         for (var i = 0; i < cardsList.length; i++) {
           var cardToHandle = null;
           var creditCardDebtDt = cardsList[i].nextDebtDate;
