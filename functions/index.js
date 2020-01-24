@@ -102,15 +102,14 @@ exports.updateLastConnected = functions.database
         var cardsList = data.creditCards;
         var totalCreditDebt = 0;
         var mapCredit = data.creditDebt;
+        var sallaryPayDay = false;
 
-        console.log('sallary', data.sallary);
-        console.log(nowDt > new Date(data.sallary.paymentDate));
         while (nowDt > new Date(data.sallary.paymentDate)) {
           data.assets += data.sallary.amount;
           var payDayDt = new Date(data.sallary.paymentDate)
           payDayDt.setMonth(payDayDt.getMonth() + 1);
           data.sallary.paymentDate = payDayDt.toISOString();
-          console.log('amount', data.assets);
+          sallaryPayDay = true;
         }
         // console.log(data.assets);
         for (var i = 0; i < cardsList.length; i++) {
@@ -147,11 +146,16 @@ exports.updateLastConnected = functions.database
         data.creditDebt = mapCredit;
         data.cardsList = cardsList;
         data.assets -= totalCreditDebt;
-        console.lof('after', data);
-        if (totalCreditDebt > 0) {
+
+        if (totalCreditDebt > 0 || sallaryPayDay) {
           dataRef.update(data)
             .then(res => {
+              if (totalCreditDebt > 0) {
                 console.log('Reduced Monthly credit: ' + totalCreditDebt + ', from account: ' + context.params.uId);
+              }
+              if (sallaryPayDay) {
+                console.log('Added Monthly sallary of: ' + data.sallary.amount + ' to total assets');
+              }
               return res;
             });
         }
