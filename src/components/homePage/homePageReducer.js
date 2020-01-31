@@ -8,7 +8,7 @@ const initialState = {
     creditCards: [],
     creditCardList: [],
     creditDebt: [],
-
+    dataLaodet: false,
     credit: [],
     pageSettings: {
         isOpenIndex: null,
@@ -30,8 +30,9 @@ export default (state = initialState, action) => {
                 currentMonthCredit: data.currentMonthCredit,
                 credit: data.fixedList,
                 sallary: data.sallary,
-
                 creditDebt: data.creditDebt,
+
+                dataLaodet: true,
             });
         case 'CHANGE_OPEN_CREDIT_INDEX':
             pageSettings = state.pageSettings;

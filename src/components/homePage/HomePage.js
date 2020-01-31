@@ -134,6 +134,7 @@ class HomePage extends Component {
     }
 
     componentDidMount() {
+        console.log(this.props);
         // this.props.fetchData(this.props.identity.uid, this.props.navigation);
     }
 
@@ -143,7 +144,7 @@ class HomePage extends Component {
 
     render() {
         const {profile, pageSettings} = this.props;
-        console.log(this.props);
+        // console.log(this.props);
         // console.log('pre', DARK_MODE);
         const getMonthsDiffrence = (firstDate, laterDate) => {
             // console.log('firstDate', firstDate);
@@ -224,34 +225,36 @@ class HomePage extends Component {
             <View style={{flex: 1, height: '100%'}}>
                 <Header navigation={this.props.navigation} title="Home"/>
                 <View style={[DARK_MODE.appContainer, {padding: 20}]}>
-                    <View style={styles.h1rowContainer}>
-                    {/* <PricingCard
-                        color="#4f9deb"
-                        title="Free"
-                        price="$0"
-                        info={['1 User', 'Basic Support', 'All Core Features']}
-                        button={{ title: null, icon: null }}
-                        /> */}
-                        <View style={{flexDirection: 'row'}}>
-                            <Text style={{marginRight: 15}}>{profile.assets.toFixed(2)}</Text>
-                            <FontAwesome name="dollar" size={20} color="#4F8EF7" />
-                        </View>
-                        <Text style={DARK_MODE.h3}>{'Current Assets'}</Text>
-                    </View>
-                    <View style={styles.h2rowContainer}>
-                        <View style={styles.h2RowItem}>
+                    <View style={styles.upperContainer}>
+                        <View style={styles.h1rowContainer}>
+                        {/* <PricingCard
+                            color="#4f9deb"
+                            title="Free"
+                            price="$0"
+                            info={['1 User', 'Basic Support', 'All Core Features']}
+                            button={{ title: null, icon: null }}
+                            /> */}
                             <View style={{flexDirection: 'row'}}>
-                                <Text style={{marginRight: 15}}>{profile.currentMonthCredit.toFixed(2)}</Text>
+                                <Text style={{marginRight: 15}}>{profile.assets.toFixed(2)}</Text>
                                 <FontAwesome name="dollar" size={20} color="#4F8EF7" />
                             </View>
-                            <Text style={DARK_MODE.h3}>{'Current Month Debt'}</Text>
+                            <Text style={DARK_MODE.h3}>{'Current Assets'}</Text>
                         </View>
-                        <View style={styles.h2RowItem}>
-                            <View style={{flexDirection: 'row'}}>
-                                <Text style={{marginRight: 15}}>{profile.totalCredit.toFixed(2)}</Text>
-                                <FontAwesome name="dollar" size={20} color="#4F8EF7" />
+                        <View style={styles.h2rowContainer}>
+                            <View style={styles.h2RowItem}>
+                                <View style={{flexDirection: 'row'}}>
+                                    <Text style={{marginRight: 15}}>{profile.currentMonthCredit.toFixed(2)}</Text>
+                                    <FontAwesome name="dollar" size={20} color="#4F8EF7" />
+                                </View>
+                                <Text style={DARK_MODE.h3}>{'Current Month Debt'}</Text>
                             </View>
-                            <Text style={DARK_MODE.h3}>Total Debt</Text>
+                            <View style={styles.h2RowItem}>
+                                <View style={{flexDirection: 'row'}}>
+                                    <Text style={{marginRight: 15}}>{profile.totalCredit.toFixed(2)}</Text>
+                                    <FontAwesome name="dollar" size={20} color="#4F8EF7" />
+                                </View>
+                                <Text style={DARK_MODE.h3}>Total Debt</Text>
+                            </View>
                         </View>
                     </View>
                     <Divider style={{ backgroundColor: '#cbe3fb' }} />
@@ -287,6 +290,10 @@ const styles = StyleSheet.create({
         padding: 15,
         // borderWidth: 2,
     },
+    upperContainer: {
+        height: 180,
+        marginBottom: 8,
+    },
     creditListHeaderStyle: {
         flexDirection: 'row',
         padding: 5,
@@ -315,12 +322,13 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         alignItems: 'center',
         // borderWidth: 2,
-        height: 60,
+        height: 80,
     },
     h2rowContainer: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
+        height: 60,
     },
     h2RowItem: {
         height: 60,
