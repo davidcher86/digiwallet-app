@@ -11,7 +11,7 @@ import DatePicker from 'react-native-datepicker';
 import * as actions from './accountActions';
 import Header from './../common/Header';
 import {randomString} from './../common/Actions';
-import { BACKGROUND_COLOR, LABEL_COLOR, INPUT_COLOR } from './../Styles';
+import { DARK_MODE, BACKGROUND_COLOR, LABEL_COLOR, INPUT_COLOR } from './../Styles';
 
 const EDIT = 'EDIT';
 const NEW = 'NEW';
@@ -94,204 +94,231 @@ class Account extends Component {
     // console.log(this.props.navigation.getParam('type'));
     // var formType = this.props.navigation.getParam('type');
     // console.log('props', this.props.account);
+    const personalData = () => {
+      return (
+        <ProgressStep
+          nextBtnTextStyle={styles.prevNextBtn}
+          previousBtnTextStyle={styles.prevNextBtn}
+          previousBtnDisabled={true}
+          onNext={() => onNextStep(2)}
+          style={styles.innerTabContainer}
+          label="First Step">
+          <View style={styles.innerTabWrapper}>
+            <View style={DARK_MODE.inputRowContainer}>
+              <Text style={DARK_MODE.h2}>Personal Data</Text>
+            </View>
+            <View style={DARK_MODE.inputRowContainer}>
+              <Input
+                style={{width: '100%'}}
+                autoCorrect={false}
+                placeholder="First Name"
+                inputStyle={styles.inputStyle}
+                value={user.firstName}
+                onChangeText={text => changeUserFieldValue('firstName', text)}
+                // leftIcon={{ name: 'mail' }}
+                autoCapitalize="none"
+                errorStyle={{color: 'red'}}
+                errorMessage={validationErrors.firstNameError}
+                // label="First Name"
+                placeholderTextColor="rgba(225,225,225,0.7)"/>
+            </View>
+            <View style={DARK_MODE.inputRowContainer}>
+              <Input
+                placeholder="Last Name"
+                style={{width: '100%'}}
+                inputStyle={styles.inputStyle}
+                value={user.lastName}
+                onChangeText={text => changeUserFieldValue('lastName', text)}
+                // leftIcon={{ name: 'maijl' }}
+                errorStyle={{color: 'red'}}
+                // label="Last Name"
+                errorMessage={validationErrors.lastNameError}/>
+            </View>
+            <View style={DARK_MODE.inputSelectionRowContainer}>
+              <View style={{width: '50%'}}>
+                <Text style={DARK_MODE.inputLabel}>Gender</Text>
+              </View>
+              <Picker
+                selectedValue={user.gender}
+                style={{height: 50, width: '50%', color: LABEL_COLOR}}
+                onValueChange={itemValue => changeUserFieldValue(itemValue)}>
+                <Picker.Item label="Male" value="male" />
+                <Picker.Item label="Female" value="female" />
+              </Picker>
+            </View>
+            <View style={DARK_MODE.inputSelectionRowContainer}>
+              <View style={{width: '50%'}}>
+                <Text style={DARK_MODE.inputLabel}>Date of Birth</Text>
+              </View>
+              <DatePicker
+                style={{width: '50%'}}
+                date={user.birthDate}
+                mode="date"
+                placeholder="select date"
+                format="YYYY-MM-DD"
+                minDate="1916-05-01"
+                maxDate="2019-06-01"
+                customStyles={{
+                  dateIcon: {
+                    position: 'absolute',
+                    left: 0,
+                    top: 4,
+                    marginLeft: 0,
+                  },
+                  dateText: {
+                    color: INPUT_COLOR,
+                  },
+                  dateInput: {
+                    marginLeft: 36,
+                  },
+                }}
+                onDateChange={itemValue =>
+                  changeUserFieldValue('birthDate', itemValue)
+                }
+                confirmBtnText="Confirm"
+                cancelBtnText="Cancel"/>
+            </View>
+          </View>
+        </ProgressStep>
+      );
+    };
+
+    const creditCardsData = () => {
+      return (
+        <ProgressStep
+          nextBtnTextStyle={styles.prevNextBtn}
+          previousBtnTextStyle={styles.prevNextBtn}
+          onNext={() => onNextStep(3)}
+          onPrevious={() => onNextStep(1)}
+          style={styles.innerTabContainer}
+          label="Second Step">
+          <View style={styles.innerTabWrapper}>
+            <View style={{alignItems: 'center'}}>
+              <View style={styles.inputRowContainer}>
+                <Text style={DARK_MODE.h2}>Credit Card Details</Text>
+                <Input
+                  placeholder="Last Name"
+                  style={{width: '70%'}}
+                  inputStyle={styles.inputStyle}
+                  value={creditCards[0].name}
+                  onChangeText={text => changeCreditFieldValue('name', text, 0)}
+                  // leftIcon={{ name: 'maijl' }}
+                  errorStyle={{color: 'red'}}
+                  // label="Last Name"
+                  errorMessage={validationErrors.lastNameError}/>
+              </View>
+              <View style={DARK_MODE.inputSelectionRowContainer}>
+                <View style={{width: '50%'}}>
+                  <Text style={DARK_MODE.inputLabel}>Card Type</Text>
+                </View>
+                <Picker
+                  selectedValue={creditCards[0].cardType}
+                  style={{height: 50, width: '50%', color: INPUT_COLOR}}
+                  onValueChange={itemValue => changeCreditFieldValue('cardType', itemValue, 0)}>
+                  <Picker.Item label="Visa" value="visa" />
+                  <Picker.Item label="Mastercard" value="mastercard" />
+                </Picker>
+              </View>
+              <View style={DARK_MODE.inputSelectionRowContainer}>
+                <View style={{width: '50%'}}>
+                  <Text style={DARK_MODE.inputLabel}>Billing Date</Text>
+                </View>
+                <Picker
+                  selectedValue={creditCards[0].billingDate}
+                  style={{height: 50, width: '50%', color: INPUT_COLOR}}
+                  onValueChange={itemValue =>
+                    changeCreditFieldValue('billingDate', itemValue, 0)
+                  }>
+                  {renderDays()}
+                </Picker>
+              </View>
+            </View>
+          </View>
+        </ProgressStep>
+      );
+    };
+
+    const sallaryData = () => {
+      return (
+        <ProgressStep
+          nextBtnTextStyle={styles.prevNextBtn}
+          previousBtnTextStyle={styles.prevNextBtn}
+          onPrevious={() => onNextStep(2)}
+          finishBtnText={account.formType === NEW ? 'Submit' : 'Edit'}
+          onSubmit={() => {
+            if (account.formType === NEW) {
+              handleRegisterAccount(this.props.account, this.props.identity.uid, this.props.navigation);
+            } else if (account.formType === EDIT) {
+              handleUpdaeAccount(this.props.account, this.props.identity.uid);
+            }
+          }}
+          errors={false}
+          label="Third Step">
+          <View style={styles.innerTabWrapper}>
+            <View style={{alignItems: 'center'}}>
+              <View style={styles.inputRowContainer}>
+                <Text style={DARK_MODE.h2}>{'Sallary & Assets Details'}</Text>
+              </View>
+              <View style={[styles.inputRowContainer,{flexDirection: 'row', alignItems: 'center'}]}>
+                <Input
+                  style={{width: '100%'}}
+                  autoCorrect={false}
+                  value={account.assets.toString()}
+                  placeholder="Initial Amount"
+                  inputStyle={styles.inputStyle}
+                  // onChangeText={text => this.props.changeUsername(text)}
+                  onChangeText={text => changeAccountFieldValue('assets', Number(text))}
+                  leftIcon={{name: 'mail'}}
+                  autoCapitalize="none"
+                  errorStyle={{color: 'red'}}
+                  errorMessage={this.props.validationErrors.firstNameError}
+                  // label="Initial Amount"
+                  placeholderTextColor="rgba(225,225,225,0.7)"/>
+              </View>
+              <View style={styles.inputRowContainer}>
+                <Input
+                  style={{width: '100%'}}
+                  autoCorrect={false}
+                  value={sallary.amount.toString()}
+                  placeholder="Sallary Amount"
+                  inputStyle={styles.inputStyle}
+                  // onChangeText={text => this.props.changeUsername(text)}
+                  onChangeText={text => changeSallaryFieldValue('amount', Number(text))}
+                  leftIcon={{name: 'mail'}}
+                  autoCapitalize="none"
+                  errorStyle={{color: 'red'}}
+                  errorMessage={this.props.validationErrors.firstNameError}
+                  // label="Sallary Amount"
+                  placeholderTextColor="rgba(225,225,225,0.7)"/>
+              </View>
+              <View style={DARK_MODE.inputSelectionRowContainer}>
+                <View style={{width: '50%'}}>
+                  <Text style={DARK_MODE.inputLabel}>Sallary pay Day</Text>
+                </View>
+                <Picker
+                  selectedValue={sallary.paymentDate}
+                  style={{height: 50, width: '50%', color: INPUT_COLOR}}
+                  onValueChange={itemValue =>
+                    changeSallaryFieldValue('paymentDate', itemValue)
+                  }>
+                  {renderDays()}
+                </Picker>
+              </View>
+            </View>
+          </View>
+        </ProgressStep>
+      );
+    };
+
     return (
       <KeyboardAvoidingView style={styles.containerStyle}>
         {account.formType === EDIT && <Header navigation={this.props.navigation} title="Account" />}
         <ScrollView style={styles.scrollerWrapper}>
           <View style={styles.wrapper}>
-            <ProgressSteps previousBtnStyle={{color: '#007aff', fontSize: 18}} nextBtnTextStyle={{color: '#007aff', fontSize: 18}} style={styles.progressbar}>
-              <ProgressStep
-                nextBtnTextStyle={{color: '#ccfbf0', fontSize: 18}}
-                previousBtnTextStyle={{color: '#ccfbf0', fontSize: 18}}
-                previousBtnDisabled={true}
-                onNext={() => onNextStep(2)}
-                style={styles.innerTabContainer}
-                label="First Step">
-                <View style={styles.innerTabWrapper}>
-                  <View style={styles.inputRowContainer}>
-                    <Text style={styles.textLabels}>Personal Data</Text>
-                  </View>
-                  <View style={styles.inputRowContainer}>
-                    <Input
-                      style={{width: '100%'}}
-                      autoCorrect={false}
-                      placeholder="First Name"
-                      inputStyle={styles.inputStyle}
-                      value={user.firstName}
-                      onChangeText={text => changeUserFieldValue('firstName', text)}
-                      // leftIcon={{ name: 'mail' }}
-                      autoCapitalize="none"
-                      errorStyle={{color: 'red'}}
-                      errorMessage={validationErrors.firstNameError}
-                      // label="First Name"
-                      placeholderTextColor="rgba(225,225,225,0.7)"/>
-                  </View>
-                  <View style={styles.inputRowContainer}>
-                    <Input
-                      placeholder="Last Name"
-                      style={{width: '100%'}}
-                      inputStyle={styles.inputStyle}
-                      value={user.lastName}
-                      onChangeText={text => changeUserFieldValue('lastName', text)}
-                      // leftIcon={{ name: 'maijl' }}
-                      errorStyle={{color: 'red'}}
-                      // label="Last Name"
-                      errorMessage={validationErrors.lastNameError}/>
-                  </View>
-                  <View style={{padding: 8, paddingLeft: 28, flexDirection: 'row', alignItems: 'center'}}>
-                    <Text style={{width: '50%', color: LABEL_COLOR}}>Gender</Text>
-                    <Picker
-                      selectedValue={user.gender}
-                      style={{height: 50, width: '50%', color: LABEL_COLOR}}
-                      onValueChange={itemValue => changeUserFieldValue(itemValue)}>
-                      <Picker.Item label="Male" value="male" />
-                      <Picker.Item label="Female" value="female" />
-                    </Picker>
-                  </View>
-                  <View style={{padding: 8, paddingRight: 18, paddingLeft: 28, flexDirection: 'row', alignItems: 'center'}}>
-                  <Text style={{width: '50%', color: LABEL_COLOR}}>Date of Birth</Text>
-                    <DatePicker
-                      style={{width: '50%'}}
-                      date={user.birthDate}
-                      mode="date"
-                      placeholder="select date"
-                      format="YYYY-MM-DD"
-                      minDate="1916-05-01"
-                      maxDate="2019-06-01"
-                      customStyles={{
-                        dateIcon: {
-                          position: 'absolute',
-                          left: 0,
-                          top: 4,
-                          marginLeft: 0,
-                        },
-                        dateText: {
-                          color: INPUT_COLOR,
-                        },
-                        dateInput: {
-                          marginLeft: 36,
-                        },
-                      }}
-                      onDateChange={itemValue =>
-                        changeUserFieldValue('birthDate', itemValue)
-                      }
-                      confirmBtnText="Confirm"
-                      cancelBtnText="Cancel"/>
-                  </View>
-                </View>
-              </ProgressStep>
-              <ProgressStep
-                nextBtnTextStyle={{color: '#ccfbf0', fontSize: 18}}
-                previousBtnTextStyle={{color: '#ccfbf0', fontSize: 18}}
-                onNext={() => onNextStep(3)}
-                onPrevious={() => onNextStep(1)}
-                style={styles.innerTabContainer}
-                label="Second Step">
-                <View style={styles.innerTabWrapper}>
-                  <View style={{alignItems: 'center'}}>
-                    <View style={styles.inputRowContainer}>
-                      <Text style={styles.h2}>Credit Card Details</Text>
-                      <Text style={{width: '30%', color: LABEL_COLOR}}>Name</Text>
-                      <Input
-                        placeholder="Last Name"
-                        style={{width: '70%'}}
-                        inputStyle={styles.inputStyle}
-                        value={creditCards[0].name}
-                        onChangeText={text => changeCreditFieldValue('name', text, 0)}
-                        // leftIcon={{ name: 'maijl' }}
-                        errorStyle={{color: 'red'}}
-                        // label="Last Name"
-                        errorMessage={validationErrors.lastNameError}/>
-                    </View>
-                    <View style={[styles.inputRowContainer,{flexDirection: 'row', alignItems: 'center'}]}>
-                      <Text style={{width: '50%', color: LABEL_COLOR}}>Card Type</Text>
-                      <Picker
-                        selectedValue={creditCards[0].cardType}
-                        style={{height: 50, width: '50%', color: INPUT_COLOR}}
-                        onValueChange={itemValue => changeCreditFieldValue('cardType', itemValue, 0)}>
-                        <Picker.Item label="Visa" value="visa" />
-                        <Picker.Item label="Mastercard" value="mastercard" />
-                      </Picker>
-                    </View>
-                    <View style={[styles.inputRowContainer,{flexDirection: 'row', alignItems: 'center'}]}>
-                      <Text style={{width: '50%', color: LABEL_COLOR}}>Billing Date</Text>
-                      <Picker
-                        selectedValue={creditCards[0].billingDate}
-                        style={{height: 50, width: '50%', color: INPUT_COLOR}}
-                        onValueChange={itemValue =>
-                          changeCreditFieldValue('billingDate', itemValue, 0)
-                        }>
-                        {renderDays()}
-                      </Picker>
-                    </View>
-                  </View>
-                </View>
-              </ProgressStep>
-              <ProgressStep
-                nextBtnTextStyle={{color: '#ccfbf0', fontSize: 18}}
-                previousBtnTextStyle={{color: '#ccfbf0', fontSize: 18}}
-                onPrevious={() => onNextStep(2)}
-                finishBtnText={account.formType === NEW ? 'Submit' : 'Edit'}
-                onSubmit={() => {
-                  if (account.formType === NEW) {
-                    handleRegisterAccount(this.props.account, this.props.identity.uid, this.props.navigation);
-                  } else if (account.formType === EDIT) {
-                    handleUpdaeAccount(this.props.account, this.props.identity.uid);
-                  }
-                }}
-                errors={false}
-                label="Third Step">
-                <View style={styles.innerTabWrapper}>
-                  <View style={{alignItems: 'center'}}>
-                    <View style={styles.inputRowContainer}>
-                      <Text style={{width: '50%', color: LABEL_COLOR}}>{'Sallary & Assets Details'}</Text>
-                    </View>
-                    <View style={[styles.inputRowContainer,{flexDirection: 'row', alignItems: 'center'}]}>
-                      <Input
-                        style={{width: '100%'}}
-                        autoCorrect={false}
-                        value={account.assets.toString()}
-                        placeholder="Initial Amount"
-                        inputStyle={styles.inputStyle}
-                        // onChangeText={text => this.props.changeUsername(text)}
-                        onChangeText={text => changeAccountFieldValue('assets', Number(text))}
-                        leftIcon={{name: 'mail'}}
-                        autoCapitalize="none"
-                        errorStyle={{color: 'red'}}
-                        errorMessage={this.props.validationErrors.firstNameError}
-                        // label="Initial Amount"
-                        placeholderTextColor="rgba(225,225,225,0.7)"/>
-                    </View>
-                    <View style={styles.inputRowContainer}>
-                      <Input
-                        style={{width: '100%'}}
-                        autoCorrect={false}
-                        value={sallary.amount.toString()}
-                        placeholder="Sallary Amount"
-                        inputStyle={styles.inputStyle}
-                        // onChangeText={text => this.props.changeUsername(text)}
-                        onChangeText={text => changeSallaryFieldValue('amount', Number(text))}
-                        leftIcon={{name: 'mail'}}
-                        autoCapitalize="none"
-                        errorStyle={{color: 'red'}}
-                        errorMessage={this.props.validationErrors.firstNameError}
-                        // label="Sallary Amount"
-                        placeholderTextColor="rgba(225,225,225,0.7)"/>
-                    </View>
-                    <View style={[styles.inputRowContainer,{flexDirection: 'row', justifyContent: 'center'}]}>
-                      <Text style={{width: '50%', color: LABEL_COLOR}}>Sallary pay Day</Text>
-                      <Picker
-                        selectedValue={sallary.paymentDate}
-                        style={{height: 50, width: '50%', color: INPUT_COLOR}}
-                        onValueChange={itemValue =>
-                          changeSallaryFieldValue('paymentDate', itemValue)
-                        }>
-                        {renderDays()}
-                      </Picker>
-                    </View>
-                  </View>
-                </View>
-              </ProgressStep>
+            <ProgressSteps previousBtnStyle={styles.prevNextBtn} nextBtnTextStyle={styles.prevNextBtn} style={styles.progressbar}>
+              {personalData()}
+              {creditCardsData()}
+              {sallaryData()}
             </ProgressSteps>
           </View>
         </ScrollView>
@@ -301,6 +328,10 @@ class Account extends Component {
 }
 
 const styles = StyleSheet.create({
+  prevNextBtn: {
+    color: '#007aff',
+    fontSize: 18,
+  },
   // containerStyle: {
   //   padding: 20,
   //   flexDirection: 'column',

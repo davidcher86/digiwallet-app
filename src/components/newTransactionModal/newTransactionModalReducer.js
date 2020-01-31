@@ -20,7 +20,12 @@ export default (state = initialState, action) => {
     case 'TOGGLE_NEW_TRANSACTION':
       return Object.assign({}, state, {isModalOpen: !state.isModalOpen});
     case 'UPDATE_NEW_TRANSACTION_FORM':
-      return Object.assign({}, state, {[action.field]: action.value});
+      let currentState = state;
+      if (action.field === 'mainCategory' && state.mainCategory !== action.field) {
+        return Object.assign({}, state, {mainCategory: action.value, subCategory: state.categoryList[action.value][0]});
+      } else {
+        return Object.assign({}, state, {[action.field]: action.value});
+      }
     case 'UPDATE_SELECTED_CREDIT_CARD':
       return Object.assign({}, state, {selectedCreditCard: action.creditCard});
     case 'CLOSE_NEW_TRANSACTION_MODAL':

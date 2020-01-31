@@ -1,10 +1,12 @@
 /* eslint-disable prettier/prettier */
 import React, {Component} from 'react';
 import {View, TouchableOpacity, Text, Image, ScrollView, KeyboardAvoidingView, StyleSheet} from 'react-native';
-import {Button, Input, Icon} from 'react-native-elements';
+import {Button, Input, ButtonGroup, Icon} from 'react-native-elements';
 import {connect} from 'react-redux';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import firebase from 'firebase';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { SocialIcon } from 'react-native-elements';
 // import { AccessToken, LoginManager } from 'react-native-fbsdk';
 // import * as fb from 'react-native-firebase';
 
@@ -33,7 +35,7 @@ class LoginForm extends Component {
   renderButton(props) {
     return (
       <View style={styles.buttonContainerStyle}>
-        {this.props.pageSettings.selectedTab === 'login' && (
+        {this.props.pageSettings.selectedTab === 0 && (
           <TouchableOpacity
             style={styles.buttonContainer}
             onPress={() =>
@@ -46,14 +48,23 @@ class LoginForm extends Component {
             <Text style={styles.buttonStyle}>LOGIN</Text>
           </TouchableOpacity>
         )}
-        {this.props.pageSettings.selectedTab === 'signIn' && (
+        {this.props.pageSettings.selectedTab === 1 && (
           <View>
-            <TouchableOpacity
+            <SocialIcon
+                  title='Sign In With Facebook'
+                  button
+                  onPress={() => props.onFacebookRegister(this.props.navigation)}
+                  type='facebook' />
+            {/* <TouchableOpacity
               style={styles.buttonContainer}
-              // onPress={() => this.props.navigation.navigate('Account', {type: 'NEW', data: props.login})}>
               onPress={() => props.onFacebookRegister(this.props.navigation)}>
+                <SocialIcon
+                  title='Sign In With Facebook'
+                  button
+                  onPress={() => console.log('herer')}
+                  type='facebook' />
               <Text style={styles.buttonStyle}>facebook</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             <TouchableOpacity
               style={styles.buttonContainer}
               // onPress={() => this.props.navigation.navigate('Account', {type: 'NEW', data: props.login})}>
@@ -74,6 +85,37 @@ class LoginForm extends Component {
     const {login, pageSettings, validationErrors} = this.props;
     const {changeTab} = this.props;
 
+    const loginTab = () => {
+      return (
+        <Text
+          onPress={() => changeTab(0)}
+          style={[
+            styles.tabStyle,
+            pageSettings.selectedTab === 0
+              ? styles.selectedTabStyle
+              : {},
+          ]}>
+          Login
+        </Text>
+      );
+    };
+    const registerTab = () => {
+      return (
+        <Text
+          onPress={() => changeTab(1)}
+          style={[
+            styles.tabStyle,
+            pageSettings.selectedTab === 1
+              ? styles.selectedTabStyle
+              : {},
+          ]}>
+          Sign In
+        </Text>
+      );
+    };
+
+    const buttons = [{ element: loginTab }, { element: registerTab }];
+    // console.log(this.props);
     return (
       <KeyboardAvoidingView style={styles.containerStyle}>
         <ScrollView style={styles.scrollerWrapper}>
@@ -83,8 +125,14 @@ class LoginForm extends Component {
                 style={{width: 130, height: 130}}
                 source={require('./../../img/login-main-icn-2.png')}/>
             </View>
-            <View style={styles.tabContainerStyle}>
-              <Text
+            {/* <View style={styles.tabContainerStyle}> */}
+            <ButtonGroup
+              // onPress={this.updateIndex}
+              selectedTextStyle={{color: 'red'}}
+              selectedIndex={1}
+              buttons={buttons}
+              containerStyle={styles.tabContainerStyle} />
+              {/* <Text
                 onPress={() => changeTab('login')}
                 style={[
                   styles.tabStyle,
@@ -103,9 +151,9 @@ class LoginForm extends Component {
                     : {},
                 ]}>
                 Sign In
-              </Text>
-            </View>
-            {pageSettings.selectedTab === 'login' && (
+              </Text> */}
+            {/* </View> */}
+            {pageSettings.selectedTab === 0 && (
               <KeyboardAvoidingView style={styles.loginContainerStyle}>
                 <View style={styles.inputConntainerStyle}>
                   <Input
@@ -114,7 +162,7 @@ class LoginForm extends Component {
                     autoCorrect={false}
                     value={login.email}
                     onChangeText={text => this.props.changeFieldValue('email', text)}
-                    leftIcon={{name: 'mail'}}
+                    leftIcon={<MaterialCommunityIcons name="email" size={30} color="#4F8EF7" />}
                     autoCapitalize="none"
                     errorStyle={{color: 'red'}}
                     // label="Email"
@@ -128,7 +176,7 @@ class LoginForm extends Component {
                     onChangeText={text =>
                       this.props.changeFieldValue('password', text)
                     }
-                    leftIcon={{name: 'mail'}}
+                    leftIcon={<MaterialCommunityIcons name="onepassword" size={30} color="#4F8EF7" />}
                     errorStyle={{color: 'red'}}
                     // label="Password"
                     errorMessage={this.props.login.error}
@@ -136,7 +184,7 @@ class LoginForm extends Component {
                 </View>
               </KeyboardAvoidingView>
             )}
-            {pageSettings.selectedTab === 'signIn' && (
+            {pageSettings.selectedTab === 1 && (
               <View style={styles.signInContainerStyle}>
                 <View style={styles.inputConntainerStyle}>
                   <Input
@@ -147,7 +195,7 @@ class LoginForm extends Component {
                     onChangeText={text =>
                       this.props.changeFieldValue('newEmail', text)
                     }
-                    leftIcon={{name: 'mail'}}
+                    leftIcon={<MaterialCommunityIcons name="email" size={30} color="#4F8EF7" />}
                     autoCapitalize="none"
                     errorStyle={{color: 'red'}}
                     errorMessage={validationErrors.newEmailError}
@@ -162,7 +210,7 @@ class LoginForm extends Component {
                     onChangeText={text =>
                       this.props.changeFieldValue('newPassword', text)
                     }
-                    leftIcon={{name: 'mail'}}
+                    leftIcon={<MaterialCommunityIcons name="textbox-password" size={30} color="#4F8EF7" />}
                     errorStyle={{color: 'red'}}
                     // label="Enter New Password"
                     errorMessage={validationErrors.newPassError}
@@ -176,7 +224,7 @@ class LoginForm extends Component {
                     onChangeText={text =>
                       this.props.changeFieldValue('reEnteredPassword', text)
                     }
-                    leftIcon={{name: 'mail'}}
+                    leftIcon={<MaterialCommunityIcons name="textbox-password" size={30} color="#4F8EF7" />}
                     errorStyle={{color: 'red'}}
                     errorMessage={validationErrors.newReEnteredPassError}
                     // label="Re-Enter Password"
@@ -237,6 +285,7 @@ const styles = StyleSheet.create({
     opacity: 0.8,
     textAlign: 'center',
     padding: 7,
+    width: '100%',
     justifyContent: 'space-between',
     backgroundColor: '#6bcfe8',
   },
@@ -250,7 +299,7 @@ const styles = StyleSheet.create({
     paddingTop: 30,
   },
   buttonContainerStyle: {
-    backgroundColor: '#2980b6',
+    // backgroundColor: '#2980b6',
     paddingVertical: 15,
     marginTop: 30,
   },

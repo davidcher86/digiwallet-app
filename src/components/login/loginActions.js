@@ -66,6 +66,13 @@ export const onRegister = (email, password, navigation) => {
   };
 };
 
+export const recieveData = data => {
+  return {
+    type: 'RECIEVE_DATA',
+    data,
+  };
+};
+
 export const onLoginPress = (email, password, navigation) => {
   var data = {
     email: email,
@@ -75,22 +82,50 @@ export const onLoginPress = (email, password, navigation) => {
   return dispatch => {
     dispatch(startLoading());
     firebaseAction(null, 'authentication', 'login', data)
-      .then(res => {
-        if (res.user !== null) {
-          rememberUser(res.user.uid);
-          navigation.navigate('HomePage');
-          dispatch(setIdentity(res.user.uid));
+      .then(response => {
+        if (response.user !== null) {
+          rememberUser(response.user.uid);
+          dispatch(setIdentity(response.user.uid));
+          // console.log('uid', res.user.uid);
+          // var res = await fetchData(res.user.uid, navigation);
+          // console.log('res', res);
+          const dataRef = firebase.database().ref(`/users/${response.user.uid}/account`);
+          dataRef.once('value').then(function(snapshot) {
+            var res = snapshot.val();
+
+            if (res && res.assets !== null) {
+              var fixedList = [];
+              var totalCredit = 0;
+              var currentMonthCredit = 0;
+              for (var item in res.creditDebt) {
+                var creditItem = res.creditDebt[item];
+                creditItem.uid = item;
+                fixedList.push(creditItem);
+                totalCredit += res.creditDebt[item].amount;
+                currentMonthCredit += res.creditDebt[item].monthlyPayment;
+              }
+              res.fixedList = fixedList;
+              res.totalCredit = totalCredit;
+              res.currentMonthCredit = currentMonthCredit;
+              dispatch(recieveData(res));
+              navigation.navigate('HomePage');
+              dispatch(endLoading());
+            } else {
+              dispatch(endLoading());
+              // navigation.navigate('Account', {formType: 'NEW', registered: true, uid: uid});
+            }
+          });
+          // navigation.navigate('HomePage');
+          // dispatch(setIdentity(response.user.uid));
         }
         dispatch(endLoading());
         dispatch(resetForm());
-        return res;
       })
       .catch(res => {
         console.log('Error: ', res);
         dispatch(resetForm());
         dispatch(handleError(res.toString()));
         dispatch(endLoading());
-        return null;
       });
   };
 };

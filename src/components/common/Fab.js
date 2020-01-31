@@ -31,12 +31,14 @@ class Fab extends Component {
 
 const styles = StyleSheet.create({
   containerStyle: {
-    flex: 1,
-    zIndex: 1000,
+    // zIndex: 100000,
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
   },
   fab: {
     height: 50,
-    zIndex: 1020,
+    zIndex: 10200,
     width: 50,
     borderRadius: 200,
     position: 'absolute',
@@ -45,6 +47,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#686cc3',
+    elevation: 1,
   },
 });
 

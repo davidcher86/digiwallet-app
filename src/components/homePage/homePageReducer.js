@@ -7,11 +7,16 @@ const initialState = {
     userDetails: null,
     creditCards: [],
     creditCardList: [],
+    creditDebt: [],
 
     credit: [],
+    pageSettings: {
+        isOpenIndex: null,
+    },
 };
 
 export default (state = initialState, action) => {
+    let pageSettings;
     switch (action.type) {
         case 'RECIEVE_DATA':
             var data = action.data;
@@ -25,7 +30,13 @@ export default (state = initialState, action) => {
                 currentMonthCredit: data.currentMonthCredit,
                 credit: data.fixedList,
                 sallary: data.sallary,
+
+                creditDebt: data.creditDebt,
             });
+        case 'CHANGE_OPEN_CREDIT_INDEX':
+            pageSettings = state.pageSettings;
+            pageSettings.isOpenIndex = (pageSettings.isOpenIndex === action.uid ? null : action.uid);
+            return Object.assign({}, state, {pageSettings: pageSettings});
         // case 'CHANGE_PASSWORD_FIELD':
         //     return Object.assign({}, state, { password: action.value });
         // case 'CHANGE_LOADING_STATE':

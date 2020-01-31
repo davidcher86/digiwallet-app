@@ -11,7 +11,7 @@ import {
   ScrollView,
   Picker,
 } from 'react-native';
-import {Button, Input, Icon} from 'react-native-elements';
+import {Button, Input, Icon, Overlay} from 'react-native-elements';
 import {connect} from 'react-redux';
 import firebase from 'firebase';
 import DatePicker from 'react-native-datepicker';
@@ -75,16 +75,22 @@ class NewTransactionModal extends Component {
     }
 
     return (
-      <KeyboardAvoidingView style={styles.containerStyle}>
-        <View >
-          <Modal
-            animationType="slide"
-            transparent={true}
-            // visible={true}
-            style={{padding: 10}}
-            visible={isModalOpen}
-            onRequestClose={() => closeNewTransactionModal()}>
-            <ScrollView style={styles.modalInnerContainerStyle} showsVerticalScrollIndicator={false}>
+      <Overlay
+        isVisible={isModalOpen}
+        windowBackgroundColor="rgba(255, 255, 255, 0.5)"
+        // overlayBackgroundColor="red"
+        overlayStyle={styles.containerStyle}
+        width={350}
+        height="auto" >
+      {/* / <KeyboardAvoidingView style={styles.containerStyle}>
+      //   <View >
+      //     <Modal
+      //       animationType="slide"
+      //       transparent={true}
+      //       style={{padding: 10}}
+      //       visible={isModalOpen}
+      //       onRequestClose={() => closeNewTransactionModal()}>
+    //       <ScrollView style={styles.modalInnerContainerStyle} showsVerticalScrollIndicator={false}> */}
               <View style={styles.inputContainer}>
                 <Text style={styles.pickerLabel}>Transaction Type</Text>
                 <Picker
@@ -250,11 +256,11 @@ class NewTransactionModal extends Component {
                 style={styles.buttonContainer}>
                 <Text style={styles.buttonStyle}>CANCEL</Text>
               </TouchableOpacity>
-            </ScrollView>
+            {/* </ScrollView>
           </Modal>
         </View>
-        {/* <FAB style={styles.fab} small icon="plus" onPress={() => this.props.toggleNewTransactionModal()} /> */}
-      </KeyboardAvoidingView>
+      </KeyboardAvoidingView> */}
+      </Overlay>
     );
   }
 }
@@ -263,8 +269,8 @@ const styles = StyleSheet.create({
   containerStyle: {
     flex: 1,
     position: 'absolute',
-    width: '100%',
-    height: '100%',
+    // width: '100%',
+    // height: '100%',
     justifyContent: 'flex-start',
     flexDirection: 'column',
     // zIndex: 40,

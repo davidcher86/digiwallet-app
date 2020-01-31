@@ -19,7 +19,7 @@ export const setSortedTransactions = (transactions) => {
 
 export const setOpenIndex = (uid) => {
   return {
-    type: 'CHANGE_OPEN_INDEX',
+    type: 'CHANGE_OPEN_TRANSACTION_INDEX',
     uid,
   };
 };

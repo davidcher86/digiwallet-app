@@ -29,6 +29,9 @@ import * as actions from './transactionsActions';
 import Fab from './../common/Fab';
 import Header from './../common/Header';
 import { BACKGROUND_COLOR, LABEL_COLOR, INPUT_COLOR } from './../Styles';
+import Feather from 'react-native-vector-icons/Feather';Entypo
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import Entypo from 'react-native-vector-icons/Entypo';
 
 class TransactionItem extends Component {
   constructor() {
@@ -44,7 +47,7 @@ class TransactionItem extends Component {
 
   expandItem = () => {
     Animated.timing(this.state.itemHeight, {
-      toValue: 80,
+      toValue: 40,
       duration: 400,
       easing: Easing.linear,
       // useNativeDriver: true
@@ -110,10 +113,11 @@ class TransactionItem extends Component {
         thumbnail>
         <View style={styles.itemVissibleSection}>
           <View style={styles.left1Section}>
-            <Image
+            <Entypo name="minus" size={25} color="#da3838" />
+            {/* <Image
               style={{width: 20, height: 20}}
               source={require('./../../img/arrow-down-ico.png')}
-            />
+            /> */}
           </View>
           <View style={styles.left2Section}>
             <Text>{transactionItem.date}</Text>
@@ -124,18 +128,16 @@ class TransactionItem extends Component {
             </Text>
           </View>
           <View style={styles.rightSection}>
-            {/* <Image
-              style={{width: 20, height: 20}}
-              source={{uri: './../../img/more-icn.png'}}/> */}
             <TouchableOpacity
               transparent
               onPress={() => this.toggleItemExpand(transactionItem.uid)}
               // onPress={() => openTransaction(transactionItem.uid)}
               style={styles.openBtn}>
-              <Image
+              <Feather name="more-horizontal" size={30} color="#4F8EF7" />
+              {/* <Image
                 style={{width: 20, height: 20}}
                 source={require('./../../img/more-icn.png')}
-              />
+              /> */}
             </TouchableOpacity>
             <TouchableOpacity
               transparent
@@ -143,10 +145,11 @@ class TransactionItem extends Component {
               onPress={() =>
                 deleteTransaction(transactionItem.uid, identity.uid)
               }>
-              <Image
+              <MaterialIcons name="delete" size={25} color="#4F8EF7" />
+              {/* <Image
                 style={{width: 20, height: 20}}
                 source={require('./../../img/remove-icn.png')}
-              />
+              /> */}
             </TouchableOpacity>
           </View>
         </View>
@@ -209,7 +212,7 @@ class Transactions extends Component {
 
   renderList(list, sort) {
     var monthsList = {};
-    console.log('sort', sort);
+
     for (var i = 0; i < list.length; i++) {
       var dt = new Date(list[i].date);
       var key = '';

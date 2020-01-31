@@ -1,13 +1,132 @@
 /* eslint-disable prettier/prettier */
 import React, { Component } from 'react';
-import { View, TouchableOpacity, Text, StyleSheet, FlatList } from 'react-native';
-import { Button, Input, Icon  } from 'react-native-elements';
+import { View, TouchableOpacity, Image, Animated, Text, StyleSheet, Easing, FlatList } from 'react-native';
+import { Button, Input, PricingCard } from 'react-native-elements';
 import { connect } from 'react-redux';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { Divider } from 'react-native-elements';
 
 import * as actions from './homePageActions';
 import Header from './../common/Header';
 import Fab from './../common/Fab';
-import { BACKGROUND_COLOR, DARK_MODE } from './../Styles';
+import { DARK_MODE } from './../Styles';
+
+class CreditItem extends Component {
+    constructor() {
+      super();
+
+      this.state = {
+        itemHeight: new Animated.Value(0),
+        itemPadding: new Animated.Value(0),
+      };
+
+      this.expandItem = this.expandItem.bind(this);
+      this.closeItem = this.closeItem.bind(this);
+      this.toggleItemExpand = this.toggleItemExpand.bind(this);
+    }
+
+    expandItem = () => {
+        Animated.timing(this.state.itemHeight, {
+          toValue: 80,
+          duration: 400,
+          easing: Easing.linear,
+          // useNativeDriver: true
+        }).start();
+
+        Animated.timing(this.state.itemPadding, {
+          toValue: 6,
+          duration: 100,
+          easing: Easing.linear,
+          // useNativeDriver: true
+        }).start();
+    };
+
+    closeItem = () => {
+        Animated.timing(this.state.itemHeight, {
+          toValue: 0,
+          duration: 200,
+          easing: Easing.linear,
+          // useNativeDriver: true
+        }).start();
+
+        Animated.timing(this.state.itemPadding, {
+          toValue: 0,
+          duration: 100,
+          easing: Easing.linear,
+          // useNativeDriver: true
+        }).start();
+    };
+
+    toggleItemExpand(uid) {
+        if (this.props.pageSettings.isOpenIndex === uid) {
+          this.props.openCredit(null);
+          this.closeItem();
+        } else {
+          this.props.openCredit(uid);
+          this.expandItem();
+        }
+    }
+
+    componentDidUpdate() {
+        if (
+          this.props.pageSettings.isOpenIndex !== this.props.creditItem.uid
+        ) {
+          this.closeItem();
+        }
+    }
+
+    render(){
+        const {
+            pageSettings,
+            identity,
+            creditItem,
+          } = this.props;
+        // console.log(PricingCard);
+        // var isOpened = pageSettings.isOpenCreditIndex === creditItem.uid;
+        // var rowIcon = (pageSettings.isOpenCreditIndex === creditItem.uid
+        //                 ? './../../img/collapse-down-icon.png'
+        //                 : './../../img/collapse-up-icon.png');
+        // console.log('rowIcon', rowIcon);
+        const getRowIcon = () => {
+            return pageSettings.isOpenIndex === creditItem.uid
+                    ? <Ionicons name="ios-arrow-up" size={30} color="#4F8EF7" />
+                    : <Ionicons name="ios-arrow-down" size={30} color="#4F8EF7" />;
+        };
+
+        return (
+            <Animated.View
+                key={creditItem.uid}
+                style={styles.creditListItemStyle}>
+                <View style={styles.vissibleItemStyle}>
+                    <View style={styles.itemColumn}>
+                        <Text>{creditItem.mainCategory} -</Text>
+                        <Text>{creditItem.mainCategory}</Text>
+                    </View>
+                    <View style={styles.itemColumn}>
+                        <Text>{creditItem.amount}/{creditItem.amountRemain}</Text>
+                    </View>
+                    <View style={styles.itemColumn}>
+                        <Text>{creditItem.paymentsAmount}/{creditItem.paymentsRemain}</Text>
+                    </View>
+                    <View style={styles.itemActionColumn}>
+                        <TouchableOpacity
+                            transparent
+                            onPress={() => this.toggleItemExpand(creditItem.uid)}
+                            // onPress={() => openTransaction(transactionItem.uid)}
+                            style={styles.openBtn}>
+                            {getRowIcon()}
+                        </TouchableOpacity>
+                    </View>
+                </View>
+                <Animated.View style={[styles.hiddenItemStyle, {height: this.state.itemHeight, padding: this.state.itemPadding}]}>
+                    <Text>fsd</Text>
+                </Animated.View>
+            </Animated.View>
+        );
+    }
+}
 
 class HomePage extends Component {
     static navigationOptions = {
@@ -15,19 +134,26 @@ class HomePage extends Component {
     }
 
     componentDidMount() {
-        this.props.fetchData(this.props.identity.uid, this.props.navigation);
+        // this.props.fetchData(this.props.identity.uid, this.props.navigation);
+    }
+
+    componentDidUpdate() {
+
     }
 
     render() {
-        const {profile} = this.props;
-        // console.log('pre', profile);
-        const getMonthsDiffrence = (firstDate, laterDate) => {            console.log('laterDate', laterDate);
+        const {profile, pageSettings} = this.props;
+        console.log(this.props);
+        // console.log('pre', DARK_MODE);
+        const getMonthsDiffrence = (firstDate, laterDate) => {
+            // console.log('firstDate', firstDate);
+            // console.log('laterDate', laterDate);
             var date1 = new Date(firstDate);
             var date2 = new Date(laterDate);
             var diffYears = date2.getFullYear() - date1.getFullYear();
             var diffMonths = date2.getMonth() - date1.getMonth();
             var diffDays = date2.getDate() - date1.getDate();
-          
+
             var months = (diffYears*12 + diffMonths);
             if (diffDays>0) {
                 months += '.' + diffDays;
@@ -35,78 +161,160 @@ class HomePage extends Component {
                 months--;
                 months += '.'+(new Date(date2.getFullYear(),date2.getMonth(),0).getDate()+diffDays);
             }
-            console.log(months);
+            // console.log(months);
             return Math.ceil(months);
         };
 
         var nowDt = new Date();
-        console.log('before', profile);
+        // console.log('before', profile);
         // console.log(nowDt > new Date(profile.sallary.paymentDate));
-        if (profile.sallary && nowDt > new Date(profile.sallary.paymentDate) && new Date(profile.sallary.paymentDate) > new Date(profile.sallary.lastUpdated)) {
-            var monthsAmount = getMonthsDiffrence(profile.sallary.paymentDate, nowDt);
+        // if (profile.credit.length > 0) {
+        //     var mapCredit = profile.credit;
+        //     var creditDebt = profile.creditDebt;
+        //     // console.log('creditCardDebtDt', creditCardDebtDt);
+        //     var cardToHandle = profile.creditCards[0].id;
+        //     var creditCardDebtDt = profile.creditCards[0].nextDebtDate;
+        //     var totalCreditDebt = 0;
 
-            profile.assets += (monthsAmount * profile.sallary.amount);
-            var payDayDt = new Date(profile.sallary.paymentDate)
-            console.log('payDayDt pre', payDayDt);
-            console.log('payDayDt pmonthsAmount', monthsAmount);
-            payDayDt.setMonth(payDayDt.getMonth() + monthsAmount);
-            console.log('payDayDt as ', payDayDt);
-            profile.sallary.paymentDate = payDayDt.toISOString();
-            profile.sallary.lastUpdated = nowDt.toISOString();
-        }
-        console.log('after', profile);
+        //     for (var item in creditDebt) {
+        //         console.log('item  ', creditDebt[item]);
 
+        //         // console.log('1', cardToHandle === mapCredit[item].creditCardId);
+        //         // console.log('2',new Date(mapCredit[item].lastUpdated) < new Date(creditCardDebtDt));
+        //         if (cardToHandle === creditDebt[item].creditCardId && new Date(creditDebt[item].lastUpdated) < new Date(creditCardDebtDt)) {
+        //             var monthsAmount = getMonthsDiffrence(creditDebt[item].lastUpdated, nowDt.toISOString());
+        //             var creditItem = creditDebt[item];
+        //             totalCreditDebt += (creditDebt[item].paymentsRemain >= monthsAmount ? (monthsAmount * mapCredit[item].monthlyPayment) : (mapCredit[item].paymentsRemain * mapCredit[item].monthlyPayment));
+        //             profile.assets -= totalCreditDebt;
+        //             console.log('paymentsRemain ', creditDebt[item].paymentsRemain);
+        //             console.log('monthsAmount ', monthsAmount);
+        //             if (creditDebt[item].paymentsRemain - monthsAmount > 0) {
+        //                 let dt = new Date();
+        //                 creditDebt[item].paymentsRemain = creditItem.paymentsRemain - monthsAmount;
+        //                 creditDebt[item].amountRemain = creditItem.amountRemain - (creditItem.monthlyPayment * monthsAmount);
+        //                 creditDebt[item].lastUpdated = dt.toISOString();
+        //             } else {
+        //                 delete creditDebt[item];
+        //             }
+        //         }
+        //     }
+        //     console.log('totalCreditDebt', totalCreditDebt);
+        //     var dt = new Date(creditCardDebtDt);
+        //     dt.setMonth(dt.getMonth() + 1);
+        //     profile.creditCards[0].nextDebtDate = dt;
+        //   }
+        // console.log('after ', profile);
+        const creditListHeader = () => {
+            return (
+                <View style={styles.creditListHeaderStyle}>
+                    <View style={styles.itemColumn}>
+                        <Text>Type</Text>
+                    </View>
+                    <View style={styles.itemColumn}>
+                        <Text>Amount</Text>
+                    </View>
+                    <View style={styles.itemColumn}>
+                        <Text>Payments</Text>
+                    </View>
+                </View>
+            );
+        };
+        // console.log(this.props);
         return (
-            <View style={{flex: 1}}>
+            <View style={{flex: 1, height: '100%'}}>
                 <Header navigation={this.props.navigation} title="Home"/>
                 <View style={[DARK_MODE.appContainer, {padding: 20}]}>
                     <View style={styles.h1rowContainer}>
-                        <Text>{profile.assets}</Text>
-                        <Text>{'Current Assets'}</Text>
+                    {/* <PricingCard
+                        color="#4f9deb"
+                        title="Free"
+                        price="$0"
+                        info={['1 User', 'Basic Support', 'All Core Features']}
+                        button={{ title: null, icon: null }}
+                        /> */}
+                        <View style={{flexDirection: 'row'}}>
+                            <Text style={{marginRight: 15}}>{profile.assets.toFixed(2)}</Text>
+                            <FontAwesome name="dollar" size={20} color="#4F8EF7" />
+                        </View>
+                        <Text style={DARK_MODE.h3}>{'Current Assets'}</Text>
                     </View>
                     <View style={styles.h2rowContainer}>
                         <View style={styles.h2RowItem}>
-                            <Text>{profile.currentMonthCredit}</Text>
-                            <Text>{'Current Month Debt'}</Text>
+                            <View style={{flexDirection: 'row'}}>
+                                <Text style={{marginRight: 15}}>{profile.currentMonthCredit.toFixed(2)}</Text>
+                                <FontAwesome name="dollar" size={20} color="#4F8EF7" />
+                            </View>
+                            <Text style={DARK_MODE.h3}>{'Current Month Debt'}</Text>
                         </View>
                         <View style={styles.h2RowItem}>
-                            <Text>{profile.totalCredit}</Text>
-                            <Text>{'Total Debt'}</Text>
+                            <View style={{flexDirection: 'row'}}>
+                                <Text style={{marginRight: 15}}>{profile.totalCredit.toFixed(2)}</Text>
+                                <FontAwesome name="dollar" size={20} color="#4F8EF7" />
+                            </View>
+                            <Text style={DARK_MODE.h3}>Total Debt</Text>
                         </View>
                     </View>
+                    <Divider style={{ backgroundColor: '#cbe3fb' }} />
+                    <View style={styles.creditListStyle}>
+                        <Text style={[DARK_MODE.h2, DARK_MODE.title]}>Credit List</Text>
+                        <Animated.View>
+                            <FlatList
+                                data={profile.credit}
+                                ListHeaderComponent={creditListHeader}
+                                keyExtractor={(item, index) => item.uid}
+                                // keyExtractor={item => item.uid}
+                                renderItem={({item}) => (
+                                    <CreditItem
+                                        key={item.uid}
+                                        pageSettings={profile.pageSettings}
+                                        openCredit={this.props.openCredit}
+                                        // openTransaction={openTransaction}
+                                        // identity={identity}
+                                        // deleteTransaction={deleteTransaction}
+                                        creditItem={item}
+                                    />
+                                )}/>
+                        </Animated.View>
+                    </View>
                 </View>
-                <View style={styles.creditListStyle}>
-                <FlatList
-                    data={profile.credit}
-                    keyExtractor={(item, index) => 'key_' + index}
-                    // keyExtractor={item => item.uid}
-                    // renderItem={({item}) => (
-                        // <TransactionItem
-                        // key={item.uid}
-                        // pageSettings={pageSettings}
-                        // openTransaction={openTransaction}
-                        // identity={identity}
-                        // deleteTransaction={deleteTransaction}
-                        // transactionItem={item}
-                        // />
-                        // )}
-                    />
                 <Fab />
-            </View>
             </View>
         );
     }
 }
 const styles = StyleSheet.create({
-    // containerStyle: {
-    //     padding: 20,
-    //     flex: 1,
-    //     backgroundColor: BACKGROUND_COLOR,
-    // },
+    creditListStyle: {
+        padding: 15,
+        // borderWidth: 2,
+    },
+    creditListHeaderStyle: {
+        flexDirection: 'row',
+        padding: 5,
+    },
+    creditListItemStyle: {
+        padding: 5,
+        width: '100%',
+        borderWidth: 2,
+    },
+    vissibleItemStyle: {
+        flexDirection: 'row',
+    },
+    hiddenItemStyle: {
+        overflow: 'hidden',
+    },
+    itemColumn: {
+        width: '30%',
+        flexDirection: 'column',
+    },
+    itemActionColumn: {
+        width: '10%',
+        flexDirection: 'column',
+    },
+    hiddenDisplayedItemStyle: {},
     h1rowContainer: {
         flexDirection: 'column',
         alignItems: 'center',
-        borderWidth: 2,
+        // borderWidth: 2,
         height: 60,
     },
     h2rowContainer: {
@@ -116,7 +324,7 @@ const styles = StyleSheet.create({
     },
     h2RowItem: {
         height: 60,
-        borderWidth: 2,
+        // borderWidth: 2,
         alignItems: 'center',
         justifyContent: 'center',
         width: '50%',

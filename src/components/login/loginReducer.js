@@ -3,7 +3,7 @@ const initialState = {
   password: '',
   pageSettings: {
     // loading: false,
-    selectedTab: 'login',
+    selectedTab: 0,
   },
   newPassword: '',
   reEnteredPassword: '',

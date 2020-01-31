@@ -3,6 +3,8 @@ import {createStackNavigator} from 'react-navigation-stack';
 import React, {Component} from 'react';
 import {FAB} from 'react-native-paper';
 import {Input, Icon} from 'react-native-elements';
+import Feather from 'react-native-vector-icons/Feather';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 // import {
 //   ScrollView,
 //   DrawerItems,
@@ -36,7 +38,7 @@ class DrawerContainer extends Component {
 
   render() {
     const {navigate} = this.props.navigation;
-    // console.log(this.props);
+
     return (
       <View style={styles.container}>
         <View style={styles.containertopRow}>
@@ -88,9 +90,7 @@ class DrawerContainer extends Component {
             }}
             style={styles.containerBottomItemLogout}>
             <View style={styles.button}>
-              <Image
-                style={{width: 20, height: 20}}
-                source={require('./../img/settings-icon.png')} />
+              <Feather name="settings" size={21} color="#4F8EF7" />
               <Text style={styles.txtBottom}>Settings</Text>
             </View>
           </TouchableOpacity>
@@ -101,9 +101,7 @@ class DrawerContainer extends Component {
             }}
             style={styles.containerBottomItemLogout}>
             <View style={styles.button}>
-              <Image
-                style={{width: 20, height: 20}}
-                source={require('./../img/logout-icon.png')} />
+              <AntDesign name="logout" size={21} color="#4F8EF7" />
               <Text style={styles.txtBottom}>Logout</Text>
             </View>
           </TouchableOpacity>
