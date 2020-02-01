@@ -15,14 +15,13 @@ import { Container, Header, Content, Tab, Tabs, Text as BaseText,TabHeading } fr
 import {startLoading, endLoading} from './../systemControl/systemControlActions';
 import * as loginActions from './loginActions';
 import {getRememberedUser} from './../common/Actions';
-import { BACKGROUND_COLOR } from './../Styles';
+import { BACKGROUND_COLOR, DARK_MODE } from './../Styles';
 
 class LoginForm extends Component {
   componentDidMount() {
     this.props.startLoading();
     getRememberedUser()
       .then(uid => {
-        console.log(uid);
         if (uid !== null) {
           this.props.setIdentity(uid);
           var lastConnected = new Date();
@@ -44,101 +43,71 @@ class LoginForm extends Component {
       });
   }
 
-  renderButton(props) {
-    return (
-      <View style={styles.buttonContainerStyle}>
-        {this.props.pageSettings.selectedTab === 0 && (
-          <TouchableOpacity
-            style={styles.buttonContainer}
-            onPress={() =>
-              props.onLoginPress(
-                props.login.email,
-                props.login.password,
-                this.props.navigation,
-              )
-            }>
-            <Text style={styles.buttonStyle}>LOGIN</Text>
-          </TouchableOpacity>
-        )}
-        {this.props.pageSettings.selectedTab === 1 && (
-          <View>
-            <SocialIcon
-                  title='Sign In With Facebook'
-                  button
-                  onPress={() => props.onFacebookRegister(this.props.navigation)}
-                  type='facebook' />
-            {/* <TouchableOpacity
-              style={styles.buttonContainer}
-              onPress={() => props.onFacebookRegister(this.props.navigation)}>
-                <SocialIcon
-                  title='Sign In With Facebook'
-                  button
-                  onPress={() => console.log('herer')}
-                  type='facebook' />
-              <Text style={styles.buttonStyle}>facebook</Text>
-            </TouchableOpacity> */}
-            <TouchableOpacity
-              style={styles.buttonContainer}
-              // onPress={() => this.props.navigation.navigate('Account', {type: 'NEW', data: props.login})}>
-              onPress={() => props.onRegister(
-                              props.login.newEmail,
-                              props.login.newPassword,
-                              this.props.navigation)}>
-              <Text style={styles.buttonStyle}>SIGN IN</Text>
-            </TouchableOpacity>
-          </View>
-        )}
-      </View>
-    );
-  }
+  // renderButton(props) {
+  //   return (
+  //     <View style={styles.buttonContainerStyle}>
+  //       {this.props.pageSettings.selectedTab === 0 && (
+  //         <TouchableOpacity
+  //           style={styles.buttonContainer}
+  //           onPress={() =>
+  //             props.onLoginPress(
+  //               props.login.email,
+  //               props.login.password,
+  //               this.props.navigation,
+  //             )
+  //           }>
+  //           <Text style={styles.buttonStyle}>LOGIN</Text>
+  //         </TouchableOpacity>
+  //       )}
+  //       {this.props.pageSettings.selectedTab === 1 && (
+  //         <View>
+  //           <SocialIcon
+  //                 title='Sign In With Facebook'
+  //                 button
+  //                 onPress={() => props.onFacebookRegister(this.props.navigation)}
+  //                 type='facebook' />
+  //           {/* <TouchableOpacity
+  //             style={styles.buttonContainer}
+  //             onPress={() => props.onFacebookRegister(this.props.navigation)}>
+  //               <SocialIcon
+  //                 title='Sign In With Facebook'
+  //                 button
+  //                 onPress={() => console.log('herer')}
+  //                 type='facebook' />
+  //             <Text style={styles.buttonStyle}>facebook</Text>
+  //           </TouchableOpacity> */}
+  //           <TouchableOpacity
+  //             style={styles.buttonContainer}
+  //             // onPress={() => this.props.navigation.navigate('Account', {type: 'NEW', data: props.login})}>
+              // onPress={() => props.onRegister(
+              //                 props.login.newEmail,
+              //                 props.login.newPassword,
+              //                 this.props.navigation)}>
+  //             <Text style={styles.buttonStyle}>SIGN IN</Text>
+  //           </TouchableOpacity>
+  //         </View>
+  //       )}
+  //     </View>
+  //   );
+  // }
 
   render() {
-    // console.log(this.props);
     const {login, pageSettings, validationErrors} = this.props;
     const {changeTab} = this.props;
 
-    const loginTab = () => {
-      return (
-        <Text
-          onPress={() => changeTab(0)}
-          style={[
-            styles.tabStyle,
-            pageSettings.selectedTab === 0
-              ? styles.selectedTabStyle
-              : {},
-          ]}>
-          Login
-        </Text>
-      );
-    };
-    const registerTab = () => {
-      return (
-        <Text
-          onPress={() => changeTab(1)}
-          style={[
-            styles.tabStyle,
-            pageSettings.selectedTab === 1
-              ? styles.selectedTabStyle
-              : {},
-          ]}>
-          Sign In
-        </Text>
-      );
-    };
-
-    const buttons = [{ element: loginTab }, { element: registerTab }];
     // console.log(this.props);
     const loginComponent = () => {
       return (
-        <KeyboardAvoidingView style={styles.loginContainerStyle}>
+        <KeyboardAvoidingView style={styles.tabContainerStyle}>
           <View style={styles.inputConntainerStyle}>
             <Input
               placeholder="Email"
               style={styles.inputStyle}
               autoCorrect={false}
               value={login.email}
+              inputStyle={{color: '#f5f5f5'}}
               onChangeText={text => this.props.changeFieldValue('email', text)}
-              leftIcon={<MaterialCommunityIcons name="email" size={30} color="#4F8EF7" />}
+              leftIcon={<MaterialCommunityIcons name="email" size={30} color="#4F8EF7" style={{marginRight: 7}}/>}
               autoCapitalize="none"
               errorStyle={{color: 'red'}}
               // label="Email"
@@ -149,14 +118,39 @@ class LoginForm extends Component {
               placeholder="Password"
               style={styles.inputStyle}
               value={login.password}
+              inputStyle={{color: '#f5f5f5'}}
               onChangeText={text =>
                 this.props.changeFieldValue('password', text)
               }
-              leftIcon={<MaterialCommunityIcons name="onepassword" size={30} color="#4F8EF7" />}
+              leftIcon={<MaterialCommunityIcons name="onepassword" size={30} color="#4F8EF7" style={{marginRight: 7}} />}
               errorStyle={{color: 'red'}}
               // label="Password"
               errorMessage={this.props.login.error}
-              secureTextEntry={true} />
+              secureTextEntry={true}
+              placeholderTextColor="rgba(225,225,225,0.7)" />
+          </View>
+          <View style={styles.buttonContainerStyle}>
+            <View style={{paddingLeft: 7, paddingRight: 7}}>
+              <Button
+                title="Login"
+                onPress={() =>
+                  this.props.onLoginPress(
+                  this.props.login.email,
+                  this.props.login.password,
+                  this.props.navigation,
+                )}
+                type="outline" />
+            </View>
+            <View style={{flexDirection: 'row', marginTop: 10, justifyContent: 'space-between'}}>
+              <SocialIcon
+                title='Facebook'
+                style={styles.socailIcon}
+                type='facebook'/>
+              <SocialIcon
+                title='Google'
+                style={styles.socailIcon}
+                type='google'/>
+            </View>
           </View>
         </KeyboardAvoidingView>
       );
@@ -164,17 +158,18 @@ class LoginForm extends Component {
 
     const registerComponent = () => {
       return (
-        <KeyboardAvoidingView style={styles.loginContainerStyle}>
+        <KeyboardAvoidingView style={styles.tabContainerStyle}>
           <View style={styles.inputConntainerStyle}>
             <Input
               placeholder="Enter Email"
               style={styles.inputStyle}
               autoCorrect={false}
               value={login.newEmail}
+              inputStyle={{color: '#f5f5f5'}}
               onChangeText={text =>
                 this.props.changeFieldValue('newEmail', text)
               }
-              leftIcon={<MaterialCommunityIcons name="email" size={30} color="#4F8EF7" />}
+              leftIcon={<MaterialCommunityIcons name="email" size={30} color="#4F8EF7" style={{marginRight: 7}} />}
               autoCapitalize="none"
               errorStyle={{color: 'red'}}
               errorMessage={validationErrors.newEmailError}
@@ -186,35 +181,61 @@ class LoginForm extends Component {
               placeholder="Enter New Password"
               style={styles.inputStyle}
               value={login.newPassword}
+              inputStyle={{color: '#f5f5f5'}}
               onChangeText={text =>
                 this.props.changeFieldValue('newPassword', text)
               }
-              leftIcon={<MaterialCommunityIcons name="textbox-password" size={30} color="#4F8EF7" />}
+              leftIcon={<MaterialCommunityIcons name="textbox-password" size={30} color="#4F8EF7" style={{marginRight: 7}} />}
               errorStyle={{color: 'red'}}
               // label="Enter New Password"
               errorMessage={validationErrors.newPassError}
-              secureTextEntry={true}/>
+              secureTextEntry={true}
+              placeholderTextColor="rgba(225,225,225,0.7)"/>
           </View>
           <View style={styles.inputConntainerStyle}>
             <Input
               placeholder="Re-Enter Password"
               style={styles.inputStyle}
               value={login.reEnteredPassword}
+              inputStyle={{color: '#f5f5f5'}}
               onChangeText={text =>
                 this.props.changeFieldValue('reEnteredPassword', text)
               }
-              leftIcon={<MaterialCommunityIcons name="textbox-password" size={30} color="#4F8EF7" />}
+              leftIcon={<MaterialCommunityIcons name="textbox-password" size={30} color="#4F8EF7" style={{marginRight: 7}} />}
               errorStyle={{color: 'red'}}
               errorMessage={validationErrors.newReEnteredPassError}
               // label="Re-Enter Password"
-              secureTextEntry={true}/>
+              secureTextEntry={true}
+              placeholderTextColor="rgba(225,225,225,0.7)"/>
+          </View>
+          <View style={styles.buttonContainerStyle}>
+            <View style={{paddingLeft: 7, paddingRight: 7}}>
+              <Button
+                title="Register"
+                onPress={() => this.props.onRegister(
+                  this.props.login.newEmail,
+                  this.props.login.newPassword,
+                  this.props.navigation)}
+                type="outline" />
+            </View>
+            <View style={{flexDirection: 'row', marginTop: 10, justifyContent: 'space-between'}}>
+              <SocialIcon
+                title='Facebook'
+                // onPress={() => this.props.onFacebookRegister(this.props.navigation)}
+                style={styles.socailIcon}
+                type='facebook'/>
+              <SocialIcon
+                title='Google'
+                style={styles.socailIcon}
+                type='google'/>
+            </View>
           </View>
         </KeyboardAvoidingView>
       );
     };
 
     return (
-      <KeyboardAvoidingView style={styles.containerStyle}>
+      <KeyboardAvoidingView style={DARK_MODE.appContainer}>
         <ScrollView style={styles.scrollerWrapper}>
           <View style={styles.wrapper}>
             <View style={styles.mainIconContainerStyle}>
@@ -222,31 +243,22 @@ class LoginForm extends Component {
                 style={{width: 130, height: 130}}
                 source={require('./../../img/login-main-icn-2.png')}/>
             </View>
-            {/* <View style={styles.tabContainerStyle}> */}
             <Tabs>
               <Tab
                 heading={<TabHeading style={styles.tabHeader}>
-                          <SimpleLineIcons size={20} name="login" />
-                          <BaseText>Login</BaseText>
+                          <SimpleLineIcons color="#4F8EF7" size={18} name="login" style={{marginRight: 5}} />
+                          <BaseText style={{fontSize: 18}}>Login</BaseText>
                         </TabHeading>}>
                 {loginComponent()}
               </Tab>
               <Tab
                 heading={<TabHeading style={styles.tabHeader}>
-                          <MaterialCommunityIcons size={24} name="account-plus-outline" />
-                          <BaseText>Register</BaseText>
+                          <MaterialCommunityIcons color="#4F8EF7" size={23} style={{marginRight: 5}} name="account-plus-outline" />
+                          <BaseText style={{fontSize: 18}}>Register</BaseText>
                         </TabHeading>}>
                 {registerComponent()}
               </Tab>
             </Tabs>
-            {/* <ButtonGroup
-              selectedTextStyle={{color: 'red'}}
-              selectedIndex={1}
-              buttons={buttons}
-              containerStyle={styles.tabContainerStyle} />
-            {pageSettings.selectedTab === 0 && loginComponent()}
-            {pageSettings.selectedTab === 1 && registerComponent()}
-            <View>{this.renderButton(this.props)}</View> */}
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -255,33 +267,20 @@ class LoginForm extends Component {
 }
 
 const styles = StyleSheet.create({
-  containerStyle: {
-    flex: 1,
-    backgroundColor: BACKGROUND_COLOR,
-    // backgroundColor: '#00868b',
-  },
   scrollerWrapper: {
     flex: 1,
   },
   wrapper: {
     flex: 1,
-    marginTop: 40,
     paddingLeft: 20,
     paddingRight: 20,
-  },
-  scrollViewWrapper: {
-    borderWidth: 2,
-    paddingTop: 300,
-    // margin: 10,
-    // flex: 1,
   },
   mainIconContainerStyle: {
     opacity: 0.4,
     justifyContent: 'center',
-    height: 270,
+    height: 220,
     alignItems: 'center',
   },
-  labelStyle: {},
   inputStyle: {
     height: 40,
     backgroundColor: 'rgba(225,225,225,0.2)',
@@ -289,10 +288,11 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     padding: 10,
     borderWidth: 2,
-    color: '#fff',
   },
-  tabContainerStyle: {
-    flexDirection: 'row',
+  socailIcon: {
+    width: 170,
+    borderRadius: 5,
+    elevation: 0,
   },
   tabHeader: {
     backgroundColor: '#0054a3',
@@ -310,26 +310,18 @@ const styles = StyleSheet.create({
     borderBottomColor: '#316b79',
     borderBottomWidth: 5,
   },
-  selectedArrowStyle: {},
-  loginContainerStyle: {
+  tabContainerStyle: {
     flexDirection: 'column',
     paddingTop: 30,
     backgroundColor: '#0f344c',
     height: '100%',
   },
   buttonContainerStyle: {
-    // backgroundColor: '#2980b6',
-    paddingVertical: 15,
     marginTop: 30,
   },
   inputConntainerStyle: {
     marginTop: 5,
     marginBottom: 5,
-  },
-  buttonStyle: {
-    color: '#fff',
-    textAlign: 'center',
-    fontWeight: '700',
   },
 });
 
