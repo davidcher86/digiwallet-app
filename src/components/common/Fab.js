@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 
 import {toggleNewTransactionModal} from './../newTransactionModal/newTransactionModalActions';
+import { DARK_MODE } from './../Styles';
 
 class Fab extends Component {
   render() {
@@ -46,8 +47,8 @@ const styles = StyleSheet.create({
     right: 20,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#686cc3',
-    elevation: 1,
+    backgroundColor: DARK_MODE.COLORS.FAB_COLOR,
+    elevation: 5,
   },
 });
 

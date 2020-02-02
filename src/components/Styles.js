@@ -1,8 +1,17 @@
 export const BACKGROUND_COLOR = '#0f344c';
-export const LABEL_COLOR = '#c7def7';
+export const LABEL_COLOR = '#b7d8fb';
 export const INPUT_COLOR = '#a0a7af';
 
 export const DARK_MODE = {
+  COLORS: {
+    INPUT_TEXT_COLOR: '#f5f5f5',
+    PLACE_HOLDER_COLOR: '#b7d8fb',
+    LABEL_COLOR: '#b7d8fb',
+    BACKGROUND_COLOR: '#0f344c',
+    HEADER_COLOR: '#021d38',
+    FAB_COLOR: '#90befd',
+    ICON_COLOR: '#4F8EF7',
+  },
   appContainer: {
     flex: 1,
     backgroundColor: '#0f344c',
@@ -12,6 +21,7 @@ export const DARK_MODE = {
     textAlign: 'center',
   },
   h1: {},
+  h1Label: {},
   h2: {
     fontSize: 19,
     color: '#a1c5ec',

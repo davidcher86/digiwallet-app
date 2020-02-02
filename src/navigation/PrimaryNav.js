@@ -5,6 +5,8 @@ import {FAB} from 'react-native-paper';
 import {Input, Icon} from 'react-native-elements';
 import Feather from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 // import {
 //   ScrollView,
 //   DrawerItems,
@@ -29,6 +31,7 @@ import Transactions from './../components/transactions/Transactions';
 import BottomTransactionsStack from './BottomTransactionNav';
 import {removeUID} from './../components/common/Actions';
 import TransactionsStack from './BottomTransactionNav';
+import { DARK_MODE } from './../components/Styles';
 
 class DrawerContainer extends Component {
   constructor(props) {
@@ -55,6 +58,7 @@ class DrawerContainer extends Component {
             onPress={() => navigate('HomePage')}
             style={styles.containerBottomItem}>
             <View style={styles.button}>
+            <MaterialCommunityIcons name="home" style={{marginRight: 7}} size={21} color="#4F8EF7" />
               <Text style={styles.txtBottom}>Home</Text>
             </View>
           </TouchableOpacity>
@@ -63,6 +67,7 @@ class DrawerContainer extends Component {
             onPress={() => navigate('Dashboard')}
             style={styles.containerBottomItem}>
             <View style={styles.button}>
+              <MaterialCommunityIcons name="view-dashboard" style={{marginRight: 7}} size={21} color="#4F8EF7" />
               <Text style={styles.txtBottom}>Dashboard</Text>
             </View>
           </TouchableOpacity>
@@ -71,6 +76,7 @@ class DrawerContainer extends Component {
             onPress={() => navigate('Account', {type: 'EDIT'})}
             style={styles.containerBottomItem}>
             <View style={styles.button}>
+              <MaterialCommunityIcons name="account" style={{marginRight: 7}} size={21} color="#4F8EF7" />
               <Text style={styles.txtBottom}>Account</Text>
             </View>
           </TouchableOpacity>
@@ -79,6 +85,7 @@ class DrawerContainer extends Component {
             onPress={() => navigate('Transactions', {group: 'Daily'})}
             style={styles.containerBottomItem}>
             <View style={styles.button}>
+              <Ionicons name="ios-wallet" style={{marginRight: 11}} size={21} color="#4F8EF7" />
               <Text style={styles.txtBottom}>Transactions</Text>
             </View>
           </TouchableOpacity>
@@ -288,7 +295,8 @@ const PrimaryNav = createDrawerNavigator(
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#17BED0',
+    // backgroundColor: '#17BED0',
+    backgroundColor: DARK_MODE.COLORS.HEADER_COLOR,
     zIndex: 500,
   },
   containertopRow: {
@@ -342,8 +350,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'flex-start',
+    backgroundColor: DARK_MODE.COLORS.HEADER_COLOR,
     borderBottomColor: '#E6FAFF',
-    borderBottomWidth: 0.5,
+    borderBottomWidth: 0.6,
   },
   containerLogout: {
     position: 'absolute',

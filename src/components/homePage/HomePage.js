@@ -91,8 +91,8 @@ class CreditItem extends Component {
         // console.log('rowIcon', rowIcon);
         const getRowIcon = () => {
             return pageSettings.isOpenIndex === creditItem.uid
-                    ? <Ionicons name="ios-arrow-up" size={30} color="#4F8EF7" />
-                    : <Ionicons name="ios-arrow-down" size={30} color="#4F8EF7" />;
+                    ? <Ionicons name="ios-arrow-up" size={30} color={DARK_MODE.COLORS.ICON_COLOR} />
+                    : <Ionicons name="ios-arrow-down" size={30} color={DARK_MODE.COLORS.ICON_COLOR} />;
         };
 
         return (
@@ -235,29 +235,32 @@ class HomePage extends Component {
                             button={{ title: null, icon: null }}
                             /> */}
                             <View style={{flexDirection: 'row'}}>
-                                <Text style={{marginRight: 15}}>{profile.assets.toFixed(2)}</Text>
-                                <FontAwesome name="dollar" size={20} color="#4F8EF7" />
+                                <Text style={DARK_MODE.h2}>{profile.assets.toFixed(2)}</Text>
+                                <FontAwesome style={{marginLeft: 15}} name="dollar" size={20} color={DARK_MODE.COLORS.ICON_COLOR} />
                             </View>
+                            <Divider style={{ backgroundColor: '#cbe3fb', width: 164, margin: 4 }} />
                             <Text style={DARK_MODE.h3}>{'Current Assets'}</Text>
                         </View>
                         <View style={styles.h2rowContainer}>
                             <View style={styles.h2RowItem}>
                                 <View style={{flexDirection: 'row'}}>
-                                    <Text style={{marginRight: 15}}>{profile.currentMonthCredit.toFixed(2)}</Text>
-                                    <FontAwesome name="dollar" size={20} color="#4F8EF7" />
+                                    <Text style={DARK_MODE.h2}>{profile.currentMonthCredit.toFixed(2)}</Text>
+                                    <FontAwesome style={{marginLeft: 15}} name="dollar" size={20} color={DARK_MODE.COLORS.ICON_COLOR} />
                                 </View>
+                                <Divider style={{ backgroundColor: '#cbe3fb', width: 164, margin: 4 }} />
                                 <Text style={DARK_MODE.h3}>{'Current Month Debt'}</Text>
                             </View>
                             <View style={styles.h2RowItem}>
                                 <View style={{flexDirection: 'row'}}>
-                                    <Text style={{marginRight: 15}}>{profile.totalCredit.toFixed(2)}</Text>
-                                    <FontAwesome name="dollar" size={20} color="#4F8EF7" />
+                                    <Text style={DARK_MODE.h2}>{profile.totalCredit.toFixed(2)}</Text>
+                                    <FontAwesome style={{marginLeft: 15}} name="dollar" size={20} color={DARK_MODE.COLORS.ICON_COLOR} />
                                 </View>
+                                <Divider style={{ backgroundColor: '#cbe3fb', width: 164,margin: 4 }} />
                                 <Text style={DARK_MODE.h3}>Total Debt</Text>
                             </View>
                         </View>
                     </View>
-                    <Divider style={{ backgroundColor: '#cbe3fb' }} />
+                    {/* <Divider style={{ backgroundColor: '#cbe3fb' }} /> */}
                     <View style={styles.creditListStyle}>
                         <Text style={[DARK_MODE.h2, DARK_MODE.title]}>Credit List</Text>
                         <Animated.View>
@@ -291,6 +294,13 @@ const styles = StyleSheet.create({
         // borderWidth: 2,
     },
     upperContainer: {
+        // borderWidth: 1,
+        // borderColor: '#fbf2d4',
+        // shadowColor: '#fff',
+        // shadowOffset: { width: 10, height: 2 },
+        // shadowOpacity: 0.5,
+        // shadowRadius: 2,
+        // elevation: 12,
         height: 180,
         marginBottom: 8,
     },
@@ -321,21 +331,38 @@ const styles = StyleSheet.create({
     h1rowContainer: {
         flexDirection: 'column',
         alignItems: 'center',
-        // borderWidth: 2,
-        height: 80,
+        marginTop: 4,
+        paddingTop: 16,
+        height: 90,
+        borderColor: '#fbf2d4',
+        shadowColor: '#fff',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.5,
+        shadowRadius: 2,
+        elevation: 4,
     },
     h2rowContainer: {
+        marginTop: 4,
+        padding: 2,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        height: 60,
+        height: 90,
     },
     h2RowItem: {
-        height: 60,
-        // borderWidth: 2,
+        height: 90,
         alignItems: 'center',
         justifyContent: 'center',
-        width: '50%',
+        flex: 1,
+        flexDirection: 'column',
+        paddingTop: 6,
+        // width: '50%',
+        borderColor: '#fbf2d4',
+        // shadowColor: '#cbd7f7',
+        // shadowOffset: { width: 0, height: 2 },
+        // shadowOpacity: 0.2,
+        // shadowRadius: 2,
+        elevation: 4,
     },
   });
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import {Header, Icon} from 'react-native-elements';
+import { DARK_MODE } from './../Styles';
 
 const MyHeader = props => {
   const HamburgerMenu = props => {
@@ -15,11 +16,14 @@ const MyHeader = props => {
   return (
     <Header
       leftComponent={<HamburgerMenu navigation={props.navigation} />}
+      backgroundColor={DARK_MODE.COLORS.HEADER_COLOR}
+      // barStyle={{height: 20}}
       centerComponent={{
         text: props.title,
         style: {color: '#fff', fontWeight: 'bold'},
       }}
-      statusBarProps={{barStyle: 'light-content'}}
+      // barStyle="dark-content"
+      statusBarProps={{barStyle: 'dark-content'}}
     />
   );
 };

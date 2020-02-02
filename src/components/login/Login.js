@@ -105,20 +105,20 @@ class LoginForm extends Component {
               style={styles.inputStyle}
               autoCorrect={false}
               value={login.email}
-              inputStyle={{color: '#f5f5f5'}}
+              inputStyle={{color: DARK_MODE.COLORS.INPUT_TEXT_COLOR}}
               onChangeText={text => this.props.changeFieldValue('email', text)}
               leftIcon={<MaterialCommunityIcons name="email" size={30} color="#4F8EF7" style={{marginRight: 7}}/>}
               autoCapitalize="none"
               errorStyle={{color: 'red'}}
               // label="Email"
-              placeholderTextColor="rgba(225,225,225,0.7)" />
+              placeholderTextColor={DARK_MODE.COLORS.placeholderTextColor} />
           </View>
           <View style={styles.inputConntainerStyle}>
             <Input
               placeholder="Password"
               style={styles.inputStyle}
               value={login.password}
-              inputStyle={{color: '#f5f5f5'}}
+              inputStyle={{color: DARK_MODE.COLORS.INPUT_TEXT_COLOR}}
               onChangeText={text =>
                 this.props.changeFieldValue('password', text)
               }
@@ -127,7 +127,7 @@ class LoginForm extends Component {
               // label="Password"
               errorMessage={this.props.login.error}
               secureTextEntry={true}
-              placeholderTextColor="rgba(225,225,225,0.7)" />
+              placeholderTextColor={DARK_MODE.COLORS.placeholderTextColor} />
           </View>
           <View style={styles.buttonContainerStyle}>
             <View style={{paddingLeft: 7, paddingRight: 7}}>
@@ -165,7 +165,7 @@ class LoginForm extends Component {
               style={styles.inputStyle}
               autoCorrect={false}
               value={login.newEmail}
-              inputStyle={{color: '#f5f5f5'}}
+              inputStyle={{color: DARK_MODE.COLORS.INPUT_TEXT_COLOR}}
               onChangeText={text =>
                 this.props.changeFieldValue('newEmail', text)
               }
@@ -174,14 +174,14 @@ class LoginForm extends Component {
               errorStyle={{color: 'red'}}
               errorMessage={validationErrors.newEmailError}
               // label="Enter Email"
-              placeholderTextColor="rgba(225,225,225,0.7)"/>
+              placeholderTextColor={DARK_MODE.COLORS.PLACE_HOLDER_COLOR}/>
           </View>
           <View style={styles.inputConntainerStyle}>
             <Input
               placeholder="Enter New Password"
               style={styles.inputStyle}
               value={login.newPassword}
-              inputStyle={{color: '#f5f5f5'}}
+              inputStyle={{color: DARK_MODE.COLORS.INPUT_TEXT_COLOR}}
               onChangeText={text =>
                 this.props.changeFieldValue('newPassword', text)
               }
@@ -190,14 +190,14 @@ class LoginForm extends Component {
               // label="Enter New Password"
               errorMessage={validationErrors.newPassError}
               secureTextEntry={true}
-              placeholderTextColor="rgba(225,225,225,0.7)"/>
+              placeholderTextColor={DARK_MODE.COLORS.PLACE_HOLDER_COLOR}/>
           </View>
           <View style={styles.inputConntainerStyle}>
             <Input
               placeholder="Re-Enter Password"
               style={styles.inputStyle}
               value={login.reEnteredPassword}
-              inputStyle={{color: '#f5f5f5'}}
+              inputStyle={{color: DARK_MODE.COLORS.INPUT_TEXT_COLOR}}
               onChangeText={text =>
                 this.props.changeFieldValue('reEnteredPassword', text)
               }
@@ -206,7 +206,7 @@ class LoginForm extends Component {
               errorMessage={validationErrors.newReEnteredPassError}
               // label="Re-Enter Password"
               secureTextEntry={true}
-              placeholderTextColor="rgba(225,225,225,0.7)"/>
+              placeholderTextColor={DARK_MODE.COLORS.PLACE_HOLDER_COLOR}/>
           </View>
           <View style={styles.buttonContainerStyle}>
             <View style={{paddingLeft: 7, paddingRight: 7}}>

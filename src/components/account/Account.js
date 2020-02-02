@@ -6,6 +6,7 @@ import {connect} from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
 import {ProgressSteps, ProgressStep} from 'react-native-progress-steps';
 import DatePicker from 'react-native-datepicker';
+import DateTimePicker from '@react-native-community/datetimepicker';
 // import Picker from '@react-native-community/picker';
 
 import * as actions from './accountActions';
@@ -112,27 +113,26 @@ class Account extends Component {
                 style={{width: '100%'}}
                 autoCorrect={false}
                 placeholder="First Name"
-                inputStyle={styles.inputStyle}
+                inputStyle={{color: DARK_MODE.COLORS.INPUT_TEXT_COLOR}}
                 value={user.firstName}
                 onChangeText={text => changeUserFieldValue('firstName', text)}
                 // leftIcon={{ name: 'mail' }}
                 autoCapitalize="none"
                 errorStyle={{color: 'red'}}
                 errorMessage={validationErrors.firstNameError}
-                // label="First Name"
-                placeholderTextColor="rgba(225,225,225,0.7)"/>
+                placeholderTextColor={DARK_MODE.COLORS.PLACE_HOLDER_COLOR} />
             </View>
             <View style={DARK_MODE.inputRowContainer}>
               <Input
                 placeholder="Last Name"
                 style={{width: '100%'}}
-                inputStyle={styles.inputStyle}
+                inputStyle={{color: DARK_MODE.COLORS.INPUT_TEXT_COLOR}}
                 value={user.lastName}
                 onChangeText={text => changeUserFieldValue('lastName', text)}
                 // leftIcon={{ name: 'maijl' }}
                 errorStyle={{color: 'red'}}
-                // label="Last Name"
-                errorMessage={validationErrors.lastNameError}/>
+                errorMessage={validationErrors.lastNameError}
+                placeholderTextColor={DARK_MODE.COLORS.PLACE_HOLDER_COLOR} />
             </View>
             <View style={DARK_MODE.inputSelectionRowContainer}>
               <View style={{width: '50%'}}>
@@ -199,13 +199,14 @@ class Account extends Component {
                 <Input
                   placeholder="Last Name"
                   style={{width: '70%'}}
-                  inputStyle={styles.inputStyle}
+                  inputStyle={{color: DARK_MODE.COLORS.INPUT_TEXT_COLOR}}
                   value={creditCards[0].name}
                   onChangeText={text => changeCreditFieldValue('name', text, 0)}
                   // leftIcon={{ name: 'maijl' }}
                   errorStyle={{color: 'red'}}
                   // label="Last Name"
-                  errorMessage={validationErrors.lastNameError}/>
+                  errorMessage={validationErrors.lastNameError}
+                  placeholderTextColor={DARK_MODE.COLORS.PLACE_HOLDER_COLOR} />
               </View>
               <View style={DARK_MODE.inputSelectionRowContainer}>
                 <View style={{width: '50%'}}>
@@ -265,7 +266,7 @@ class Account extends Component {
                   autoCorrect={false}
                   value={account.assets.toString()}
                   placeholder="Initial Amount"
-                  inputStyle={styles.inputStyle}
+                  inputStyle={{color: DARK_MODE.COLORS.INPUT_TEXT_COLOR}}
                   // onChangeText={text => this.props.changeUsername(text)}
                   onChangeText={text => changeAccountFieldValue('assets', Number(text))}
                   leftIcon={{name: 'mail'}}
@@ -273,7 +274,7 @@ class Account extends Component {
                   errorStyle={{color: 'red'}}
                   errorMessage={this.props.validationErrors.firstNameError}
                   // label="Initial Amount"
-                  placeholderTextColor="rgba(225,225,225,0.7)"/>
+                  placeholderTextColor={DARK_MODE.COLORS.PLACE_HOLDER_COLOR} />
               </View>
               <View style={styles.inputRowContainer}>
                 <Input
@@ -281,7 +282,7 @@ class Account extends Component {
                   autoCorrect={false}
                   value={sallary.amount.toString()}
                   placeholder="Sallary Amount"
-                  inputStyle={styles.inputStyle}
+                  inputStyle={{color: DARK_MODE.COLORS.INPUT_TEXT_COLOR}}
                   // onChangeText={text => this.props.changeUsername(text)}
                   onChangeText={text => changeSallaryFieldValue('amount', Number(text))}
                   leftIcon={{name: 'mail'}}
@@ -289,7 +290,7 @@ class Account extends Component {
                   errorStyle={{color: 'red'}}
                   errorMessage={this.props.validationErrors.firstNameError}
                   // label="Sallary Amount"
-                  placeholderTextColor="rgba(225,225,225,0.7)"/>
+                  placeholderTextColor={DARK_MODE.COLORS.PLACE_HOLDER_COLOR} />
               </View>
               <View style={DARK_MODE.inputSelectionRowContainer}>
                 <View style={{width: '50%'}}>
@@ -315,10 +316,18 @@ class Account extends Component {
         {account.formType === EDIT && <Header navigation={this.props.navigation} title="Account" />}
         <ScrollView style={styles.scrollerWrapper}>
           <View style={styles.wrapper}>
-            <ProgressSteps previousBtnStyle={styles.prevNextBtn} nextBtnTextStyle={styles.prevNextBtn} style={styles.progressbar}>
-              {personalData()}
-              {creditCardsData()}
-              {sallaryData()}
+            <ProgressSteps
+              previousBtnStyle={styles.prevNextBtn}
+              disabledStepIconColor="#989898"
+              progressBarColor="#808080"
+              activeStepNumColor="#0070ea"
+              activeStepIconColor="#a8d4ff"
+              activeLabelColor="#a8d4ff"
+              nextBtnTextStyle={styles.prevNextBtn}
+              style={styles.progressbar}>
+                {personalData()}
+                {creditCardsData()}
+                {sallaryData()}
             </ProgressSteps>
           </View>
         </ScrollView>

@@ -17,6 +17,7 @@ import firebase from 'firebase';
 import DatePicker from 'react-native-datepicker';
 
 import * as actions from './newTransactionModalActions';
+import { DARK_MODE } from './../Styles';
 
 class NewTransactionModal extends Component {
   toggleNewTransModal = () => {
@@ -73,7 +74,7 @@ class NewTransactionModal extends Component {
     if (creditCardList !== undefined && creditCardList.length > 0 && newTransaction.selectedCreditCard !== null) {
       newTransaction.creditCardId = newTransaction.selectedCreditCard.id;
     }
-
+    // console.log(isModalOpen);
     return (
       <Overlay
         isVisible={isModalOpen}
@@ -102,7 +103,24 @@ class NewTransactionModal extends Component {
                 </Picker>
               </View>
 
-              <View style={styles.inputContainer}>
+              <View style={DARK_MODE.inputRowContainer}>
+                <Input
+                  style={{width: '100%'}}
+                  autoCorrect={false}
+                  placeholder="Amount"
+                  keyboardType="numeric"
+                  inputStyle={{color: DARK_MODE.COLORS.INPUT_TEXT_COLOR}}
+                  value={(newTransaction.amount === 0 ? '' : newTransaction.amount.toString())}
+                  onChangeText={text => changeFieldValue('amount', text)}
+                  // leftIcon={{ name: 'mail' }}
+                  autoCapitalize="none"
+                  errorStyle={{color: 'red'}}
+                  // errorMessage={validationErrors.firstNameError}
+                  // label="First Name"
+                  placeholderTextColor={DARK_MODE.COLORS.PLACE_HOLDER_COLOR} />
+                </View>
+
+              {/* <View style={styles.inputContainer}>
                 <Text style={styles.pickerLabel}>Amount</Text>
                 <TextInput
                   placeholder="Amount"
@@ -115,7 +133,7 @@ class NewTransactionModal extends Component {
                   // errorMessage={validationErrors.lastNameError}
                   // label="Amount"
                 />
-              </View>
+              </View> */}
 
               <View style={styles.inputContainer}>
                 <Text style={styles.pickerLabel}>Main Category</Text>
@@ -233,29 +251,42 @@ class NewTransactionModal extends Component {
 
               <View style={styles.inputContainer}>
                 <Input
+                  style={{width: '100%'}}
+                  autoCorrect={false}
                   placeholder="Description"
-                  style={styles.inputStyle}
+                  inputStyle={{color: DARK_MODE.COLORS.INPUT_TEXT_COLOR}}
                   value={newTransaction.description}
                   onChangeText={text => changeFieldValue('description', text)}
-                  // leftIcon={{ name: 'maijl' }}
+                  // leftIcon={{ name: 'mail' }}
+                  autoCapitalize="none"
                   errorStyle={{color: 'red'}}
-                  // errorMessage={validationErrors.lastNameError}
-                  // label="Description"
-                />
+                  // errorMessage={validationErrors.firstNameError}
+                  placeholderTextColor={DARK_MODE.COLORS.PLACE_HOLDER_COLOR} />
               </View>
-
-              <TouchableOpacity
+              <View style={styles.bottomBtnContainer}>
+                  <Button
+                    title="ADD"
+                    buttonStyle={styles.bottomBtn}
+                    onPress={() => handleAddNewTransactionAccount(newTransaction, identity.uid)}
+                    type="outline" />
+                  <Button
+                    title="CANCEL"
+                    buttonStyle={styles.bottomBtn}
+                    onPress={() => closeNewTransactionModal()}
+                    type="outline" />
+              </View>
+              {/* <TouchableOpacity
                 onPress={() => handleAddNewTransactionAccount(newTransaction, identity.uid)}
                 // onPress={() => console.log(this.props.account)}
                 style={styles.buttonContainer}>
                 <Text style={styles.buttonStyle}>ADD</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
+              </TouchableOpacity> */}
+              {/* <TouchableOpacity
                 onPress={() => closeNewTransactionModal()}
                 // onPress={() => console.log(this.props.account)}
                 style={styles.buttonContainer}>
                 <Text style={styles.buttonStyle}>CANCEL</Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             {/* </ScrollView>
           </Modal>
         </View>
@@ -271,6 +302,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     // width: '100%',
     // height: '100%',
+    backgroundColor: DARK_MODE.COLORS.BACKGROUND_COLOR,
     justifyContent: 'flex-start',
     flexDirection: 'column',
     // zIndex: 40,
@@ -301,9 +333,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: '100%',
     marginTop: 4,
-    borderRadius: 10,
-    backgroundColor: 'pink',
+    // borderRadius: 10,
+    backgroundColor: DARK_MODE.COLORS.BACKGROUND_COLOR,
     marginBottom: 7,
+  },
+  bottomBtnContainer: {
+    padding: 2,
+    flexDirection: 'column',
+    justifyContent: 'space-around',
+    // height: 30,
+  },
+  bottomBtn: {
+    marginTop: 6,
+    marginBottom: 11,
   },
   inputStyle: {
     // borderWidth: 2,
