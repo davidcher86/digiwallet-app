@@ -34,6 +34,14 @@ export const changeFieldValue = (field, value) => {
   };
 };
 
+export const changePageSettings = (field, value) => {
+  return {
+    type: 'CHANGE_NEW_TRANS_TAB',
+    value,
+    field,
+  };
+};
+
 export const handleAddNewTransactionAccount = (
   newTransaction,
   uid,

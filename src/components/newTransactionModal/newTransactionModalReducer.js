@@ -8,14 +8,17 @@ const initialState = {
   },
   mainCategory: '',
   subCategory: '',
-  paymentType: 'credit',
-  paymentAmount: 1,
+  paymentType: 'cash',
+  paymentsAmount: 1,
   selectedCreditCard: null,
   description: '',
+  pageSettings: {
+    activeTab: 'amount',
+  },
 };
 
 export default (state = initialState, action) => {
-  let {paymentDetails} = state;
+  let {paymentDetails, pageSettings} = state;
   switch (action.type) {
     case 'TOGGLE_NEW_TRANSACTION':
       return Object.assign({}, state, {isModalOpen: !state.isModalOpen});
@@ -32,6 +35,9 @@ export default (state = initialState, action) => {
       return Object.assign({}, state, {isModalOpen: false});
     case 'RESET_NEW_TRANSACTION_FORM':
       return initialState;
+    case 'CHANGE_NEW_TRANS_TAB':
+      pageSettings[action.field] = action.value;
+      return Object.assign({}, state, {pageSettings: pageSettings});
     default:
       return state;
   }

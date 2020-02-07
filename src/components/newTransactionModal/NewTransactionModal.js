@@ -30,6 +30,10 @@ class NewTransactionModal extends Component {
     }
   }
 
+  componentWillUnmount() {
+    this.props.changePageSettings('activeTab', 'amount');
+  }
+
   render() {
     const {isModalOpen, categoryList, subCategory} = this.props.newTransaction;
     const {
@@ -39,10 +43,12 @@ class NewTransactionModal extends Component {
       handleAddNewTransactionAccount,
       toggleNewTransactionModal,
       changeFieldValue,
+      changePageSettings,
       closeNewTransactionModal,
       identity,
       profile,
       onFabPress,
+      pageSettings,
     } = this.props;
 
     const renderMainCategories = () => {
@@ -74,7 +80,214 @@ class NewTransactionModal extends Component {
     if (creditCardList !== undefined && creditCardList.length > 0 && newTransaction.selectedCreditCard !== null) {
       newTransaction.creditCardId = newTransaction.selectedCreditCard.id;
     }
-    // console.log(isModalOpen);
+
+    const transTypeRow = () => {
+      return (
+        <View>
+            <View style={styles.inputContainer}>
+              <Text style={styles.pickerLabel}>Transaction Type</Text>
+              <Picker
+              on
+                selectedValue={newTransaction.transactionType}
+                // onBlur={changePageSettings('activeTab', 'amount')}
+                onValueChange={itemValue => {
+                  changeFieldValue('transactionType', itemValue);
+                  changePageSettings('activeTab', 'amount');
+                }}
+                style={styles.pickerInput}>
+                <Picker.Item label="Expense" value="expense" />
+                <Picker.Item label="Income" value="income" />
+              </Picker>
+            </View>
+        </View>
+      );
+    };
+
+    const dateRow = () => {
+      return (
+        <View style={styles.inputContainer}>
+          <Text style={styles.pickerLabel}>Date</Text>
+          <DatePicker
+            style={styles.pickerInput}
+            date={newTransaction.date}
+            mode="date"
+            placeholder="select date"
+            format="YYYY-MM-DD H:mm"
+            minDate="1916-05-01"
+            maxDate={maxDate}
+            customStyles={{
+              dateIcon: {
+                position: 'absolute',
+                left: 0,
+                top: 4,
+                marginLeft: 0,
+              },
+              dateInput: {
+                marginLeft: 36,
+              },
+            }}
+            onDateChange={itemValue => changeFieldValue('date', itemValue)}
+            confirmBtnText="Confirm"
+            cancelBtnText="Cancel"
+          />
+        </View>
+      );
+    };
+
+    const descriptionRow = () => {
+      return (
+        <View style={styles.inputContainer}>
+          <Input
+            style={{width: '100%'}}
+            autoCorrect={false}
+            placeholder="Description"
+            inputStyle={{color: DARK_MODE.COLORS.INPUT_TEXT_COLOR}}
+            value={newTransaction.description}
+            onChangeText={text => changeFieldValue('description', text)}
+            // leftIcon={{ name: 'mail' }}
+            autoCapitalize="none"
+            errorStyle={{color: 'red'}}
+            // errorMessage={validationErrors.firstNameError}
+            placeholderTextColor={DARK_MODE.COLORS.PLACE_HOLDER_COLOR} />
+        </View>
+      );
+    };
+
+    const amountTab = () => {
+      return (
+        <View>
+            <View style={DARK_MODE.inputRowContainer}>
+              <Input
+                style={{width: '100%'}}
+                autoCorrect={false}
+                onBlur={() => changePageSettings('activeTab', 'category')}
+                placeholder="Amount"
+                keyboardType="numeric"
+                inputStyle={{color: DARK_MODE.COLORS.INPUT_TEXT_COLOR}}
+                value={(newTransaction.amount === 0 ? '' : newTransaction.amount.toString())}
+                onChangeText={text => changeFieldValue('amount', text)}
+                // leftIcon={{ name: 'mail' }}
+                autoCapitalize="none"
+                errorStyle={{color: 'red'}}
+                // errorMessage={validationErrors.firstNameError}
+                // label="First Name"
+                placeholderTextColor={DARK_MODE.COLORS.PLACE_HOLDER_COLOR} />
+            </View>
+        </View>
+      );
+    };
+
+    const categoryTab = () => {
+      return (
+        <View>
+            <View style={styles.inputContainer}>
+              <Text style={styles.pickerLabel}>Main Category</Text>
+              <Picker
+                selectedValue={newTransaction.mainCategory}
+                onValueChange={itemValue => {
+                  changeFieldValue('mainCategory', itemValue);
+                  changePageSettings('activeTab', 'subCategory');
+                }}
+                style={styles.pickerInput}>
+                  {renderMainCategories()}
+              </Picker>
+            </View>
+        </View>
+      );
+    };
+
+    const subCategoryTab = () => {
+      return (
+        <View>
+            <View style={styles.inputContainer}>
+              <Text style={styles.pickerLabel}>Sub Category</Text>
+              <Picker
+                selectedValue={newTransaction.subCategory}
+                style={styles.pickerInput}
+                onValueChange={itemValue => {
+                  changeFieldValue('subCategory', itemValue);
+                  changePageSettings('activeTab', 'paymentType');
+                }}>
+                  <Picker.Item label="" value="" />
+                  {renderSubCategories()}
+              </Picker>
+            </View>
+        </View>
+      );
+    };
+
+    const paymentTypeTab = () => {
+      return (
+        <View>
+          <View style={styles.inputContainer}>
+            <Text style={styles.pickerLabel}>Payment Type</Text>
+            <Picker
+              selectedValue={newTransaction.paymentType}
+              style={styles.pickerInput}
+              onValueChange={itemValue =>
+                changeFieldValue('paymentType', itemValue)
+              }>
+              <Picker.Item label="Cash" value="cash" />
+              <Picker.Item label="Credit" value="credit" />
+            </Picker>
+          </View>
+        </View>
+      );
+    };
+
+    const creditPaymentDetailsTab = () => {
+      return (
+        <View style={[styles.inputContainer, {flexDirection: 'column'}]}>
+          <View style={{flexDirection: 'row'}}>
+            <Text style={[styles.pickerLabel, {alignSelf: 'center'}]}>Choose Card</Text>
+            <Picker
+              selectedValue={creditCardList}
+              onValueChange={(itemValue, itemIndex) => changeFieldValue('selectedCreditCard', itemValue)}
+              style={{width: '50%'}} >
+                {creditCardList.map(item => <Picker.Item key={item.id} label={item.name} value={item.id} />)}
+            </Picker>
+          </View>
+          <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+            {/* <Text style={{width: '50%', paddingLeft: 8}}>Card Type</Text> */}
+            <Text style={[styles.pickerLabel, {width: '50%'}]}>Number of Payments</Text>
+            <View style={{width: '50%'}}>
+              <TextInput
+                placeholder="#"
+                keyboardType="numeric"
+                value={newTransaction.paymentAmount}
+                onChangeText={text => changeFieldValue('paymentAmount', text)}
+                // leftIcon={{ name: 'maijl' }}
+                // errorMessage={validationErrors.lastNameError}
+                // label="Number of Payments"
+                errorStyle={{color: 'red'}} />
+            </View>
+          </View>
+        </View>
+      );
+    };
+
+    const buttonsTab = () => {
+      return (
+        <View>
+          <View style={styles.bottomBtnContainer}>
+            <Button
+              title="ADD"
+              buttonStyle={styles.bottomBtn}
+              onPress={() => handleAddNewTransactionAccount(newTransaction, identity.uid)}
+              type="outline" />
+            <Button
+              title="CANCEL"
+              buttonStyle={styles.bottomBtn}
+              onPress={() => {
+                closeNewTransactionModal();
+                changePageSettings('activeTab', 'transType');
+              }}
+              type="outline" />
+          </View>
+        </View>
+      );
+    };
+    console.log(this.props);
     return (
       <Overlay
         isVisible={isModalOpen}
@@ -83,185 +296,42 @@ class NewTransactionModal extends Component {
         overlayStyle={styles.containerStyle}
         width={350}
         height="auto" >
-      {/* / <KeyboardAvoidingView style={styles.containerStyle}>
-      //   <View >
-      //     <Modal
-      //       animationType="slide"
-      //       transparent={true}
-      //       style={{padding: 10}}
-      //       visible={isModalOpen}
-      //       onRequestClose={() => closeNewTransactionModal()}>
-    //       <ScrollView style={styles.modalInnerContainerStyle} showsVerticalScrollIndicator={false}> */}
+              {transTypeRow()}
+              {dateRow()}
               <View style={styles.inputContainer}>
-                <Text style={styles.pickerLabel}>Transaction Type</Text>
-                <Picker
-                  selectedValue={newTransaction.transactionType}
-                  style={styles.pickerInput}
-                  onValueChange={itemValue => changeFieldValue('transactionType', itemValue)}>
-                  <Picker.Item label="Expense" value="expense" />
-                  <Picker.Item label="Income" value="income" />
-                </Picker>
-              </View>
-
-              <View style={DARK_MODE.inputRowContainer}>
-                <Input
-                  style={{width: '100%'}}
-                  autoCorrect={false}
-                  placeholder="Amount"
-                  keyboardType="numeric"
-                  inputStyle={{color: DARK_MODE.COLORS.INPUT_TEXT_COLOR}}
-                  value={(newTransaction.amount === 0 ? '' : newTransaction.amount.toString())}
-                  onChangeText={text => changeFieldValue('amount', text)}
-                  // leftIcon={{ name: 'mail' }}
-                  autoCapitalize="none"
-                  errorStyle={{color: 'red'}}
-                  // errorMessage={validationErrors.firstNameError}
-                  // label="First Name"
-                  placeholderTextColor={DARK_MODE.COLORS.PLACE_HOLDER_COLOR} />
-                </View>
-
-              {/* <View style={styles.inputContainer}>
                 <Text style={styles.pickerLabel}>Amount</Text>
-                <TextInput
-                  placeholder="Amount"
-                  style={styles.inputStyle}
-                  keyboardType="numeric"
-                  value={(newTransaction.amount === 0 ? '' : newTransaction.amount.toString())}
-                  onChangeText={text => changeFieldValue('amount', text)}
-                  // leftIcon={{ name: 'maijl' }}
-                  errorStyle={{color: 'red'}}
-                  // errorMessage={validationErrors.lastNameError}
-                  // label="Amount"
-                />
-              </View> */}
-
-              <View style={styles.inputContainer}>
-                <Text style={styles.pickerLabel}>Main Category</Text>
-                <Picker
-                  selectedValue={newTransaction.mainCategory}
-                  style={styles.pickerInput}
-                  onValueChange={itemValue => changeFieldValue('mainCategory', itemValue)}>
-                    <Picker.Item key={'*'} label={''} value={''} />
-                    {renderMainCategories()}
-                </Picker>
-              </View>
-
-              {newTransaction.mainCategory !== '' && <View style={styles.inputContainer}>
-                <Text style={styles.pickerLabel}>Sub Category</Text>
-                <Picker
-                  selectedValue={newTransaction.subCategory}
-                  style={styles.pickerInput}
-                  onValueChange={itemValue =>
-                    changeFieldValue('subCategory', itemValue)
-                  }>
-                    {renderSubCategories()}
-                </Picker>
-              </View>}
-
-              <View style={styles.inputContainer}>
-                <Text style={styles.pickerLabel}>Date</Text>
-                <DatePicker
-                  style={styles.pickerInput}
-                  date={newTransaction.date}
-                  mode="date"
-                  placeholder="select date"
-                  format="YYYY-MM-DD H:mm"
-                  minDate="1916-05-01"
-                  maxDate={maxDate}
-                  customStyles={{
-                    dateIcon: {
-                      position: 'absolute',
-                      left: 0,
-                      top: 4,
-                      marginLeft: 0,
-                    },
-                    dateInput: {
-                      marginLeft: 36,
-                    },
-                  }}
-                  onDateChange={itemValue => changeFieldValue('date', itemValue)}
-                  confirmBtnText="Confirm"
-                  cancelBtnText="Cancel"
-                />
+                <Text style={styles.pickerInput}>
+                  {newTransaction.amount}
+                </Text>
               </View>
 
               <View style={styles.inputContainer}>
-                <Text style={styles.pickerLabel}>Payment Type</Text>
-                <Picker
-                  selectedValue={newTransaction.paymentType}
-                  style={styles.pickerInput}
-                  onValueChange={itemValue =>
-                    changeFieldValue('paymentType', itemValue)
-                  }>
-                  <Picker.Item label="Cash" value="cash" />
-                  <Picker.Item label="Credit" value="credit" />
-                </Picker>
+                <Text style={styles.pickerLabel}>Category</Text>
+                {/* <Text style={styles.pickerInput}>
+                  {newTransaction.mainCategory} - {newTransaction.subCategory}
+                </Text> */}
               </View>
 
               {newTransaction.paymentType === 'credit' && (
-                <View style={[styles.inputContainer, {flexDirection: 'column'}]}>
+                <View style={{flexDirection: 'column'}}>
+                  <Text style={{width: '100%'}}>'Payment Details'</Text>
                   <View style={{flexDirection: 'row'}}>
-                    <Text style={[styles.pickerLabel, {alignSelf: 'center'}]}>Choose Card</Text>
-                    <Picker
-                      selectedValue={creditCardList}
-                      onValueChange={(itemValue, itemIndex) => changeFieldValue('selectedCreditCard', itemValue)}
-                      style={{width: '50%'}} >
-                        {creditCardList.map(item => <Picker.Item key={item.id} label={item.name.toString()} value={item.id} />)}
-                    </Picker>
-                  </View>
-                  <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                    {/* <Text style={{width: '50%', paddingLeft: 8}}>Card Type</Text> */}
-                    <Text style={[styles.pickerLabel, {width: '50%'}]}>Number of Payments</Text>
-                    <View style={{width: '50%'}}>
-                      <TextInput
-                        placeholder="#"
-                        keyboardType="numeric"
-                        value={newTransaction.paymentAmount.toString()}
-                        onChangeText={text => changeFieldValue('paymentAmount', text)}
-                        // leftIcon={{ name: 'maijl' }}
-                        // errorMessage={validationErrors.lastNameError}
-                        // label="Number of Payments"
-                        errorStyle={{color: 'red'}} />
-                    </View>
-                  </View>
-                  <View style={{flexDirection: 'row'}}>
-                    {/* <Picker
-                      // selectedValue={newTransaction.selectedCreditCard.cardType}
-                      selectedValue={paymentDetails.cardType}
-                      style={{width: '50%'}}
-                      onValueChange={itemValue =>
-                        changePaymentDetailsFieldValue('cardType', itemValue)
-                      }>
-                      <Picker.Item label="Visa" value="visa" />
-                      <Picker.Item label="Mastercard" value="mastercard" />
-                    </Picker> */}
-                    {/* <View style={{width: '50%'}}>
-                      <Input
-                        placeholder="#"
-                        value={newTransaction.paymentAmount}
-                        onChangeText={text => changePaymentDetailsFieldValue('paymentAmount', text)}
-                        // leftIcon={{ name: 'maijl' }}
-                        // errorMessage={validationErrors.lastNameError}
-                        // label="Number of Payments"
-                        errorStyle={{color: 'red'}} />
-                    </View> */}
+                    <Text style={{width: '25%'}}>{'Credit Card:'}</Text>
+                    <Text style={{width: '20%', marginLeft: 5}}>{newTransaction.selectedCreditCard.name}</Text>
+                    <Text style={{width: '25%'}}>{'# payments:'}</Text>
+                    <Text style={{width: '20%', marginLeft: 5}}>{newTransaction.paymentsAmount}</Text>
                   </View>
                 </View>
               )}
 
-              <View style={styles.inputContainer}>
-                <Input
-                  style={{width: '100%'}}
-                  autoCorrect={false}
-                  placeholder="Description"
-                  inputStyle={{color: DARK_MODE.COLORS.INPUT_TEXT_COLOR}}
-                  value={newTransaction.description}
-                  onChangeText={text => changeFieldValue('description', text)}
-                  // leftIcon={{ name: 'mail' }}
-                  autoCapitalize="none"
-                  errorStyle={{color: 'red'}}
-                  // errorMessage={validationErrors.firstNameError}
-                  placeholderTextColor={DARK_MODE.COLORS.PLACE_HOLDER_COLOR} />
+              {descriptionRow()}
+              <View style={styles.tabWrapper}>
+                  {pageSettings.activeTab === 'amount' && amountTab()}
+                  {pageSettings.activeTab === 'category' && categoryTab()}
+                  {/* {pageSettings.activeTab === 'subCategory' && subCategoryTab()}
+                  {pageSettings.activeTab === 'paymentType' && paymentTypeTab()}
+                  {pageSettings.activeTab === 'creditPaymentDetails' && creditPaymentDetailsTab()}
+                  {pageSettings.activeTab === 'final' && buttonsTab()} */}
               </View>
               <View style={styles.bottomBtnContainer}>
                   <Button
@@ -275,22 +345,6 @@ class NewTransactionModal extends Component {
                     onPress={() => closeNewTransactionModal()}
                     type="outline" />
               </View>
-              {/* <TouchableOpacity
-                onPress={() => handleAddNewTransactionAccount(newTransaction, identity.uid)}
-                // onPress={() => console.log(this.props.account)}
-                style={styles.buttonContainer}>
-                <Text style={styles.buttonStyle}>ADD</Text>
-              </TouchableOpacity> */}
-              {/* <TouchableOpacity
-                onPress={() => closeNewTransactionModal()}
-                // onPress={() => console.log(this.props.account)}
-                style={styles.buttonContainer}>
-                <Text style={styles.buttonStyle}>CANCEL</Text>
-              </TouchableOpacity> */}
-            {/* </ScrollView>
-          </Modal>
-        </View>
-      </KeyboardAvoidingView> */}
       </Overlay>
     );
   }
@@ -306,6 +360,9 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     flexDirection: 'column',
     // zIndex: 40,
+  },
+  tabWrapper: {
+    height: 120,
   },
   buttonContainerStyle: {
     backgroundColor: '#2980b6',
@@ -378,6 +435,7 @@ const mapStateToProps = state => {
     systemControl: state.systemControl,
     identity: state.identity,
     profile: state.profile,
+    pageSettings: state.newTransactionModal.pageSettings,
     paymentDetails: state.newTransactionModal.paymentDetails,
     creditCardList: state.profile.creditCardList,
   };
