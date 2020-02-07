@@ -43,6 +43,7 @@ class NewTransactionModal extends Component {
       handleAddNewTransactionAccount,
       toggleNewTransactionModal,
       changeFieldValue,
+      resetNewTransactionForm,
       changePageSettings,
       closeNewTransactionModal,
       identity,
@@ -224,9 +225,10 @@ class NewTransactionModal extends Component {
             <Picker
               selectedValue={newTransaction.paymentType}
               style={styles.pickerInput}
-              onValueChange={itemValue =>
-                changeFieldValue('paymentType', itemValue)
-              }>
+              onValueChange={itemValue => {
+                changeFieldValue('paymentType', itemValue);
+                changePageSettings('activeTab', 'creditPaymentDetails');
+              }}>
               <Picker.Item label="Cash" value="cash" />
               <Picker.Item label="Credit" value="credit" />
             </Picker>
@@ -238,21 +240,13 @@ class NewTransactionModal extends Component {
     const creditPaymentDetailsTab = () => {
       return (
         <View style={[styles.inputContainer, {flexDirection: 'column'}]}>
-          <View style={{flexDirection: 'row'}}>
-            <Text style={[styles.pickerLabel, {alignSelf: 'center'}]}>Choose Card</Text>
-            <Picker
-              selectedValue={creditCardList}
-              onValueChange={(itemValue, itemIndex) => changeFieldValue('selectedCreditCard', itemValue)}
-              style={{width: '50%'}} >
-                {creditCardList.map(item => <Picker.Item key={item.id} label={item.name} value={item.id} />)}
-            </Picker>
-          </View>
           <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
             {/* <Text style={{width: '50%', paddingLeft: 8}}>Card Type</Text> */}
             <Text style={[styles.pickerLabel, {width: '50%'}]}>Number of Payments</Text>
             <View style={{width: '50%'}}>
               <TextInput
                 placeholder="#"
+                onBlur={() => changePageSettings('activeTab', 'final')}
                 keyboardType="numeric"
                 value={newTransaction.paymentAmount}
                 onChangeText={text => changeFieldValue('paymentAmount', text)}
@@ -280,6 +274,7 @@ class NewTransactionModal extends Component {
               buttonStyle={styles.bottomBtn}
               onPress={() => {
                 closeNewTransactionModal();
+                resetNewTransactionForm();
                 changePageSettings('activeTab', 'transType');
               }}
               type="outline" />
@@ -307,9 +302,9 @@ class NewTransactionModal extends Component {
 
               <View style={styles.inputContainer}>
                 <Text style={styles.pickerLabel}>Category</Text>
-                {/* <Text style={styles.pickerInput}>
-                  {newTransaction.mainCategory} - {newTransaction.subCategory}
-                </Text> */}
+                <Text style={styles.pickerInput}>
+                  {newTransaction.mainCategory + ' - ' + newTransaction.subCategory}
+                </Text>
               </View>
 
               {newTransaction.paymentType === 'credit' && (
@@ -325,13 +320,14 @@ class NewTransactionModal extends Component {
               )}
 
               {descriptionRow()}
+
               <View style={styles.tabWrapper}>
                   {pageSettings.activeTab === 'amount' && amountTab()}
                   {pageSettings.activeTab === 'category' && categoryTab()}
-                  {/* {pageSettings.activeTab === 'subCategory' && subCategoryTab()}
+                  {pageSettings.activeTab === 'subCategory' && subCategoryTab()}
                   {pageSettings.activeTab === 'paymentType' && paymentTypeTab()}
                   {pageSettings.activeTab === 'creditPaymentDetails' && creditPaymentDetailsTab()}
-                  {pageSettings.activeTab === 'final' && buttonsTab()} */}
+                  {pageSettings.activeTab === 'final' && buttonsTab()}
               </View>
               <View style={styles.bottomBtnContainer}>
                   <Button
@@ -342,7 +338,10 @@ class NewTransactionModal extends Component {
                   <Button
                     title="CANCEL"
                     buttonStyle={styles.bottomBtn}
-                    onPress={() => closeNewTransactionModal()}
+                    onPress={() => {
+                      closeNewTransactionModal();
+                      resetNewTransactionForm();
+                    }}
                     type="outline" />
               </View>
       </Overlay>
