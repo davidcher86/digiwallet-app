@@ -5,7 +5,7 @@ export const INPUT_COLOR = '#a0a7af';
 export const DARK_MODE = {
   COLORS: {
     INPUT_TEXT_COLOR: '#f5f5f5',
-    PLACE_HOLDER_COLOR: '#b7d8fb',
+    PLACE_HOLDER_COLOR: '#6087b1',
     LABEL_COLOR: '#b7d8fb',
     BACKGROUND_COLOR: '#0f344c',
     HEADER_COLOR: '#021d38',
@@ -30,6 +30,21 @@ export const DARK_MODE = {
   h3: {
     color: '#a1c5ec',
     fontSize: 17,
+    marginBottom: 8,
+  },
+  h4: {
+    color: '#a1c5ec',
+    fontSize: 15,
+    marginBottom: 8,
+  },
+  h3Label: {
+    color: '#6087b1',
+    fontSize: 15,
+    marginBottom: 8,
+  },
+  h4Label: {
+    color: '#6087b1',
+    fontSize: 15,
     marginBottom: 8,
   },
   inputRowContainer: {

@@ -34,7 +34,10 @@ export default (state = initialState, action) => {
     case 'CLOSE_NEW_TRANSACTION_MODAL':
       return Object.assign({}, state, {isModalOpen: false});
     case 'RESET_NEW_TRANSACTION_FORM':
-      return initialState;
+      var resetState = initialState;
+      resetState.pageSettings.activeTab = 'amount';
+      resetState.paymentType = 'cash';
+      return Object.assign({}, state, resetState);
     case 'CHANGE_NEW_TRANS_TAB':
       pageSettings[action.field] = action.value;
       return Object.assign({}, state, {pageSettings: pageSettings});
