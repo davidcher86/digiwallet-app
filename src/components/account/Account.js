@@ -18,6 +18,62 @@ const EDIT = 'EDIT';
 const NEW = 'NEW';
 
 class Account extends Component {
+  constructor() {
+    super();
+    this.fieldValidation = this.fieldValidation.bind(this);
+  }
+
+  fieldValidation(field) {
+    var {newTransaction, setErrors, user, account} = this.props;
+    var errors = account.errors;
+
+    switch (field) {
+      case 'firstName':
+        console.log(user.firstName);
+        if (user.firstName === '') {
+          errors.firstName = 'First name is mandatory';
+          setErrors(errors);
+          return false;
+        } else if (user.firstName.length > 20) {
+          errors.firstName = 'First name can\'t be more than 20 chars';
+          setErrors(errors);
+          return false;
+        }
+        delete errors.firstName;
+        setErrors(errors);
+        return true;
+      case 'lastName':
+        if (user.lastName === '') {
+          errors.lastName = 'Last name is mandatory';
+          setErrors(errors);
+          return false;
+        } else if (user.lastName.length > 20) {
+          errors.lastName = 'Last name can\'t be more than 20 chars';
+          setErrors(errors);
+          return false;
+        }
+        delete errors.lastName;
+        setErrors(errors);
+        return true;
+      case 'creditCardName':
+        var cardName = account.creditCards[0].name;
+        if (cardName === '') {
+          errors.creditCardName = 'Credit card name is mandatory';
+          setErrors(errors);
+          return false;
+        } else if (cardName.length > 20) {
+          errors.creditCardName = 'Credit card can\'t be more than 20 chars';
+          setErrors(errors);
+          return false;
+        }
+        delete errors.creditCardName;
+        setErrors(errors);
+        return true;
+      default:
+        return true;
+    }
+  }
+
   getRememberedUser = async () => {
       try {
           const uid = await AsyncStorage.getItem('digiwalletUserUID');
@@ -67,6 +123,7 @@ class Account extends Component {
       type,
       creditCards,
       sallary,
+      errors,
     } = this.props;
 
     const {
@@ -92,9 +149,7 @@ class Account extends Component {
     const onNextStep = next => {
       handleStep(next);
     };
-    // console.log(this.props.navigation.getParam('type'));
-    // var formType = this.props.navigation.getParam('type');
-    // console.log('props', this.props.account);
+
     const personalData = () => {
       return (
         <ProgressStep
@@ -102,6 +157,7 @@ class Account extends Component {
           previousBtnTextStyle={styles.prevNextBtn}
           previousBtnDisabled={true}
           onNext={() => onNextStep(2)}
+          nextBtnDisabled={Object.keys(account.errors).length > 0}
           style={styles.innerTabContainer}
           label="First Step">
           <View style={styles.innerTabWrapper}>
@@ -115,11 +171,14 @@ class Account extends Component {
                 placeholder="First Name"
                 inputStyle={{color: DARK_MODE.COLORS.INPUT_TEXT_COLOR}}
                 value={user.firstName}
-                onChangeText={text => changeUserFieldValue('firstName', text)}
+                onChangeText={text => {
+                  changeUserFieldValue('firstName', text);
+                  this.fieldValidation('firstName');
+                }}
                 // leftIcon={{ name: 'mail' }}
                 autoCapitalize="none"
                 errorStyle={{color: 'red'}}
-                errorMessage={validationErrors.firstNameError}
+                errorMessage={errors.firstName}
                 placeholderTextColor={DARK_MODE.COLORS.PLACE_HOLDER_COLOR} />
             </View>
             <View style={DARK_MODE.inputRowContainer}>
@@ -128,10 +187,13 @@ class Account extends Component {
                 style={{width: '100%'}}
                 inputStyle={{color: DARK_MODE.COLORS.INPUT_TEXT_COLOR}}
                 value={user.lastName}
-                onChangeText={text => changeUserFieldValue('lastName', text)}
+                onChangeText={text => {
+                  changeUserFieldValue('lastName', text);
+                  this.fieldValidation('lastName');
+                }}
                 // leftIcon={{ name: 'maijl' }}
                 errorStyle={{color: 'red'}}
-                errorMessage={validationErrors.lastNameError}
+                errorMessage={errors.lastName}
                 placeholderTextColor={DARK_MODE.COLORS.PLACE_HOLDER_COLOR} />
             </View>
             <View style={DARK_MODE.inputSelectionRowContainer}>
@@ -190,6 +252,8 @@ class Account extends Component {
           previousBtnTextStyle={styles.prevNextBtn}
           onNext={() => onNextStep(3)}
           onPrevious={() => onNextStep(1)}
+          nextBtnDisabled={Object.keys(account.errors).length > 0}
+          previousBtnDisabled={Object.keys(account.errors).length > 0}
           style={styles.innerTabContainer}
           label="Second Step">
           <View style={styles.innerTabWrapper}>
@@ -197,15 +261,18 @@ class Account extends Component {
               <View style={styles.inputRowContainer}>
                 <Text style={DARK_MODE.h2}>Credit Card Details</Text>
                 <Input
-                  placeholder="Last Name"
+                  placeholder="Name"
                   style={{width: '70%'}}
                   inputStyle={{color: DARK_MODE.COLORS.INPUT_TEXT_COLOR}}
                   value={creditCards[0].name}
-                  onChangeText={text => changeCreditFieldValue('name', text, 0)}
+                  onChangeText={text => {
+                    changeCreditFieldValue('name', text, 0);
+                    this.fieldValidation('creditCardName');
+                  }}
                   // leftIcon={{ name: 'maijl' }}
                   errorStyle={{color: 'red'}}
                   // label="Last Name"
-                  errorMessage={validationErrors.lastNameError}
+                  errorMessage={errors.creditCardName}
                   placeholderTextColor={DARK_MODE.COLORS.PLACE_HOLDER_COLOR} />
               </View>
               <View style={DARK_MODE.inputSelectionRowContainer}>
@@ -246,6 +313,8 @@ class Account extends Component {
           previousBtnTextStyle={styles.prevNextBtn}
           onPrevious={() => onNextStep(2)}
           finishBtnText={account.formType === NEW ? 'Submit' : 'Edit'}
+          nextBtnDisabled={Object.keys(account.errors).length > 0}
+          previousBtnDisabled={Object.keys(account.errors).length > 0}
           onSubmit={() => {
             if (account.formType === NEW) {
               handleRegisterAccount(this.props.account, this.props.identity.uid, this.props.navigation);
@@ -268,11 +337,13 @@ class Account extends Component {
                   placeholder="Initial Amount"
                   inputStyle={{color: DARK_MODE.COLORS.INPUT_TEXT_COLOR}}
                   // onChangeText={text => this.props.changeUsername(text)}
-                  onChangeText={text => changeAccountFieldValue('assets', Number(text))}
+                  onChangeText={text => {
+                    changeAccountFieldValue('assets', Number(text))
+                  }}
                   leftIcon={{name: 'mail'}}
                   autoCapitalize="none"
                   errorStyle={{color: 'red'}}
-                  errorMessage={this.props.validationErrors.firstNameError}
+                  errorMessage={errors.initialAssets}
                   // label="Initial Amount"
                   placeholderTextColor={DARK_MODE.COLORS.PLACE_HOLDER_COLOR} />
               </View>
@@ -284,11 +355,13 @@ class Account extends Component {
                   placeholder="Sallary Amount"
                   inputStyle={{color: DARK_MODE.COLORS.INPUT_TEXT_COLOR}}
                   // onChangeText={text => this.props.changeUsername(text)}
-                  onChangeText={text => changeSallaryFieldValue('amount', Number(text))}
+                  onChangeText={text => {
+                    changeSallaryFieldValue('amount', Number(text));
+                  }}
                   leftIcon={{name: 'mail'}}
                   autoCapitalize="none"
                   errorStyle={{color: 'red'}}
-                  errorMessage={this.props.validationErrors.firstNameError}
+                  errorMessage={errors.sallaryAmount}
                   // label="Sallary Amount"
                   placeholderTextColor={DARK_MODE.COLORS.PLACE_HOLDER_COLOR} />
               </View>
@@ -423,6 +496,7 @@ const mapStateToProps = state => {
     identity: state.identity,
     pageSettings: state.account.pageSettings,
     user: state.account.user,
+    errors: state.account.errors,
     sallary: state.account.sallary,
     validationErrors: state.account.validationErrors,
   };

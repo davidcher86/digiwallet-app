@@ -1,6 +1,6 @@
 const initialState = {
   isModalOpen: false,
-  transactionType: 'expense',
+  transactionType: 'EXPANSE',
   amount: 0,
   categoryList: {
     car: ['Gas', 'license Renewel', 'Insuranes'],
@@ -8,17 +8,18 @@ const initialState = {
   },
   mainCategory: '',
   subCategory: '',
-  paymentType: 'cash',
+  paymentType: 'CASH',
   paymentsAmount: 1,
   selectedCreditCard: null,
   description: '',
+  errors: {},
   pageSettings: {
     activeTab: 'amount',
   },
 };
 
 export default (state = initialState, action) => {
-  let {paymentDetails, pageSettings} = state;
+  let {paymentDetails, pageSettings, errors} = state;
   switch (action.type) {
     case 'TOGGLE_NEW_TRANSACTION':
       return Object.assign({}, state, {isModalOpen: !state.isModalOpen});
@@ -41,6 +42,9 @@ export default (state = initialState, action) => {
     case 'CHANGE_NEW_TRANS_TAB':
       pageSettings[action.field] = action.value;
       return Object.assign({}, state, {pageSettings: pageSettings});
+    case 'SET_NEW_TRANSACTION_ERRORS':
+      errors[action.field] = action.value;
+      return Object.assign({}, state, {errors: action.errors});
     default:
       return state;
   }

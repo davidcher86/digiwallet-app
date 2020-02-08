@@ -33,6 +33,7 @@ const initialState = {
   },
   registerData: {},
   formType: 'NEW',
+  errors: {},
 };
 
 export default (state = initialState, action) => {
@@ -59,6 +60,8 @@ export default (state = initialState, action) => {
     case 'SET_ACCOUNT_DETAILS':
       // console.log(action.account);
       return Object.assign({}, state, action.account);
+    case 'SET_ACCOUNT_ERRORS':
+      return Object.assign({}, state, {errors: action.errors});
     default:
       return state;
   }

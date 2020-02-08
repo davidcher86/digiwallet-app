@@ -5,11 +5,12 @@ const initialState = {
     // loading: false,
     selectedTab: 0,
   },
+  email: '',
   newPassword: '',
   reEnteredPassword: '',
   newEmail: '',
   loading: false,
-  error: '',
+  errors: {},
   validationErrors: {
     newEmailError: '',
     newPassError: '',
@@ -19,6 +20,8 @@ const initialState = {
 
 export default (state = initialState, action) => {
   let pageSettings = state.pageSettings;
+  let errors = state.errors;
+
   switch (action.type) {
     case 'UPDATE_LOGIN_FORM':
       return Object.assign({}, state, {[action.field]: action.value});
@@ -40,6 +43,9 @@ export default (state = initialState, action) => {
         password: '',
         loading: false,
       });
+    case 'SET_NEW_TRANSACTION_ERRORS':
+      errors[action.field] = action.value;
+      return Object.assign({}, state, {errors: action.errors});
     default:
       return state;
   }

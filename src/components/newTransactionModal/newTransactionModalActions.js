@@ -74,3 +74,10 @@ export const handleAddNewTransactionAccount = (
       console.log(err);
     });
 };
+
+export const setErrors = errors => {
+  return {
+    type: 'SET_NEW_TRANSACTION_ERRORS',
+    errors,
+  };
+};

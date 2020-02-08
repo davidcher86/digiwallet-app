@@ -18,6 +18,11 @@ import {getRememberedUser} from './../common/Actions';
 import { BACKGROUND_COLOR, DARK_MODE } from './../Styles';
 
 class LoginForm extends Component {
+  constructor() {
+    super();
+    this.fieldValidation = this.fieldValidation.bind(this);
+  }
+
   componentDidMount() {
     this.props.startLoading();
     getRememberedUser()
@@ -41,6 +46,56 @@ class LoginForm extends Component {
         console.log('Error:', r);
         this.props.endLoading();
       });
+  }
+
+  fieldValidation(field) {
+    var {setErrors, login} = this.props;
+    var errors = login.errors;
+
+    const isValideEmail = (email) => {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    };
+
+    switch (field) {
+      case 'email':
+        if (!isValideEmail(login[field])) {
+          errors.email = 'Email format error';
+          setErrors(errors);
+          return false;
+        }
+        delete errors.email;
+        setErrors(errors);
+        return true;
+      case 'newEmail':
+        if (!isValideEmail(login[field])) {
+          errors.newEmail = 'Email format error';
+          setErrors(errors);
+          return false;
+        }
+        delete errors.newEmail;
+        setErrors(errors);
+        return true;
+      case 'newPassword':
+        if (login[field].length < 6) {
+          errors.newPassword = 'Password must be at least 6 chars';
+          setErrors(errors);
+          return false;
+        }
+        delete errors.newPassword;
+        setErrors(errors);
+        return true;
+      case 'reEnteredPassword':
+        if (login[field] !== login.newPassword) {
+          errors.reEnteredPassword = 'Not Identical Password';
+          setErrors(errors);
+          return false;
+        }
+        delete errors.reEnteredPassword;
+        setErrors(errors);
+        return true;
+      default:
+        return true;
+    }
   }
 
   // renderButton(props) {
@@ -92,10 +147,9 @@ class LoginForm extends Component {
   // }
 
   render() {
-    const {login, pageSettings, validationErrors} = this.props;
+    const {login, pageSettings, onLoginPress, onRegister, validationErrors, navigation} = this.props;
     const {changeTab} = this.props;
 
-    // console.log(this.props);
     const loginComponent = () => {
       return (
         <KeyboardAvoidingView style={styles.tabContainerStyle}>
@@ -106,10 +160,14 @@ class LoginForm extends Component {
               autoCorrect={false}
               value={login.email}
               inputStyle={{color: DARK_MODE.COLORS.INPUT_TEXT_COLOR}}
-              onChangeText={text => this.props.changeFieldValue('email', text)}
+              onChangeText={text => {
+                this.props.changeFieldValue('email', text);
+                this.fieldValidation('email');
+              }}
               leftIcon={<MaterialCommunityIcons name="email" size={30} color="#4F8EF7" style={{marginRight: 7}}/>}
               autoCapitalize="none"
               errorStyle={{color: 'red'}}
+              errorMessage={login.errors.email}
               // label="Email"
               placeholderTextColor={DARK_MODE.COLORS.placeholderTextColor} />
           </View>
@@ -119,9 +177,7 @@ class LoginForm extends Component {
               style={styles.inputStyle}
               value={login.password}
               inputStyle={{color: DARK_MODE.COLORS.INPUT_TEXT_COLOR}}
-              onChangeText={text =>
-                this.props.changeFieldValue('password', text)
-              }
+              onChangeText={text => this.props.changeFieldValue('password', text)}
               leftIcon={<MaterialCommunityIcons name="onepassword" size={30} color="#4F8EF7" style={{marginRight: 7}} />}
               errorStyle={{color: 'red'}}
               // label="Password"
@@ -133,12 +189,8 @@ class LoginForm extends Component {
             <View style={{paddingLeft: 7, paddingRight: 7}}>
               <Button
                 title="Login"
-                onPress={() =>
-                  this.props.onLoginPress(
-                  this.props.login.email,
-                  this.props.login.password,
-                  this.props.navigation,
-                )}
+                onPress={() => onLoginPress(login.email, login.password, navigation)}
+                disabled={(login.email === '' ||  login.password === '')}
                 type="outline" />
             </View>
             <View style={{flexDirection: 'row', marginTop: 10, justifyContent: 'space-between'}}>
@@ -164,15 +216,17 @@ class LoginForm extends Component {
               placeholder="Enter Email"
               style={styles.inputStyle}
               autoCorrect={false}
+              // onBlur={() => this.fieldValidation('newEmail')}
               value={login.newEmail}
               inputStyle={{color: DARK_MODE.COLORS.INPUT_TEXT_COLOR}}
-              onChangeText={text =>
-                this.props.changeFieldValue('newEmail', text)
-              }
+              onChangeText={text => {
+                this.props.changeFieldValue('newEmail', text);
+                this.fieldValidation('newEmail');
+              }}
               leftIcon={<MaterialCommunityIcons name="email" size={30} color="#4F8EF7" style={{marginRight: 7}} />}
               autoCapitalize="none"
               errorStyle={{color: 'red'}}
-              errorMessage={validationErrors.newEmailError}
+              errorMessage={login.errors.newEmail}
               // label="Enter Email"
               placeholderTextColor={DARK_MODE.COLORS.PLACE_HOLDER_COLOR}/>
           </View>
@@ -182,13 +236,14 @@ class LoginForm extends Component {
               style={styles.inputStyle}
               value={login.newPassword}
               inputStyle={{color: DARK_MODE.COLORS.INPUT_TEXT_COLOR}}
-              onChangeText={text =>
-                this.props.changeFieldValue('newPassword', text)
-              }
+              onChangeText={text => {
+                this.props.changeFieldValue('newPassword', text);
+                this.fieldValidation('newPassword');
+              }}
               leftIcon={<MaterialCommunityIcons name="textbox-password" size={30} color="#4F8EF7" style={{marginRight: 7}} />}
               errorStyle={{color: 'red'}}
               // label="Enter New Password"
-              errorMessage={validationErrors.newPassError}
+              errorMessage={login.errors.newPassword}
               secureTextEntry={true}
               placeholderTextColor={DARK_MODE.COLORS.PLACE_HOLDER_COLOR}/>
           </View>
@@ -198,12 +253,13 @@ class LoginForm extends Component {
               style={styles.inputStyle}
               value={login.reEnteredPassword}
               inputStyle={{color: DARK_MODE.COLORS.INPUT_TEXT_COLOR}}
-              onChangeText={text =>
-                this.props.changeFieldValue('reEnteredPassword', text)
-              }
+              onChangeText={text => {
+                this.props.changeFieldValue('reEnteredPassword', text);
+                this.fieldValidation('reEnteredPassword');
+              }}
               leftIcon={<MaterialCommunityIcons name="textbox-password" size={30} color="#4F8EF7" style={{marginRight: 7}} />}
               errorStyle={{color: 'red'}}
-              errorMessage={validationErrors.newReEnteredPassError}
+              errorMessage={login.errors.reEnteredPassword}
               // label="Re-Enter Password"
               secureTextEntry={true}
               placeholderTextColor={DARK_MODE.COLORS.PLACE_HOLDER_COLOR}/>
@@ -212,10 +268,8 @@ class LoginForm extends Component {
             <View style={{paddingLeft: 7, paddingRight: 7}}>
               <Button
                 title="Register"
-                onPress={() => this.props.onRegister(
-                  this.props.login.newEmail,
-                  this.props.login.newPassword,
-                  this.props.navigation)}
+                disabled={login.newEmail === '' ||  login.newPassword === '' || login.reEnteredPassword === '' || Object.keys(login.errors).length > 0}
+                onPress={() => onRegister(login.newEmail, login.newPassword, navigation)}
                 type="outline" />
             </View>
             <View style={{flexDirection: 'row', marginTop: 10, justifyContent: 'space-between'}}>
@@ -328,6 +382,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => {
   return {
     login: state.login,
+    errors: state.login.errors,
     pageSettings: state.login.pageSettings,
     validationErrors: state.login.validationErrors,
   };

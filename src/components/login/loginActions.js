@@ -246,3 +246,10 @@ export const changeTab = value => {
     value,
   };
 };
+
+export const setErrors = errors => {
+  return {
+    type: 'SET_LOGIN_REGISTER_ERRORS',
+    errors,
+  };
+};

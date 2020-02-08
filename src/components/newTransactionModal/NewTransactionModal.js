@@ -4,23 +4,28 @@ import {
   View,
   TouchableOpacity,
   Text,
-  TextInput,
   Modal,
   StyleSheet,
   KeyboardAvoidingView,
   ScrollView,
   Picker,
 } from 'react-native';
-import {Button, Input, Icon, Overlay, Divider} from 'react-native-elements';
+import {Button, Input, Icon, Overlay, Divider, ButtonGroup} from 'react-native-elements';
 import {connect} from 'react-redux';
 import firebase from 'firebase';
 import DatePicker from 'react-native-datepicker';
+// import DateTimePicker from '@react-native-community/datetimepicker';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 import * as actions from './newTransactionModalActions';
 import { DARK_MODE } from './../Styles';
 
 class NewTransactionModal extends Component {
+  constructor() {
+    super();
+    this.fieldValidation = this.fieldValidation.bind(this);
+  }
+
   toggleNewTransModal = () => {
     return console.log('sdfsdfssdfsdf');
   };
@@ -33,6 +38,34 @@ class NewTransactionModal extends Component {
 
   componentWillUnmount() {
     this.props.changePageSettings('activeTab', 'amount');
+  }
+
+  fieldValidation(field) {
+    var {newTransaction, setErrors} = this.props;
+    var errors = newTransaction.errors;
+    // console.log(newTransaction);
+    switch (field) {
+      case 'amount':
+        if (!/^\d+$/.test(newTransaction[field])) {
+          errors.amount = 'Only digits allowed';
+          setErrors(errors);
+          return false;
+        }
+        delete errors.amount;
+        setErrors(errors);
+        return true;
+      case 'paymentsAmount':
+        if (!/^\d+$/.test(newTransaction[field])) {
+          errors.paymentsAmount = 'Only digits allowed';
+          setErrors(errors);
+          return false;
+        }
+        delete errors.paymentsAmount;
+        setErrors(errors);
+        return true;
+      default:
+        return true;
+    }
   }
 
   render() {
@@ -84,22 +117,60 @@ class NewTransactionModal extends Component {
     }
 
     const transTypeRow = () => {
+      const buttons = ['EXPANSE', 'INCOME'];
+
       return (
-        <View>
-            <View style={styles.inputContainer}>
-              <Text style={[styles.pickerLabel, DARK_MODE.h3Label]}>Transaction Type</Text>
-              <Picker
-                selectedValue={newTransaction.transactionType}
-                // onBlur={changePageSettings('activeTab', 'amount')}
-                onValueChange={itemValue => {
-                  changeFieldValue('transactionType', itemValue);
-                  changePageSettings('activeTab', 'amount');
-                }}   
-                style={[styles.pickerInput, {color:  DARK_MODE.COLORS.LABEL_COLOR}]}>
-                <Picker.Item label="Expense" value="expense" />
-                <Picker.Item label="Income" value="income" />
-              </Picker>
-            </View>
+        <View style={styles.inputContainer}>
+          <View style={styles.buttonGroupContainer}>
+            <TouchableOpacity
+              style={[
+                styles.btnGroup,
+                (newTransaction.transactionType === 'EXPANSE' ? styles.btnGroupActive : {}),
+                {borderTopLeftRadius: 4, borderBottomLeftRadius: 4}
+              ]}
+              onPress={() => changeFieldValue('transactionType', 'EXPANSE')}>
+                <Text style={{
+                        textAlign: 'center',
+                        fontSize: 15,
+                        color: (newTransaction.transactionType === 'EXPANSE' ? '#006bb7' : '#a1c5ec'),
+                        fontWeight: '600'}}>
+                          EXPANSE
+                </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.btnGroup,
+                (newTransaction.transactionType === 'INCOME' ? styles.btnGroupActive : {}),
+                {borderTopRightRadius: 4, borderBottomRightRadius: 4}
+              ]}
+              onPress={() => changeFieldValue('transactionType', 'INCOME')}>
+                <Text style={{
+                        textAlign: 'center',
+                        fontSize: 15,
+                        color: (newTransaction.transactionType === 'INCOME' ? '#006bb7' : '#a1c5ec'),
+                        fontWeight: '600'}}>
+                          INCOME
+                </Text>
+            </TouchableOpacity>
+          </View>
+          {/* <ButtonGroup
+            onPress={(itemValue) => changeFieldValue('transactionType', buttons[itemValue])}
+            selectedIndex={buttons.indexOf(newTransaction.transactionType)}
+            buttons={buttons}
+            containerStyle={{height: 40, flex: 1}} /> */}
+
+          {/* <Text style={[styles.pickerLabel, DARK_MODE.h3Label]}>Transaction Type</Text>
+          <Picker
+            selectedValue={newTransaction.transactionType}
+            mode="dropdown"
+            onValueChange={itemValue => {
+              changeFieldValue('transactionType', itemValue);
+              changePageSettings('activeTab', 'amount');
+            }}
+            style={{width: '55%', color: DARK_MODE.COLORS.LABEL_COLOR, marginBottom: 8}}>
+            <Picker.Item label="Expense" value="expense" />
+            <Picker.Item label="Income" value="income" />
+          </Picker> */}
         </View>
       );
     };
@@ -109,7 +180,7 @@ class NewTransactionModal extends Component {
         <View style={styles.inputContainer}>
           <Text style={[styles.pickerLabel, DARK_MODE.h3Label]}>Date</Text>
           <DatePicker
-            style={[styles.pickerInput, {color: DARK_MODE.COLORS.LABEL_COLOR}]}
+            style={styles.pickerInput}
             date={newTransaction.date}
             mode="date"
             placeholder="select date"
@@ -131,6 +202,28 @@ class NewTransactionModal extends Component {
             confirmBtnText="Confirm"
             cancelBtnText="Cancel"
           />
+          {/* <DatePicker
+            style={{width: '50%', marginBottom: 8}}
+            value={new Date(date)}
+            mode="date"
+            placeholder="select date"
+            format="YYYY-MM-DD H:mm"
+            minDate="1916-05-01"
+            maxDate={maxDate}
+            customStyles={{
+              dateIcon: {
+                position: 'absolute',
+                left: 0,
+                top: 4,
+                marginLeft: 0,
+              },
+              dateInput: {
+                marginLeft: 36,
+              },
+            }}
+            onChange={itemValue => changeFieldValue('date', itemValue)}
+            confirmBtnText="Confirm"
+            cancelBtnText="Cancel" /> */}
         </View>
       );
     };
@@ -142,26 +235,31 @@ class NewTransactionModal extends Component {
             style={{width: '100%'}}
             autoCorrect={false}
             placeholder="Description"
-            inputStyle={{color: DARK_MODE.h3Label}}
+            inputStyle={DARK_MODE.h3Label}
             value={newTransaction.description}
             onChangeText={text => changeFieldValue('description', text)}
             // leftIcon={{ name: 'mail' }}
             autoCapitalize="none"
             errorStyle={{color: 'red'}}
             // errorMessage={validationErrors.firstNameError}
-            placeholderTextColor={{color: DARK_MODE.COLORS.PLACE_HOLDER_COLOR}} />
+            placeholderTextColor={DARK_MODE.COLORS.PLACE_HOLDER_COLOR} />
         </View>
       );
     };
 
     const amountTab = () => {
       return (
-        <View style={DARK_MODE.inputRowContainer}>
+        <View style={[{width: '100%'}, DARK_MODE.inputRowContainer]}>
+          <Text style={[styles.pickerLabel, DARK_MODE.h3Label]}>Amount</Text>
           <Input
             style={{width: '100%'}}
             autoCorrect={false}
-            onBlur={() => changePageSettings('activeTab', 'category')}
-            placeholder="Amount"
+            onBlur={() => {
+              if (this.fieldValidation('amount')) {
+                changePageSettings('activeTab', 'category');
+              }
+            }}
+            placeholder="#"
             keyboardType="numeric"
             inputStyle={{color: DARK_MODE.COLORS.INPUT_TEXT_COLOR}}
             value={(newTransaction.amount === 0 ? '' : newTransaction.amount.toString())}
@@ -169,9 +267,9 @@ class NewTransactionModal extends Component {
             // leftIcon={{ name: 'mail' }}
             autoCapitalize="none"
             errorStyle={{color: 'red'}}
-            // errorMessage={validationErrors.firstNameError}
+            errorMessage={newTransaction.errors.amount}
             // label="First Name"
-            placeholderTextColor={{color: DARK_MODE.COLORS.PLACE_HOLDER_COLOR}}/>
+            placeholderTextColor={DARK_MODE.COLORS.PLACE_HOLDER_COLOR}/>
         </View>
       );
     };
@@ -182,6 +280,7 @@ class NewTransactionModal extends Component {
           <Text style={[DARK_MODE.h3, {width: '50%'}]}>Main Category</Text>
           <Picker
             selectedValue={newTransaction.mainCategory}
+            mode="dropdown"
             onValueChange={itemValue => {
               changeFieldValue('mainCategory', itemValue);
               changePageSettings('activeTab', 'subCategory');
@@ -199,6 +298,7 @@ class NewTransactionModal extends Component {
           <Text style={DARK_MODE.h3}>Sub Category</Text>
           <Picker
             selectedValue={newTransaction.subCategory}
+            mode="dropdown"
             style={styles.pickerInput}
             onValueChange={itemValue => {
               changeFieldValue('subCategory', itemValue);
@@ -212,57 +312,114 @@ class NewTransactionModal extends Component {
     };
 
     const paymentTypeTab = () => {
+      const buttons = ['CREDIT', 'CASH', 'CHECK'];
+
       return (
         <View style={DARK_MODE.inputRowContainer}>
-          <Text style={DARK_MODE.h3}>Payment Type</Text>
-          <Picker
+        <Text style={DARK_MODE.h3}>Payment Type</Text>
+        <View style={{height: 40}}>
+          <View style={styles.buttonGroupContainer}>
+            <TouchableOpacity
+              style={[
+                styles.btnGroup,
+                (newTransaction.transactionType === 'CREDIT' ? styles.btnGroupActive : {}),
+                {borderTopLeftRadius: 4, borderBottomLeftRadius: 4, width: '33%'}
+              ]}
+              onPress={() => changeFieldValue('paymentType', 'CREDIT')}>
+                <Text style={{
+                        textAlign: 'center',
+                        fontSize: 15,
+                        color: (newTransaction.paymentType === 'CREDIT' ? '#006bb7' : '#a1c5ec'),
+                        fontWeight: '600'}}>
+                          CREDIT
+                </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.btnGroup,
+                (newTransaction.transactionType === 'CASH' ? styles.btnGroupActive : {}),
+                {borderLeftWidth: 1, width: '33%'}
+              ]}
+              onPress={() => changeFieldValue('paymentType', 'CASH')}>
+                <Text style={{
+                        textAlign: 'center',
+                        fontSize: 15,
+                        color: (newTransaction.paymentType === 'CASH' ? '#006bb7' : '#a1c5ec'),
+                        fontWeight: '600'}}>
+                          CASH
+                </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.btnGroup,
+                (newTransaction.transactionType === 'CHECK' ? styles.btnGroupActive : {}),
+                {borderTopRightRadius: 4, borderBottomRightRadius: 4, borderLeftWidth: 1, width: '33%'}
+              ]}
+              onPress={() => changeFieldValue('paymentType', 'CHECK')}>
+                <Text style={{
+                        textAlign: 'center',
+                        fontSize: 15,
+                        color: (newTransaction.paymentType === 'CHECK' ? '#006bb7' : '#a1c5ec'),
+                        fontWeight: '600'}}>
+                          CHECK
+                </Text>
+            </TouchableOpacity>
+          </View>
+          {/* <ButtonGroup
+            onPress={(itemValue) => {
+              changeFieldValue('paymentType', buttons[itemValue]);
+              if (buttons[itemValue] === 'CREDIT') {
+                changePageSettings('activeTab', 'creditPaymentDetails');
+              }
+          }}
+            selectedIndex={buttons.indexOf(newTransaction.paymentType)}
+            buttons={buttons}
+            containerStyle={{height: 80, flex: 1}} /> */}
+          </View>
+          {/* <Picker
             selectedValue={newTransaction.paymentType}
             style={styles.pickerInput}
+            mode="dropdown"
             onValueChange={itemValue => {
               changeFieldValue('paymentType', itemValue);
               changePageSettings('activeTab', 'creditPaymentDetails');
             }}>
-            <Picker.Item label="Cash" value="cash" />
-            <Picker.Item label="Credit" value="credit" />
-          </Picker>
+            <Picker.Item label="CASH" value="CASH" />
+            <Picker.Item label="CREDIT" value="CREDIT" />
+            <Picker.Item label="CHECK" value="CHECK" />
+          </Picker> */}
         </View>
       );
     };
 
     const creditPaymentDetailsTab = () => {
       return (
-        <View style={[DARK_MODE.inputRowContainer, {flexDirection: 'column'}]}>
-          <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+        <View style={DARK_MODE.inputRowContainer}>
+          <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
             {/* <Text style={{width: '50%', paddingLeft: 8}}>Card Type</Text> */}
-            <Text style={[DARK_MODE.h3, {width: '70%'}]}>Number of Payments</Text>
-            <View style={{width: '20%'}}>
-              <Input
-                style={{width: '100%'}}
-                autoCorrect={false}
-                onBlur={() => changePageSettings('activeTab', 'final')}
-                placeholder="#"
-                keyboardType="numeric"
-                inputStyle={{color: DARK_MODE.COLORS.INPUT_TEXT_COLOR}}
-                defaultValue={newTransaction.paymentsAmount.toString()}
-                value={newTransaction.paymentsAmount.toString()}
-                onChangeText={text => changeFieldValue('paymentsAmount', text)}
-                // leftIcon={{ name: 'mail' }}
-                autoCapitalize="none"
-                errorStyle={{color: 'red'}}
-                // errorMessage={validationErrors.firstNameError}
-                // label="First Name"
-                placeholderTextColor={DARK_MODE.COLORS.PLACE_HOLDER_COLOR} />
-              {/* <TextInput
-                placeholder="#"
-                onBlur={() => changePageSettings('activeTab', 'final')}
-                keyboardType="numeric"
-                value={newTransaction.paymentsAmount}
-                onChangeText={text => changeFieldValue('paymentsAmount', text)}
-                // leftIcon={{ name: 'maijl' }}
-                // errorMessage={validationErrors.lastNameError}
-                // label="Number of Payments"
-                errorStyle={{color: 'red'}} /> */}
-            </View>
+            <Text style={[DARK_MODE.h3, {width: '100%'}]}>Number of Payments</Text>
+            <Input
+              autoCorrect={false}
+              // onBlur={() => {
+              //   if (this.fieldValidation('paymentsAmount')) {
+              //     changePageSettings('activeTab', 'final');
+              //   }
+              // }}
+              placeholder="#"
+              keyboardType="numeric"
+              inputStyle={{color: DARK_MODE.COLORS.INPUT_TEXT_COLOR}}
+              defaultValue={newTransaction.paymentsAmount.toString()}
+              value={newTransaction.paymentsAmount.toString()}
+              onChangeText={text => {
+                changeFieldValue('paymentsAmount', text);
+                this.fieldValidation('paymentsAmount');
+              }}
+              // leftIcon={{ name: 'mail' }}
+              autoCapitalize="none"
+              errorStyle={{color: 'red'}}
+              errorMessage={newTransaction.errors.paymentsAmount}
+              // label="First Name"
+              placeholderTextColor={DARK_MODE.COLORS.PLACE_HOLDER_COLOR} />
           </View>
         </View>
       );
@@ -274,6 +431,7 @@ class NewTransactionModal extends Component {
           <Button
             title={<MaterialIcons name="done" size={25} color="#4F8EF7" />}
             buttonStyle={styles.bottomBtn}
+            disabled={Object.keys(newTransaction.errors).length > 0}
             onPress={() => handleAddNewTransactionAccount(newTransaction, identity.uid)}
             type="outline" />
           {/* <Button
@@ -288,7 +446,7 @@ class NewTransactionModal extends Component {
         </View>
       );
     };
-    // console.log(this.props);
+
     return (
       <Overlay
         isVisible={isModalOpen}
@@ -297,72 +455,81 @@ class NewTransactionModal extends Component {
         overlayStyle={styles.containerStyle}
         width={350}
         height="auto" >
-              {transTypeRow()}
-              {dateRow()}
-              <TouchableOpacity style={styles.inputContainer} onPress={() => changePageSettings('activeTab', 'amount')}>
-                <Text style={[styles.pickerLabel, DARK_MODE.h3Label]}>Amount</Text>
-                <Text style={[styles.pickerInput, {color: DARK_MODE.COLORS.LABEL_COLOR}]}>
-                  {newTransaction.amount}
-                </Text>
+          <View>
+            {transTypeRow()}
+            {dateRow()}
+            <TouchableOpacity style={styles.inputContainer} onPress={() => changePageSettings('activeTab', 'amount')}>
+              <Text style={[styles.pickerLabel, DARK_MODE.h3Label, {color: (newTransaction.errors.amount !== undefined ? 'red' : DARK_MODE.h3Label.color)}]}>Amount</Text>
+              <Text style={[styles.pickerInput, {marginBottom: 8}, {color: (newTransaction.errors.amount !== undefined ? 'red' : DARK_MODE.h3Label.color)}]}>
+                {newTransaction.amount}
+              </Text>
+            </TouchableOpacity>
+
+            <View style={styles.inputContainer}>
+              <TouchableOpacity
+                style={{width: '45%', paddingLeft: 6}}
+                onPress={() => changePageSettings('activeTab', 'category')}>
+                  <Text style={DARK_MODE.h3Label}>Category</Text>
               </TouchableOpacity>
+              <TouchableOpacity
+                style={{width: '30%'}}
+                onPress={() => changePageSettings('activeTab', 'category')}>
+                <Text style={{color: DARK_MODE.COLORS.LABEL_COLOR, marginBottom: 8}}>{newTransaction.mainCategory}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{width: '25%'}}
+                onPress={() => changePageSettings('activeTab', 'subCategory')}>
+                <Text style={{color: DARK_MODE.COLORS.LABEL_COLOR, marginBottom: 8}}>{newTransaction.subCategory}</Text>
+              </TouchableOpacity>
+            </View>
 
-              <View style={styles.inputContainer}>
-                <TouchableOpacity 
-                  style={styles.pickerLabel} 
-                  onPress={() => changePageSettings('activeTab', 'category')}>
-                    <Text style={DARK_MODE.h3Label}>Category</Text>
+            <TouchableOpacity style={styles.inputContainer} onPress={() => changePageSettings('activeTab', 'paymentType')}>
+              <Text style={[styles.pickerLabel, DARK_MODE.h3Label]}>Payment Type</Text>
+              <Text style={[styles.pickerInput, {color: DARK_MODE.COLORS.LABEL_COLOR, marginBottom: 8}]}>
+                {newTransaction.paymentType}
+              </Text>
+            </TouchableOpacity>
+
+            {newTransaction.paymentType === 'CREDIT' && (
+              <View style={{flexDirection: 'column', backgroundColor: '#1c3c61'}}>
+                <TouchableOpacity style={[ DARK_MODE.h3Label, {width: '100%', paddingLeft: 6}]} onPress={() => changePageSettings('activeTab', 'paymentType')}>
+                  <Text>{'Payment Details - ' + newTransaction.paymentType}</Text>
                 </TouchableOpacity>
-                <TouchableOpacity 
-                  style={styles.pickerLabel} 
-                  onPress={() => changePageSettings('activeTab', 'category')}>
-                  <Text style={{color: DARK_MODE.COLORS.LABEL_COLOR}}>{newTransaction.mainCategory + ' - '}</Text>
-                </TouchableOpacity>
-                <TouchableOpacity 
-                  style={styles.pickerLabel} 
-                  onPress={() => changePageSettings('activeTab', 'subCategory')}>
-                  <Text style={{color: DARK_MODE.COLORS.LABEL_COLOR}}>{newTransaction.subCategory}</Text>
+                <TouchableOpacity style={{flexDirection: 'row', padding: 6}} onPress={() => changePageSettings('activeTab', 'creditPaymentDetails')}>
+                  <Text style={[DARK_MODE.h4Label, {width: '28%'}]}>{'Credit Card:'}</Text>
+                  <Text style={{width: '15%', marginLeft: 5}}>{newTransaction.selectedCreditCard.name}</Text>
+                  <Text style={[DARK_MODE.h4Label, {width: '28%', color: (newTransaction.errors.paymentsAmount !== undefined ? 'red' : null)}]}>{'# payments:'}</Text>
+                  <Text style={{width: '15%', marginLeft: 5, color: (newTransaction.errors.paymentsAmount !== undefined ? 'red' : null)}}>{newTransaction.paymentsAmount}</Text>
                 </TouchableOpacity>
               </View>
+            )}
 
-              {newTransaction.paymentType === 'credit' && (
-                <View style={{flexDirection: 'column', backgroundColor: '#1c3c61'}}>
-                  <TouchableOpacity style={[ DARK_MODE.h3Label, {width: '100%', paddingLeft: 6}]} onPress={() => changePageSettings('activeTab', 'paymentType')}>
-                    <Text>{'Payment Details - ' + newTransaction.paymentType}</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity style={{flexDirection: 'row', padding: 6}} onPress={() => changePageSettings('activeTab', 'creditPaymentDetails')}>
-                    <Text style={[DARK_MODE.h4Label, {width: '28%'}]}>{'Credit Card:'}</Text>
-                    <Text style={{width: '15%', marginLeft: 5}}>{newTransaction.selectedCreditCard.name}</Text>
-                    <Text style={[DARK_MODE.h4Label, {width: '28%'}]}>{'# payments:'}</Text>
-                    <Text style={{width: '15%', marginLeft: 5}}>{newTransaction.paymentsAmount}</Text>
-                  </TouchableOpacity>
-                </View>
-              )}
-
-              {descriptionRow()}
-              {/* <Divider style={{ backgroundColor: '#cbe3fb', width: '100%',margin: 4 }} /> */}
-              <View style={styles.tabWrapper}>
-                  {pageSettings.activeTab === 'amount' && amountTab()}
-                  {pageSettings.activeTab === 'category' && categoryTab()}
-                  {pageSettings.activeTab === 'subCategory' && subCategoryTab()}
-                  {pageSettings.activeTab === 'paymentType' && paymentTypeTab()}
-                  {pageSettings.activeTab === 'creditPaymentDetails' && creditPaymentDetailsTab()}
-                  {pageSettings.activeTab === 'final' && buttonsTab()}
-              </View>
-              <View style={styles.bottomBtnContainer}>
-                  {/* <Button
-                    title="ADD"
-                    buttonStyle={styles.bottomBtn}
-                    onPress={() => handleAddNewTransactionAccount(newTransaction, identity.uid)}
-                    type="outline" /> */}
-                  <Button
-                    title="CANCEL"
-                    buttonStyle={styles.bottomBtn}
-                    onPress={() => {
-                      closeNewTransactionModal();
-                      resetNewTransactionForm();
-                    }}
-                    type="outline" />
-              </View>
+            {descriptionRow()}
+            {/* <Divider style={{ backgroundColor: '#cbe3fb', width: '100%',margin: 4 }} /> */}
+            {pageSettings.activeTab !== 'final' && <View style={styles.tabWrapper}>
+                {pageSettings.activeTab === 'amount' && amountTab()}
+                {pageSettings.activeTab === 'category' && categoryTab()}
+                {pageSettings.activeTab === 'subCategory' && subCategoryTab()}
+                {pageSettings.activeTab === 'paymentType' && paymentTypeTab()}
+                {pageSettings.activeTab === 'creditPaymentDetails' && creditPaymentDetailsTab()}
+            </View>}
+            {pageSettings.activeTab === 'final' && buttonsTab()}
+            <View style={styles.bottomBtnContainer}>
+                {/* <Button
+                  title="ADD"
+                  buttonStyle={styles.bottomBtn}
+                  onPress={() => handleAddNewTransactionAccount(newTransaction, identity.uid)}
+                  type="outline" /> */}
+                <Button
+                  title="CANCEL"
+                  buttonStyle={styles.bottomBtn}
+                  onPress={() => {
+                    closeNewTransactionModal();
+                    resetNewTransactionForm();
+                  }}
+                  type="outline" />
+            </View>
+          </View>
       </Overlay>
     );
   }
@@ -443,7 +610,7 @@ const styles = StyleSheet.create({
     // borderWidth: 2,
     paddingLeft: 6,
     // justifyContent: 'center',
-    width: '50%',
+    width: '45%',
   },
   buttonContainer: {
     width: '100%',
@@ -453,6 +620,21 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     padding: 8,
     alignItems: 'center',
+  },
+  buttonGroupContainer: {
+    flexDirection: 'row',
+    margin: 3,
+  },
+  btnGroup: {
+    width: '50%',
+    alignContent: 'center',
+    justifyContent: 'center',
+    borderWidth: 2,
+    borderColor: '#61bcfd',
+    padding: 5,
+  },
+  btnGroupActive: {
+    backgroundColor: '#b4e0ff',
   },
 });
 

@@ -186,3 +186,10 @@ export const handleUpdaeAccount = (account, uid) => dispatch => {
   //         console.log(err);
   //     })
 };
+
+export const setErrors = errors => {
+  return {
+    type: 'SET_ACCOUNT_ERRORS',
+    errors,
+  };
+};

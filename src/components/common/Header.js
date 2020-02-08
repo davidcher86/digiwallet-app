@@ -17,7 +17,7 @@ const MyHeader = props => {
     <Header
       leftComponent={<HamburgerMenu navigation={props.navigation} />}
       backgroundColor={DARK_MODE.COLORS.HEADER_COLOR}
-      // barStyle={{height: 20}}
+      containerStyle={{height: 60, paddingBottom: 25}}
       centerComponent={{
         text: props.title,
         style: {color: '#fff', fontWeight: 'bold'},
