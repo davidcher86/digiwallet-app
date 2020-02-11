@@ -32,10 +32,31 @@ export const removeUID = async uid => {
 
 export const randomString = length => {
   var result = '';
-  var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  var characters =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   var charactersLength = characters.length;
   for (var i = 0; i < length; i++) {
     result += characters.charAt(Math.floor(Math.random() * charactersLength));
   }
   return result;
+};
+
+const getMonthsDiffrence = (firstDate, laterDate) => {
+  var date1 = new Date(firstDate);
+  var date2 = new Date(laterDate);
+  var diffYears = date2.getFullYear() - date1.getFullYear();
+  var diffMonths = date2.getMonth() - date1.getMonth();
+  var diffDays = date2.getDate() - date1.getDate();
+
+  var months = diffYears * 12 + diffMonths;
+  if (diffDays > 0) {
+    months += '.' + diffDays;
+  } else if (diffDays < 0) {
+    months--;
+    months +=
+      '.' +
+      (new Date(date2.getFullYear(), date2.getMonth(), 0).getDate() + diffDays);
+  }
+
+  return Math.ceil(months);
 };

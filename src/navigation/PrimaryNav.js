@@ -118,24 +118,6 @@ class DrawerContainer extends Component {
   }
 }
 
-// class NavigationDrawerStructure extends Component {
-//   //Structure for the navigatin Drawer
-//   toggleDrawer = () => {
-//     //Props to open/close the drawer
-//     this.props.navigationProps.toggleDrawer();
-//   };
-//   render() {
-//     return (
-//       <View style={{flexDirection: 'row'}}>
-//         <TouchableOpacity onPress={this.toggleDrawer.bind(this)}>
-//           {/*Donute Button Image */}
-//           <Text>dsdg</Text>
-//         </TouchableOpacity>
-//       </View>
-//     );
-//   }
-// }
-
 const HomePage_StackNavigator = createStackNavigator({
   //All the screen from the Screen1 will be indexed here
   First: {
@@ -221,76 +203,11 @@ const PrimaryNav = createDrawerNavigator(
     contentComponent: DrawerContainer,
     edgeWidth: 25,
     headerMode: 'none',
+    drawerWidth: '57%',
+    drawerType: 'slide',
     unmountInactiveRoutes: true,
   },
 );
-
-// const PrvimaryNav = createDrawerNavigator(
-//   {
-//     HomePage: {
-//       screen: HomePage,
-//       navigationOptions: {
-//         drawerLabel: 'Home',
-//         headerTitle: 'iohoiuh',
-//         drawerLockMode: 'locked-closed',
-//         // drawerLabel: () => null, //hide header if not needed so whole screen slide
-//       },
-//     },
-//     Account: {
-//       screen: Account,
-//       navigationOptions: {
-//         drawerLockMode: 'locked-closed',
-//         drawerLabel: 'Account Details',
-//         headerStyle: {
-//           backgroundColor: '#f4511e',
-//         },
-//         headerTintColor: '#fff',
-//         headerTitleStyle: {
-//           fontWeight: 'bold',
-//         },
-//       },
-//     },
-//     Dashboard: {
-//       screen: Dashboard,
-//       navigationOptions: {
-//         headerRight: <Text>Info</Text>,
-//         drawerLabel: 'Dashboard',
-//         drawerLockMode: 'locked-closed',
-//         headerStyle: {
-//           backgroundColor: '#f4511e',
-//         },
-//         headerTintColor: '#fff',
-//         headerTitleStyle: {
-//           fontWeight: 'bold',
-//         },
-//       },
-//     },
-//     Transactions: {
-//       // screen: Transactions,
-//       screen: TransactionsStack,
-//       navigationOptions: {
-//         drawerLabel: 'HomePage',
-//         drawerLockMode: 'locked-closed',
-//         headerStyle: {
-//           backgroundColor: '#f4511e',
-//         },
-//         headerTintColor: '#fff',
-//         headerTitleStyle: {
-//           fontWeight: 'bold',
-//         },
-//       },
-//     },
-//   },
-//   {
-//     // contentComponent: DrawerWithLogoutButton,
-//     initialRouteName: 'HomePage',
-//     drawerType: 'slide',
-//     drawerWidth: 100,
-//     contentComponent: DrawerContainer,
-//     headerMode: 'none',
-//     unmountInactiveRoutes: true,
-//   },
-// );
 
 const styles = StyleSheet.create({
   container: {

@@ -66,4 +66,19 @@ export const DARK_MODE = {
     fontSize: 15,
     color: '#c7def7',
   },
+  btnGroup: {
+    width: '50%',
+    alignContent: 'center',
+    justifyContent: 'center',
+    borderWidth: 2,
+    borderColor: '#61bcfd',
+    padding: 5,
+  },
+  buttonGroupContainer: {
+    flexDirection: 'row',
+    margin: 3,
+  },
+  btnGroupActive: {
+    backgroundColor: '#b4e0ff',
+  },
 };

@@ -302,22 +302,6 @@ class Transactions extends Component {
           )}
           // sections={transactionsListSorted}
           sections={this.state.list} />
-        {/* <FlatList
-          data={transactionsList}
-          keyExtractor={(item, index) => 'key_' + index}
-          // keyExtractor={item => item.uid}
-          renderItem={({item}) => (
-            <TransactionItem
-              key={item.uid}
-              pageSettings={pageSettings}
-              openTransaction={openTransaction}
-              identity={identity}
-              deleteTransaction={deleteTransaction}
-              transactionItem={item}
-            />
-            )}
-        /> */}
-        {/* <Fab /> */}
       </View>
     );
   }
@@ -331,23 +315,9 @@ const styles = StyleSheet.create({
   },
   transactionItemContainer: {
     flexDirection: 'column',
-    // padding: 4,
-    // alignItems: 'stretch',
-    // width: '100%',
-    // flexDirection: 'column',
-    // flex: 5,
-    // height: 80,
-    // flex: 1,
-    // alignSelf: 'baseline',
-    // marginTop: 10,
-    // borderBottomWidth: 1,
-    // borderColor: 'black',
-    // marginVertical: 8,
-    // marginHorizontal: 16,
-    // backgroundColor: 'yellow',
   },
   SectionHeaderStyle: {
-    backgroundColor: '#CDDC89',
+    backgroundColor: '#023d79',
     fontSize: 20,
     padding: 5,
     color: '#fff',

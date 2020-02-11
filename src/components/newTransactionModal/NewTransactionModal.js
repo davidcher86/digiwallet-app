@@ -121,11 +121,12 @@ class NewTransactionModal extends Component {
 
       return (
         <View style={styles.inputContainer}>
-          <View style={styles.buttonGroupContainer}>
+          <View style={DARK_MODE.buttonGroupContainer}>
             <TouchableOpacity
               style={[
-                styles.btnGroup,
-                (newTransaction.transactionType === 'EXPANSE' ? styles.btnGroupActive : {}),
+                // styles.btnGroup,
+                DARK_MODE.btnGroup,
+                (newTransaction.transactionType === 'EXPANSE' ? DARK_MODE.btnGroupActive : {}),
                 {borderTopLeftRadius: 4, borderBottomLeftRadius: 4}
               ]}
               onPress={() => changeFieldValue('transactionType', 'EXPANSE')}>
@@ -139,8 +140,9 @@ class NewTransactionModal extends Component {
             </TouchableOpacity>
             <TouchableOpacity
               style={[
-                styles.btnGroup,
-                (newTransaction.transactionType === 'INCOME' ? styles.btnGroupActive : {}),
+                // styles.btnGroup,
+                DARK_MODE.btnGroup,
+                (newTransaction.transactionType === 'INCOME' ? DARK_MODE.btnGroupActive : {}),
                 {borderTopRightRadius: 4, borderBottomRightRadius: 4}
               ]}
               onPress={() => changeFieldValue('transactionType', 'INCOME')}>
@@ -318,11 +320,12 @@ class NewTransactionModal extends Component {
         <View style={DARK_MODE.inputRowContainer}>
         <Text style={DARK_MODE.h3}>Payment Type</Text>
         <View style={{height: 40}}>
-          <View style={styles.buttonGroupContainer}>
+          <View style={DARK_MODE.buttonGroupContainer}>
             <TouchableOpacity
               style={[
-                styles.btnGroup,
-                (newTransaction.transactionType === 'CREDIT' ? styles.btnGroupActive : {}),
+                // styles.btnGroup,
+                DARK_MODE.btnGroup,
+                (newTransaction.transactionType === 'CREDIT' ? DARK_MODE.btnGroupActive : {}),
                 {borderTopLeftRadius: 4, borderBottomLeftRadius: 4, width: '33%'}
               ]}
               onPress={() => changeFieldValue('paymentType', 'CREDIT')}>
@@ -336,8 +339,9 @@ class NewTransactionModal extends Component {
             </TouchableOpacity>
             <TouchableOpacity
               style={[
-                styles.btnGroup,
-                (newTransaction.transactionType === 'CASH' ? styles.btnGroupActive : {}),
+                // styles.btnGroup,
+                DARK_MODE.btnGroup,
+                (newTransaction.transactionType === 'CASH' ? DARK_MODE.btnGroupActive : {}),
                 {borderLeftWidth: 1, width: '33%'}
               ]}
               onPress={() => changeFieldValue('paymentType', 'CASH')}>
@@ -351,8 +355,9 @@ class NewTransactionModal extends Component {
             </TouchableOpacity>
             <TouchableOpacity
               style={[
-                styles.btnGroup,
-                (newTransaction.transactionType === 'CHECK' ? styles.btnGroupActive : {}),
+                // styles.btnGroup,
+                DARK_MODE.btnGroup,
+                (newTransaction.transactionType === 'CHECK' ? DARK_MODE.btnGroupActive : {}),
                 {borderTopRightRadius: 4, borderBottomRightRadius: 4, borderLeftWidth: 1, width: '33%'}
               ]}
               onPress={() => changeFieldValue('paymentType', 'CHECK')}>

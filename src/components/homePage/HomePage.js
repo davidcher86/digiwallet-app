@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 import React, { Component } from 'react';
 import { View, TouchableOpacity, Image, Animated, Text, StyleSheet, Easing, FlatList } from 'react-native';
+import { SwipeListView } from 'react-native-swipe-list-view';
 import { Button, Input, PricingCard } from 'react-native-elements';
 import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -20,12 +21,33 @@ class CreditItem extends Component {
       this.state = {
         itemHeight: new Animated.Value(0),
         itemPadding: new Animated.Value(0),
+        iconRotation: new Animated.Value(0),
       };
 
       this.expandItem = this.expandItem.bind(this);
       this.closeItem = this.closeItem.bind(this);
       this.toggleItemExpand = this.toggleItemExpand.bind(this);
+      this.rotateDown = this.rotateDown.bind(this);
+      this.rotateUp = this.rotateUp.bind(this);
     }
+
+    rotateDown = () => {
+        Animated.timing(this.state.iconRotation, {
+          toValue: 180,
+          duration: 400,
+          easing: Easing.linear,
+          // useNativeDriver: true
+        }).start();
+    };
+
+    rotateUp = () => {
+        Animated.timing(this.state.iconRotation, {
+          toValue: 180,
+          duration: 360,
+          easing: Easing.linear,
+          // useNativeDriver: true
+        }).start();
+    };
 
     expandItem = () => {
         Animated.timing(this.state.itemHeight, {
@@ -94,7 +116,12 @@ class CreditItem extends Component {
                     ? <Ionicons name="ios-arrow-up" size={30} color={DARK_MODE.COLORS.ICON_COLOR} />
                     : <Ionicons name="ios-arrow-down" size={30} color={DARK_MODE.COLORS.ICON_COLOR} />;
         };
-
+        // var spinValue = new Animated.Value(0);
+        // const spin = spinValue.interpolate({
+        //     inputRange: [0, 1],
+        //     outputRange: ['0deg', '360deg'],
+        //   })
+          console.log(this.state.iconRotation._value);
         return (
             <Animated.View
                 key={creditItem.uid}
@@ -110,15 +137,21 @@ class CreditItem extends Component {
                     <View style={styles.itemColumn}>
                         <Text>{creditItem.paymentsAmount}/{creditItem.paymentsRemain}</Text>
                     </View>
-                    <View style={styles.itemActionColumn}>
+                    <Animated.View style={styles.itemActionColumn}>
                         <TouchableOpacity
                             transparent
-                            onPress={() => this.toggleItemExpand(creditItem.uid)}
+                            onPress={() => {
+                                this.toggleItemExpand(creditItem.uid);
+                                this.rotateDown();
+                            }}
                             // onPress={() => openTransaction(transactionItem.uid)}
                             style={styles.openBtn}>
-                            {getRowIcon()}
+                            <Animated.View style={{transform: [{rotate: (this.state.iconRotation._value + 'deg')}] }}>
+                                <Ionicons name="ios-arrow-down" size={30} color={DARK_MODE.COLORS.ICON_COLOR} />
+                            </Animated.View>
+                            {/* {getRowIcon()} */}
                         </TouchableOpacity>
-                    </View>
+                    </Animated.View>
                 </View>
                 <Animated.View style={[styles.hiddenItemStyle, {height: this.state.itemHeight, padding: this.state.itemPadding}]}>
                     <Text>fsd</Text>
@@ -162,7 +195,7 @@ class HomePage extends Component {
                 months--;
                 months += '.'+(new Date(date2.getFullYear(),date2.getMonth(),0).getDate()+diffDays);
             }
-            // console.log(months);
+
             return Math.ceil(months);
         };
 
@@ -263,6 +296,29 @@ class HomePage extends Component {
                     {/* <Divider style={{ backgroundColor: '#cbe3fb' }} /> */}
                     <View style={styles.creditListStyle}>
                         <Text style={[DARK_MODE.h2, DARK_MODE.title]}>Credit List</Text>
+                        {/* <SwipeListView
+                            data={profile.credit}
+                            renderItem={ (data, rowMap) => (
+                                <CreditItem
+                                        key={data.item.uid}
+                                        pageSettings={profile.pageSettings}
+                                        openCredit={this.props.openCredit}
+                                        // openTransaction={openTransaction}
+                                        // identity={identity}
+                                        // deleteTransaction={deleteTransaction}
+                                        creditItem={data.item}
+                                />
+                            )}
+                            renderHiddenItem={ (data, rowMap) => (
+                                <View style={styles.rowBack}>
+                                {console.log(data)}
+                                    <Text>Left</Text>
+                                    <Text>Right</Text>
+                                </View>
+                            )}
+                            // leftOpenValue={75}
+                            rightOpenValue={-75}
+                        /> */}
                         <Animated.View>
                             <FlatList
                                 data={profile.credit}
