@@ -3,46 +3,48 @@ import {View, TouchableOpacity, Text} from 'react-native';
 import {Button, Input, Icon} from 'react-native-elements';
 import {connect} from 'react-redux';
 import {createStackNavigator} from 'react-navigation-stack';
+
+import Header from './../common/Header';
 import * as actions from './settingsActions';
-import { DARK_MODE } from './../Styles';
+import {DARK_MODE} from './../Styles';
 
 class SettingsContainer extends Component {
-    static navigationOptions = {
-      title: 'Dashboard',
-      headerStyle: {
-        backgroundColor: '#f4511e',
-      },
-      headerTintColor: '#fff',
-      headerTitleStyle: {
-        fontWeight: 'bold',
+  static navigationOptions = {
+    title: 'Dashboard',
+    headerStyle: {
+      backgroundColor: '#f4511e',
+    },
+    headerTintColor: '#fff',
+    headerTitleStyle: {
+      fontWeight: 'bold',
+    },
+  };
+
+  render() {
+    const styles = {
+      containerStyle: {
+        padding: 20,
       },
     };
-  
-    render() {
-      const styles = {
-        containerStyle: {
-          padding: 20,
-        },
-      };
-  
-      return (
-        <View style={{flex: 1}}>
-          <View style={styles.containerStyle}>
-            <Text>{'Settings'}</Text>
-          </View>
+
+    return (
+      <View style={{flex: 1}}>
+        <View style={styles.containerStyle}>
+          <Text>{'Settings'}</Text>
         </View>
-      );
-    }
+      </View>
+    );
   }
-  
-  const mapStateToProps = state => {
-    return {dashboard: state.dashboard};
-  };
-  
-  const SettingsScreen = connect(
-    mapStateToProps,
-    actions,
-  )(SettingsContainer);
+}
+
+const mapStateToProps = state => {
+  return {dashboard: state.dashboard};
+};
+
+const SettingsScreen = connect(
+  mapStateToProps,
+  actions,
+)(SettingsContainer);
 
 const Settings = createStackNavigator(
   {
@@ -51,11 +53,13 @@ const Settings = createStackNavigator(
       navigationOptions: {
         headerShown: true,
         // title: 'Settings',
-        header: () => <Button
-        onPress={() => alert('This is a button!')}
-        title="Info"
-        color="#fff"
-      />,
+        header: () => (
+          <Button
+            onPress={() => alert('This is a button!')}
+            title="Info"
+            color="#fff"
+          />
+        ),
         headerTitleAlign: 'center',
         // headerBackground: DARK_MODE.COLORS.HEADER_COLOR,
         headerStyle: {backgroundColor: DARK_MODE.COLORS.HEADER_COLOR},
@@ -63,7 +67,7 @@ const Settings = createStackNavigator(
         headerMode: 'screen',
         headerBackTitleVisible: true,
         headerTruncatedBackTitle: 'back',
-        headerLeft:{label: 'back'},
+        headerLeft: {label: 'back'},
         // headerStyle: {
         //   backgroundColor: '#f4511e',
         // },
@@ -73,7 +77,6 @@ const Settings = createStackNavigator(
         // },
       },
     },
-    
   },
   {
     // contentComponent: DrawerWithLogoutButton,

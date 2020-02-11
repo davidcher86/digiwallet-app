@@ -256,7 +256,7 @@ class HomePage extends Component {
         // console.log(this.props);
         return (
             <View style={{flex: 1, height: '100%'}}>
-                <Header navigation={this.props.navigation} title="Home"/>
+                {/* <Header navigation={this.props.navigation} title="Home"/> */}
                 <View style={[DARK_MODE.appContainer, {padding: 20}]}>
                     <View style={styles.upperContainer}>
                         <View style={styles.h1rowContainer}>

@@ -32,7 +32,8 @@ import Settings from './../components/settings/Settings';
 import BottomTransactionsStack from './BottomTransactionNav';
 import {removeUID} from './../components/common/Actions';
 import TransactionsStack from './BottomTransactionNav';
-import { DARK_MODE } from './../components/Styles';
+import Header from './../components/common/Header';
+import {DARK_MODE} from './../components/Styles';
 
 class DrawerContainer extends Component {
   constructor(props) {
@@ -59,7 +60,12 @@ class DrawerContainer extends Component {
             onPress={() => navigate('HomePage')}
             style={styles.containerBottomItem}>
             <View style={styles.button}>
-            <MaterialCommunityIcons name="home" style={{marginRight: 7}} size={21} color="#4F8EF7" />
+              <MaterialCommunityIcons
+                name="home"
+                style={{marginRight: 7}}
+                size={21}
+                color="#4F8EF7"
+              />
               <Text style={styles.txtBottom}>Home</Text>
             </View>
           </TouchableOpacity>
@@ -68,7 +74,12 @@ class DrawerContainer extends Component {
             onPress={() => navigate('Dashboard')}
             style={styles.containerBottomItem}>
             <View style={styles.button}>
-              <MaterialCommunityIcons name="view-dashboard" style={{marginRight: 7}} size={21} color="#4F8EF7" />
+              <MaterialCommunityIcons
+                name="view-dashboard"
+                style={{marginRight: 7}}
+                size={21}
+                color="#4F8EF7"
+              />
               <Text style={styles.txtBottom}>Dashboard</Text>
             </View>
           </TouchableOpacity>
@@ -77,7 +88,12 @@ class DrawerContainer extends Component {
             onPress={() => navigate('Account', {type: 'EDIT'})}
             style={styles.containerBottomItem}>
             <View style={styles.button}>
-              <MaterialCommunityIcons name="account" style={{marginRight: 7}} size={21} color="#4F8EF7" />
+              <MaterialCommunityIcons
+                name="account"
+                style={{marginRight: 7}}
+                size={21}
+                color="#4F8EF7"
+              />
               <Text style={styles.txtBottom}>Account</Text>
             </View>
           </TouchableOpacity>
@@ -86,7 +102,12 @@ class DrawerContainer extends Component {
             onPress={() => navigate('Transactions', {group: 'Daily'})}
             style={styles.containerBottomItem}>
             <View style={styles.button}>
-              <Ionicons name="ios-wallet" style={{marginRight: 11}} size={21} color="#4F8EF7" />
+              <Ionicons
+                name="ios-wallet"
+                style={{marginRight: 11}}
+                size={21}
+                color="#4F8EF7"
+              />
               <Text style={styles.txtBottom}>Transactions</Text>
             </View>
           </TouchableOpacity>
@@ -125,7 +146,8 @@ const HomePage_StackNavigator = createStackNavigator({
     screen: HomePage,
     navigationOptions: ({navigation}) => ({
       title: 'Demo Screen 1',
-      headerShown: false,
+      // headerShown: false,
+      header: () => <Header />,
     }),
   },
 });
