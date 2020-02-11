@@ -9,6 +9,7 @@ import newTransactionModalReducer from '../components/newTransactionModal/newTra
 import accountReducer from './../components/account/accountReducer';
 import systemControl from './../components/systemControl/systemControlReducer';
 import identity from './../components/identity/identityReducer';
+import settings from './../components/settings/settingsReducer';
 
 export default combineReducers({
     login: loginReducer,
@@ -19,4 +20,5 @@ export default combineReducers({
     newTransactionModal: newTransactionModalReducer,
     systemControl: systemControl,
     identity: identity,
+    settings: settings,
 });

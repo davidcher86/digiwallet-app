@@ -40,7 +40,7 @@ class Dashboard extends Component {
 }
 
 const mapStateToProps = state => {
-  return {dashboard: state.dashboard};
+  return {settings: state.settings};
 };
 
 export default connect(

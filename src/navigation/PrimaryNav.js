@@ -28,6 +28,7 @@ import Account from './../components/account/Account';
 import HomePage from './../components/homePage/HomePage';
 import Dashboard from './../components/dashboard/Dashboard';
 import Transactions from './../components/transactions/Transactions';
+import Settings from './../components/settings/Settings';
 import BottomTransactionsStack from './BottomTransactionNav';
 import {removeUID} from './../components/common/Actions';
 import TransactionsStack from './BottomTransactionNav';
@@ -185,6 +186,13 @@ const PrimaryNav = createDrawerNavigator(
     Account: {
       //Title
       screen: Account_StackNavigator,
+      navigationOptions: {
+        drawerLabel: 'Demo Screen 2',
+      },
+    },
+    Settings: {
+      //Title
+      screen: Settings,
       navigationOptions: {
         drawerLabel: 'Demo Screen 2',
       },
