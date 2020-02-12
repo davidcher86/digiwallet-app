@@ -386,7 +386,7 @@ class Account extends Component {
 
     return (
       <KeyboardAvoidingView style={styles.containerStyle}>
-        {account.formType === EDIT && <Header navigation={this.props.navigation} title="Account" />}
+        {/* {account.formType === EDIT && <Header navigation={this.props.navigation} title="Account" />} */}
         <ScrollView style={styles.scrollerWrapper}>
           <View style={styles.wrapper}>
             <ProgressSteps

@@ -145,9 +145,7 @@ const HomePage_StackNavigator = createStackNavigator({
   First: {
     screen: HomePage,
     navigationOptions: ({navigation}) => ({
-      title: 'Demo Screen 1',
-      // headerShown: false,
-      header: () => <Header />,
+      header: ({navigation}) => <Header navigation={navigation} title="Home Page" />,
     }),
   },
 });
@@ -157,8 +155,7 @@ const Dashboard_StackNavigator = createStackNavigator({
   Second: {
     screen: Dashboard,
     navigationOptions: ({navigation}) => ({
-      title: 'Demo Screen 2',
-      headerShown: false,
+      header: ({navigation}) => <Header navigation={navigation} title="Dashboard" />,
     }),
   },
 });
@@ -170,8 +167,7 @@ const Account_StackNavigator = createStackNavigator({
     screen: Account,
     params: {type: EDIT},
     navigationOptions: ({route, navigation}) => ({
-      title: 'Demo Screen 2',
-      headerShown: false,
+      header: ({navigation}) => <Header navigation={navigation} title="Account" accountFormType="EDIT" />,
     }),
   },
 });
@@ -182,8 +178,7 @@ const Transactions_StackNavigator = createStackNavigator({
     screen: BottomTransactionsStack,
     // screen: Transactions,
     navigationOptions: ({navigation}) => ({
-      title: 'Demo Screen 2',
-      headerShown: false,
+      header: ({navigation}) => <Header navigation={navigation} title="Transactions" />,
     }),
   },
 });

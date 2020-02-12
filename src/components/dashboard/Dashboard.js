@@ -5,7 +5,6 @@ import {connect} from 'react-redux';
 import firebase from 'firebase';
 
 import * as actions from './dashboardActions';
-import Header from './../common/Header';
 import Fab from './../common/Fab';
 
 class Dashboard extends Component {
@@ -29,7 +28,6 @@ class Dashboard extends Component {
 
     return (
       <View style={{flex: 1}}>
-        <Header navigation={this.props.navigation} title="Dashboard" />
         <View style={styles.containerStyle}>
           <Text>{'Dashboard'}</Text>
         </View>
