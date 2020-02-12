@@ -193,7 +193,7 @@ class HomePage extends Component {
                 months += '.' + diffDays;
             } else if (diffDays < 0) {
                 months--;
-                months += '.'+(new Date(date2.getFullYear(),date2.getMonth(),0).getDate()+diffDays);
+                months += '.' + (new Date(date2.getFullYear(),date2.getMonth(),0).getDate()+diffDays);
             }
 
             return Math.ceil(months);

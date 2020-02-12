@@ -77,13 +77,15 @@ export const fetchData = (uid, navigation) => {
   return dispatch => {
     dispatch(startLoading());
     const dataRef = firebase.database().ref(`/users/${uid}/account`);
-
+    console.log('sdfsdffsdf');
     dataRef
       .once('value')
       .then(function(snapshot) {
         var res = snapshot.val();
 
-        if (res && res.assets !== null) {
+        // console.log(res);
+        // console.log(res && res.assets !== undefined);
+        if (res && res.assets !== undefined) {
           var fixedList = [];
           var totalCredit = 0;
           var currentMonthCredit = 0;
@@ -100,12 +102,21 @@ export const fetchData = (uid, navigation) => {
           dispatch(recieveData(res));
           dispatch(endLoading());
         } else {
+          // console.log('sdfsdf');
           dispatch(endLoading());
-          // navigation.navigate('Account', {formType: 'NEW', registered: true, uid: uid});
+          // return navigation.navigate('Account', {
+          //   type: 'NEW',
+          //   registered: true,
+          // });
         }
       })
       .catch(fail => {
         console.log(fail);
+        dispatch(endLoading());
+        // return navigation.navigate('Account', {
+        //   type: 'NEW',
+        //   registered: true,
+        // });
       });
   };
 };

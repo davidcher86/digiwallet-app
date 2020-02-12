@@ -27,7 +27,6 @@ import {
 
 import * as actions from './transactionsActions';
 import Fab from './../common/Fab';
-import Header from './../common/Header';
 import { BACKGROUND_COLOR, LABEL_COLOR, INPUT_COLOR } from './../Styles';
 import Feather from 'react-native-vector-icons/Feather';Entypo
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -283,7 +282,6 @@ class Transactions extends Component {
     // console.log(this.props);
     return (
       <View style={styles.transacionListContainer}>
-        <Header navigation={this.props.navigation} title="Transaction" />
         <SectionList
           ItemSeparatorComponent={this.FlatListItemSeparator}
           keyExtractor={(item, index) => 'key_' + index}

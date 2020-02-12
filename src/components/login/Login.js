@@ -33,10 +33,19 @@ class LoginForm extends Component {
           const updateRef = firebase.database().ref(`/users/${uid}/account`);
 
           updateRef.update({lastConnected}).then(async res => {
-            await this.props.fetchData(uid, this.props.navigation);
-            this.props.navigation.navigate('PrimaryNav');
-            this.props.endLoading();
-            return res;
+            if (res !== undefined) {
+              console.log('rrr', res);
+              await this.props.fetchData(uid, this.props.navigation);
+              this.props.navigation.navigate('PrimaryNav');
+              this.props.endLoading();
+              return res;
+            } else {
+              this.props.endLoading();
+              this.props.navigation.navigate('Account', {
+                type: 'NEW',
+                registered: true,
+              });
+            }
           });
         } else {
           this.props.endLoading();
@@ -48,7 +57,7 @@ class LoginForm extends Component {
       });
   }
 
-  fieldValidation(field) {
+  fieldValidation(field, value) {
     var {setErrors, login} = this.props;
     var errors = login.errors;
 
@@ -58,7 +67,7 @@ class LoginForm extends Component {
 
     switch (field) {
       case 'email':
-        if (!isValideEmail(login[field])) {
+        if (!isValideEmail(value)) {
           errors.email = 'Email format error';
           setErrors(errors);
           return false;
@@ -67,7 +76,7 @@ class LoginForm extends Component {
         setErrors(errors);
         return true;
       case 'newEmail':
-        if (!isValideEmail(login[field])) {
+        if (!isValideEmail(value)) {
           errors.newEmail = 'Email format error';
           setErrors(errors);
           return false;
@@ -76,7 +85,8 @@ class LoginForm extends Component {
         setErrors(errors);
         return true;
       case 'newPassword':
-        if (login[field].length < 6) {
+        console.log(value.length);
+        if (value.length < 6) {
           errors.newPassword = 'Password must be at least 6 chars';
           setErrors(errors);
           return false;
@@ -85,7 +95,7 @@ class LoginForm extends Component {
         setErrors(errors);
         return true;
       case 'reEnteredPassword':
-        if (login[field] !== login.newPassword) {
+        if (login.newPassword !== value) {
           errors.reEnteredPassword = 'Not Identical Password';
           setErrors(errors);
           return false;
@@ -97,54 +107,6 @@ class LoginForm extends Component {
         return true;
     }
   }
-
-  // renderButton(props) {
-  //   return (
-  //     <View style={styles.buttonContainerStyle}>
-  //       {this.props.pageSettings.selectedTab === 0 && (
-  //         <TouchableOpacity
-  //           style={styles.buttonContainer}
-  //           onPress={() =>
-  //             props.onLoginPress(
-  //               props.login.email,
-  //               props.login.password,
-  //               this.props.navigation,
-  //             )
-  //           }>
-  //           <Text style={styles.buttonStyle}>LOGIN</Text>
-  //         </TouchableOpacity>
-  //       )}
-  //       {this.props.pageSettings.selectedTab === 1 && (
-  //         <View>
-  //           <SocialIcon
-  //                 title='Sign In With Facebook'
-  //                 button
-  //                 onPress={() => props.onFacebookRegister(this.props.navigation)}
-  //                 type='facebook' />
-  //           {/* <TouchableOpacity
-  //             style={styles.buttonContainer}
-  //             onPress={() => props.onFacebookRegister(this.props.navigation)}>
-  //               <SocialIcon
-  //                 title='Sign In With Facebook'
-  //                 button
-  //                 onPress={() => console.log('herer')}
-  //                 type='facebook' />
-  //             <Text style={styles.buttonStyle}>facebook</Text>
-  //           </TouchableOpacity> */}
-  //           <TouchableOpacity
-  //             style={styles.buttonContainer}
-  //             // onPress={() => this.props.navigation.navigate('Account', {type: 'NEW', data: props.login})}>
-              // onPress={() => props.onRegister(
-              //                 props.login.newEmail,
-              //                 props.login.newPassword,
-              //                 this.props.navigation)}>
-  //             <Text style={styles.buttonStyle}>SIGN IN</Text>
-  //           </TouchableOpacity>
-  //         </View>
-  //       )}
-  //     </View>
-  //   );
-  // }
 
   render() {
     const {login, pageSettings, onLoginPress, onRegister, validationErrors, navigation} = this.props;
@@ -162,7 +124,7 @@ class LoginForm extends Component {
               inputStyle={{color: DARK_MODE.COLORS.INPUT_TEXT_COLOR}}
               onChangeText={text => {
                 this.props.changeFieldValue('email', text);
-                this.fieldValidation('email');
+                this.fieldValidation('email', text);
               }}
               leftIcon={<MaterialCommunityIcons name="email" size={30} color="#4F8EF7" style={{marginRight: 7}}/>}
               autoCapitalize="none"
@@ -221,7 +183,7 @@ class LoginForm extends Component {
               inputStyle={{color: DARK_MODE.COLORS.INPUT_TEXT_COLOR}}
               onChangeText={text => {
                 this.props.changeFieldValue('newEmail', text);
-                this.fieldValidation('newEmail');
+                this.fieldValidation('newEmail', text);
               }}
               leftIcon={<MaterialCommunityIcons name="email" size={30} color="#4F8EF7" style={{marginRight: 7}} />}
               autoCapitalize="none"
@@ -238,7 +200,7 @@ class LoginForm extends Component {
               inputStyle={{color: DARK_MODE.COLORS.INPUT_TEXT_COLOR}}
               onChangeText={text => {
                 this.props.changeFieldValue('newPassword', text);
-                this.fieldValidation('newPassword');
+                this.fieldValidation('newPassword', text);
               }}
               leftIcon={<MaterialCommunityIcons name="textbox-password" size={30} color="#4F8EF7" style={{marginRight: 7}} />}
               errorStyle={{color: 'red'}}
@@ -255,7 +217,7 @@ class LoginForm extends Component {
               inputStyle={{color: DARK_MODE.COLORS.INPUT_TEXT_COLOR}}
               onChangeText={text => {
                 this.props.changeFieldValue('reEnteredPassword', text);
-                this.fieldValidation('reEnteredPassword');
+                this.fieldValidation('reEnteredPassword', text);
               }}
               leftIcon={<MaterialCommunityIcons name="textbox-password" size={30} color="#4F8EF7" style={{marginRight: 7}} />}
               errorStyle={{color: 'red'}}

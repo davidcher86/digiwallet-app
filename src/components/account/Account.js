@@ -29,7 +29,6 @@ class Account extends Component {
 
     switch (field) {
       case 'firstName':
-        console.log(user.firstName);
         if (user.firstName === '') {
           errors.firstName = 'First name is mandatory';
           setErrors(errors);
@@ -86,31 +85,29 @@ class Account extends Component {
       }
   };
 
+  // componentWillUpdate() {
+  //   console.log('componentWillUpdate', this.props.navigation.getParam('type'));
+  // }
+
   componentDidMount() {
-      switch (this.props.navigation.state.params.type) {
+    console.log('navigation', this.props.navigation.getParam('type'));
+      switch (this.props.navigation.getParam('type')) {
         case EDIT:
-          // console.log('EDIT');
-          // console.log(this.props.identity.uid !== undefined && this.props.identity.uid !== null);
           if (this.props.identity.uid !== undefined && this.props.identity.uid !== null) {
             this.props.changeAccountFieldValue('formType', EDIT);
             this.props.fetchAccount(this.props.identity.uid);
           }
           break;
         case NEW:
-          // console.log('NEW');
-          // const loginData = this.props.navigation.getParam('data');
-          // const data = {email: loginData.newEmail, newPassword: loginData.newPassword};
-          this.props.changeAccountFieldValue('formType', NEW);
-          // if (this.props.navigation.getParam('registered')) {
-          //   this.props.changeAccountFieldValue('registerData', data);
-          // }
+          console.log('NEW');
+          // this.props.changeAccountFieldValue('formType', NEW);
           break;
       }
-      if (this.props.navigation.state.params.type === EDIT
-          && this.props.identity.uid !== undefined
-          && this.props.identity.uid !== null) {
-            this.props.fetchAccount(this.props.identity.uid);
-      }
+      // if (this.props.navigation.state.params.type === EDIT
+      //     && this.props.identity.uid !== undefined
+      //     && this.props.identity.uid !== null) {
+      //       this.props.fetchAccount(this.props.identity.uid);
+      // }
   }
 
 
@@ -151,6 +148,7 @@ class Account extends Component {
     };
 
     const personalData = () => {
+      // console.log(user);
       return (
         <ProgressStep
           nextBtnTextStyle={styles.prevNextBtn}
@@ -386,7 +384,7 @@ class Account extends Component {
 
     return (
       <KeyboardAvoidingView style={styles.containerStyle}>
-        {account.formType === EDIT && <Header navigation={this.props.navigation} title="Account" />}
+        {/* {account.formType === EDIT && <Header navigation={this.props.navigation} title="Account" />} */}
         <ScrollView style={styles.scrollerWrapper}>
           <View style={styles.wrapper}>
             <ProgressSteps
