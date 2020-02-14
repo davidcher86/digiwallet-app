@@ -24,6 +24,7 @@
     "react-native": "0.61.4",
     "react-native-action-button": "^2.8.5",
     "react-native-datepicker": "^1.7.2",
+    "react-native-draggable-flatlist": "^2.2.0",
     "react-native-elements": "^1.2.7",
     "react-native-fab": "^1.0.9",
     "react-native-fbsdk": "^1.1.1",

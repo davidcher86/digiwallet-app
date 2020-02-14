@@ -7,6 +7,7 @@ import {
   StyleSheet,
   StatusBar,
 } from 'react-native';
+import DraggableFlatList from 'react-native-draggable-flatlist'
 import MultiSelectSortableFlatlist from 'react-native-multiselect-sortable-flatlist';
 import {
   widthPercentageToDP as wp,
@@ -15,99 +16,141 @@ import {
 import {Button, Input, Icon} from 'react-native-elements';
 import {connect} from 'react-redux';
 import {createStackNavigator} from 'react-navigation-stack';
+import { Container, Left, Right, Header as BaseHeader, Content, List, ListItem, Text as BaseText } from 'native-base';
 
 import Header from './../common/Header';
 import * as actions from './settingsActions';
 import {DARK_MODE} from './../Styles';
 
+// const exampleData = [...Array(20)].map((d, index) => ({
+//   key: `item-${index}`, // For example only -- don't use index as your key!
+//   label: index,
+//   backgroundColor: `rgb(${Math.floor(Math.random() * 255)}, ${index * 5}, ${132})`,
+// }))
+
+const exampleData = {
+  car: ['Gas', 'license Renewel', 'Insuranes'],
+  'house Hold': ['Electric Bill', 'Water Bill', 'Gas Bill'],
+};
+
 class SettingsContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      ListData: ['A', 'B', 'C', 'D', 'E', 'F', 'G'],
-      ItemsSelected: [],
+      data: exampleData.car,
     };
   }
 
-  onItemPress(item) {
-    Alert.alert(
-      'Alert',
-      item + ' Pressed',
-      [{text: 'OK', onPress: () => console.log('OK Pressed')}],
-      {
-        cancelable: true,
-      },
+  render() {
+    const { navigation } = this.props;
+
+    const renderItem = ({ item, index, drag, isActive }) => {
+      return (
+        <TouchableOpacity
+          style={styles.itemContainer}
+          onLongPress={drag} >
+          <View style={styles.itemStyle}>
+            <Text 
+              style={{ 
+                fontWeight: 'bold', 
+                color: 'white',
+                fontSize: 20,}}>
+                  {item}
+            </Text>
+          </View>
+        </TouchableOpacity>
+      )
+    }
+
+    // console.log(this.props.navigation);
+    return (
+      <Container>
+        {/* <Header /> */}
+        <Content>
+          <List>
+            <ListItem>
+              <Left>
+                <Text>Categories</Text>
+              </Left>
+              <Right>
+                <Icon  onPress={() => navigation.navigate('MainCategories')} active name="arrow-forward" />
+              </Right>
+            </ListItem>
+          </List>
+        </Content>
+      </Container>
     );
   }
+}
 
-  onSelectionChanged(selectedItems) {
-    this.setState({ItemsSelected: selectedItems});
+class MainCategories extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: exampleData.car,
+    };
   }
-
-  onSort(newListDataArray) {
-    this.setState({ListData: newListDataArray});
-  }
-
   render() {
-    // const styles = {
-    //   containerStyle: {
-    //     padding: 20,
-    //   },
-    // };
+    const renderItem = ({ item, index, drag, isActive }) => {
+      return (
+        <TouchableOpacity
+          style={styles.itemContainer}
+          onLongPress={drag} >
+          <View style={styles.itemStyle}>
+          <Text style={{ 
+            fontWeight: 'bold', 
+            color: 'white',
+            fontSize: 20,
+          }}>{item}</Text>
+          </View>
+        </TouchableOpacity>
+      )
+    }
 
     return (
       <View style={{flex: 1}}>
-        {/* <MultiSelectSortableFlatlist
-          data={this.state.ListData}
-          keyExtractor={(item, index) => item}
-          onSort={data => this.onSort(data)}
-          renderItem={({item, index, selected}) => (
-            //Note: To view selection changes, your component should take a prop that will render changes based on "selected" bool
-            // <View style={{width: '100%', backgroundColor: 'yellow'}}>
-            <View style={styles.itemContainer}>
-              <View
-                style={[
-                  styles.containerStyle,
-                  {
-                    flex: 1,
-                    borderColor: selected ? 'blue' : 'white',
-                    borderWidth: selected ? 1.5 : 0,
-                  },
-                ]}>
-                <Text style={styles.CardText}>{item}</Text>
-              </View>
-            </View>
-          )}
-        /> */}
-        <MultiSelectSortableFlatlist
-          ref={MultiSelectSortableFlatlist =>
-            (this.MultiSelectSortableFlatlist = MultiSelectSortableFlatlist)
-          }
-          contentContainerStyle={styles.ListContainer}
-          ListHeaderComponentStyle={styles.HeaderStyle}
-          // ListHeaderComponent={
-          //   <Header
-          //     SelectAll={() => this.MultiSelectSortableFlatlist.SelectAll()}
-          //     DeselectAll={() => this.MultiSelectSortableFlatlist.DeselectAll()}
-          //   />
-          // }
-          data={this.state.ListData}
-          keyExtractor={(item, index) => item}
-          onItemTap={({item, index}) => this.onItemPress(item)}
-          onItemSelected={({selectedItems, item, index}) =>
-            this.onSelectionChanged(selectedItems)
-          }
-          onItemDeselected={({selectedItems, item, index}) =>
-            this.onSelectionChanged(selectedItems)
-          }
-          onSort={data => this.onSort(data)}
-          renderItem={({item, index, selected}) => (
-            //Note: To view selection changes, your component should take a prop that will render changes based on "selected" bool
-            <View style={styles.itemContainer} Selected={selected}>
-              <Text style={styles.CardText}>{item}</Text>
-            </View>
-          )}
+        <DraggableFlatList
+          data={this.state.data}
+          renderItem={renderItem}
+          keyExtractor={(item, index) => `draggable-item-${index}`}
+          onDragEnd={({ data }) => this.setState({ data })}
         />
+      </View>
+    );
+  }
+}
+
+class SubCategories extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: exampleData.car,
+    };
+  }
+  render() {
+    const renderItem = ({ item, index, drag, isActive }) => {
+      return (
+        <TouchableOpacity
+          style={styles.itemContainer}
+          onLongPress={drag} >
+          <View style={styles.itemStyle}>
+          <Text style={{ 
+            fontWeight: 'bold', 
+            color: 'white',
+            fontSize: 20,
+          }}>{item}</Text>
+          </View>
+        </TouchableOpacity>
+      )
+    }
+
+    return (
+      <View style={{flex: 1}}>
+        <DraggableFlatList
+          data={this.state.data}
+          renderItem={renderItem}
+          keyExtractor={(item, index) => `draggable-item-${index}`}
+          onDragEnd={({ data }) => this.setState({ data })} />
       </View>
     );
   }
@@ -120,10 +163,17 @@ const styles = StyleSheet.create({
     paddingTop: StatusBar.currentHeight + hp(2),
   },
   itemContainer: {
+    // padding: 6,
+    height: 40,
+    width: '100%',
+    borderBottomWidth: 2,
+    // backgroundColor: 'green',
+  },
+  itemStyle: {
     padding: 6,
     height: 40,
-    width: 100,
-    backgroundColor: 'yellow',
+    flex: 1,
+    backgroundColor: '#1e446b',
   },
   CardText: {
     textAlign: 'center',
@@ -134,7 +184,10 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
-  return {dashboard: state.dashboard};
+  return {
+    dashboard: state.dashboard,
+    settings: state.settings,
+  };
 };
 
 const SettingsScreen = connect(
@@ -148,20 +201,68 @@ const Settings = createStackNavigator(
       screen: SettingsScreen,
       navigationOptions: {
         headerShown: true,
+        headerBackTitleVisible: true,
         // title: 'Settings',
-        header: ({navigation}) => (
-          <Header navigation={navigation} title="Settings" />
-        ),
+        // header: ({navigation}) => (
+        //   <Header navigation={navigation} title="Settings" />
+        // ),
+        // headerStatusBarHeight: 20,
         headerTitleAlign: 'center',
         // headerBackground: DARK_MODE.COLORS.HEADER_COLOR,
         headerStyle: {
-          height: 20,
+          height: 40,
           backgroundColor: DARK_MODE.COLORS.HEADER_COLOR,
         },
         mode: 'modal',
         headerMode: 'screen',
         headerBackTitleVisible: true,
         headerTruncatedBackTitle: 'back',
+      },
+    },
+    MainCategories: {
+      screen: MainCategories,
+      navigationOptions: {
+        headerShown: true,
+        headerBackTitleVisible: true,
+        // title: 'Settings',
+        // header: ({navigation}) => (
+        //   <Header navigation={navigation} title="Settings" />
+        // ),
+        headerTitleAlign: 'center',
+        headerBackTitleStyle: {color: 'white'},
+        headerTitleStyle: {color: 'white'},
+        // headerBackground: DARK_MODE.COLORS.HEADER_COLOR,
+        headerStyle: {
+          height: 40,
+          backgroundColor: DARK_MODE.COLORS.HEADER_COLOR,
+        },
+        mode: 'modal',
+        headerMode: 'screen',
+        headerBackTitleVisible: true,
+        headerTruncatedBackTitle: '<',
+      },
+    },
+    SubCategories: {
+      screen: SubCategories,
+      navigationOptions: {
+        headerShown: true,
+        headerBackTitleVisible: true,
+        // title: 'Settings',
+        // header: ({navigation}) => (
+        //   <Header navigation={navigation} title="Settings" />
+        // ),
+        headerTitleAlign: 'center',
+        headerBackTitleStyle: {color: 'white'},
+        headerTitleStyle: {color: 'white'},
+        // headerBackground: DARK_MODE.COLORS.HEADER_COLOR,
+        headerStyle: {
+          height: 40,
+          backgroundColor: DARK_MODE.COLORS.HEADER_COLOR,
+        },
+        mode: 'modal',
+        headerMode: 'screen',
+        headerBackTitleVisible: true,
+        headerTruncatedBackTitle: '<',
       },
     },
   },

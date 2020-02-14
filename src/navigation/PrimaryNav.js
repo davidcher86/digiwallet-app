@@ -145,6 +145,9 @@ const HomePage_StackNavigator = createStackNavigator({
   First: {
     screen: HomePage,
     navigationOptions: ({navigation}) => ({
+      headerStyle: {
+        height: 20, // Specify the height of your custom header
+      },
       header: ({navigation}) => <Header navigation={navigation} title="Home Page" />,
     }),
   },
@@ -177,6 +180,7 @@ const Transactions_StackNavigator = createStackNavigator({
   Second: {
     screen: BottomTransactionsStack,
     // screen: Transactions,
+    headerStyle: {height: 20},
     navigationOptions: ({navigation}) => ({
       header: ({navigation}) => <Header navigation={navigation} title="Transactions" />,
     }),
@@ -223,8 +227,8 @@ const PrimaryNav = createDrawerNavigator(
     },
   },
   {
-    // contentComponent: DrawerWithLogoutButton,
-    initialRouteName: 'HomePage',
+    // initialRouteName: 'HomePage',
+    initialRouteName: 'Settings',
     contentComponent: DrawerContainer,
     edgeWidth: 25,
     headerMode: 'none',

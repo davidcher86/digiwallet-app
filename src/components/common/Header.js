@@ -9,6 +9,7 @@ const MyHeader = ({navigation, title}) => {
       <Icon
         color="#fff"
         name="menu"
+        style={{height: '20'}}
         onPress={() => navigation.dispatch(navigation.actions.openDrawer())}
       />
     );
@@ -20,11 +21,10 @@ const MyHeader = ({navigation, title}) => {
       <Header
         leftComponent={<HamburgerMenu />}
         backgroundColor={DARK_MODE.COLORS.HEADER_COLOR}
-        style={{height: 20}}
-        // barStyle={{height: '20%'}}
+        headerStyle={{height: '20'}}
         centerComponent={{
           text: title,
-          style: {color: '#fff', fontWeight: 'bold'},
+          style: {color: '#fff', fontWeight: 'bold', height: 20},
         }}
         // barStyle="dark-content"
         statusBarProps={{barStyle: 'dark-content'}}
