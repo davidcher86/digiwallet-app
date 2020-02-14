@@ -109,11 +109,6 @@ export const setAccountDetails = account => {
 
 export const fetchAccount = uid => {
   return dispatch => {
-    // firebaseAction(uid, 'transactions', 'read', null, setTransactions)
-    // .then(res => {
-    //   console.log(res);
-    // })
-
     const dataRef = firebase.database().ref(`/users/${uid}/account`);
 
     dispatch(startLoading());
@@ -121,8 +116,7 @@ export const fetchAccount = uid => {
       .once('value')
       .then(function(snapshot) {
         var res = snapshot.val();
-        // console.log(res);
-        // console.log(res !== null && res.assets !== undefined);
+
         if (res !== null && res.assets !== null) {
           var account = {
             assets: res.assets,
@@ -142,7 +136,6 @@ export const fetchAccount = uid => {
 };
 
 export const handleUpdaeAccount = (account, uid) => dispatch => {
-  // console.log('edit: ', account);
   const json = {
     sallary: account.sallary,
     creditCards: account.creditCards,
@@ -171,20 +164,6 @@ export const handleUpdaeAccount = (account, uid) => dispatch => {
       console.log(res);
       dispatch(endLoading());
     });
-  // const jsonToSend = {acount: json};
-  // console.log(jsonToSend);
-  // return firebaseAction(uid, 'account', 'edit', null, jsonToSend).then(res => {
-  //   console.log(res);
-  // });
-
-  // firebase.database().ref(`/users/${uid}/account`)
-  //     .set(json)
-  //     .then(res => {
-  //         console.log(res);
-  //     })
-  //     .catch(err => {
-  //         console.log(err);
-  //     })
 };
 
 export const setErrors = errors => {

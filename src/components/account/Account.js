@@ -90,7 +90,7 @@ class Account extends Component {
   // }
 
   componentDidMount() {
-    console.log('navigation', this.props.navigation.getParam('type'));
+    // console.log('navigation', this.props.navigation.getParam('type'));
       switch (this.props.navigation.getParam('type')) {
         case EDIT:
           if (this.props.identity.uid !== undefined && this.props.identity.uid !== null) {
@@ -99,7 +99,6 @@ class Account extends Component {
           }
           break;
         case NEW:
-          console.log('NEW');
           // this.props.changeAccountFieldValue('formType', NEW);
           break;
       }
@@ -148,7 +147,6 @@ class Account extends Component {
     };
 
     const personalData = () => {
-      // console.log(user);
       return (
         <ProgressStep
           nextBtnTextStyle={styles.prevNextBtn}

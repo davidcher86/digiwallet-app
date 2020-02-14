@@ -33,19 +33,7 @@ class LoginForm extends Component {
           const updateRef = firebase.database().ref(`/users/${uid}/account`);
 
           updateRef.update({lastConnected}).then(async res => {
-            if (res !== undefined) {
-              console.log('rrr', res);
-              await this.props.fetchData(uid, this.props.navigation);
-              this.props.navigation.navigate('PrimaryNav');
-              this.props.endLoading();
-              return res;
-            } else {
-              this.props.endLoading();
-              this.props.navigation.navigate('Account', {
-                type: 'NEW',
-                registered: true,
-              });
-            }
+            await this.props.fetchData(uid, this.props.navigation);
           });
         } else {
           this.props.endLoading();
@@ -85,7 +73,6 @@ class LoginForm extends Component {
         setErrors(errors);
         return true;
       case 'newPassword':
-        console.log(value.length);
         if (value.length < 6) {
           errors.newPassword = 'Password must be at least 6 chars';
           setErrors(errors);

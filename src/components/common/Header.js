@@ -20,7 +20,8 @@ const MyHeader = ({navigation, title}) => {
       <Header
         leftComponent={<HamburgerMenu />}
         backgroundColor={DARK_MODE.COLORS.HEADER_COLOR}
-        barStyle={{height: 20}}
+        style={{height: 20}}
+        // barStyle={{height: '20%'}}
         centerComponent={{
           text: title,
           style: {color: '#fff', fontWeight: 'bold'},

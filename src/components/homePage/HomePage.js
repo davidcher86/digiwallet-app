@@ -168,7 +168,7 @@ class HomePage extends Component {
 
     componentDidMount() {
         // console.log(this.props);
-        // this.props.fetchData(this.props.identity.uid, this.props.navigation);
+        this.props.fetchProfileData(this.props.identity.uid, this.props.navigation);
     }
 
     componentDidUpdate() {

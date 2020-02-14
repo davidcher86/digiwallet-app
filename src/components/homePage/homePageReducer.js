@@ -18,7 +18,7 @@ const initialState = {
 export default (state = initialState, action) => {
     let pageSettings;
     switch (action.type) {
-        case 'RECIEVE_DATA':
+        case 'RECIEVE_PROFILE_DATA':
             var data = action.data;
             return Object.assign({}, state, {
                 assets: data.assets,

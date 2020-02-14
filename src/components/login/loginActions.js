@@ -77,14 +77,12 @@ export const fetchData = (uid, navigation) => {
   return dispatch => {
     dispatch(startLoading());
     const dataRef = firebase.database().ref(`/users/${uid}/account`);
-    console.log('sdfsdffsdf');
+
     dataRef
       .once('value')
       .then(function(snapshot) {
         var res = snapshot.val();
 
-        // console.log(res);
-        // console.log(res && res.assets !== undefined);
         if (res && res.assets !== undefined) {
           var fixedList = [];
           var totalCredit = 0;
@@ -100,23 +98,19 @@ export const fetchData = (uid, navigation) => {
           res.totalCredit = totalCredit;
           res.currentMonthCredit = currentMonthCredit;
           dispatch(recieveData(res));
+          navigation.navigate('PrimaryNav');
           dispatch(endLoading());
         } else {
-          // console.log('sdfsdf');
           dispatch(endLoading());
-          // return navigation.navigate('Account', {
-          //   type: 'NEW',
-          //   registered: true,
-          // });
+          return navigation.navigate('Account', {
+            type: 'NEW',
+            registered: true,
+          });
         }
       })
       .catch(fail => {
         console.log(fail);
         dispatch(endLoading());
-        // return navigation.navigate('Account', {
-        //   type: 'NEW',
-        //   registered: true,
-        // });
       });
   };
 };
@@ -134,9 +128,7 @@ export const onLoginPress = (email, password, navigation) => {
         if (response.user !== null) {
           rememberUser(response.user.uid);
           dispatch(setIdentity(response.user.uid));
-          // console.log('uid', res.user.uid);
-          // var res = await fetchData(res.user.uid, navigation);
-          // console.log('res', res);
+
           const dataRef = firebase.database().ref(`/users/${response.user.uid}/account`);
           dataRef.once('value').then(function(snapshot) {
             var res = snapshot.val();
@@ -160,11 +152,8 @@ export const onLoginPress = (email, password, navigation) => {
               dispatch(endLoading());
             } else {
               dispatch(endLoading());
-              // navigation.navigate('Account', {formType: 'NEW', registered: true, uid: uid});
             }
           });
-          // navigation.navigate('HomePage');
-          // dispatch(setIdentity(response.user.uid));
         }
         dispatch(endLoading());
         dispatch(resetForm());
