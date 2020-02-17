@@ -5,10 +5,14 @@ import {
   Text,
   Alert,
   StyleSheet,
+  TouchableWithoutFeedback,
   StatusBar,
 } from 'react-native';
-import DraggableFlatList from 'react-native-draggable-flatlist'
+import DraggableFlatList from 'react-native-draggable-flatlist';
 import MultiSelectSortableFlatlist from 'react-native-multiselect-sortable-flatlist';
+import {SwipeListView, SwipeRow} from 'react-native-swipe-list-view';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -16,7 +20,18 @@ import {
 import {Button, Input, Icon} from 'react-native-elements';
 import {connect} from 'react-redux';
 import {createStackNavigator} from 'react-navigation-stack';
-import { Container, Left, Right, Header as BaseHeader, Content, List, ListItem, Text as BaseText } from 'native-base';
+import {
+  Container,
+  Left,
+  Right,
+  Header as BaseHeader,
+  Content,
+  List,
+  // SwipeRow,
+  Button as BaseBtn,
+  ListItem,
+  Text as BaseText,
+} from 'native-base';
 
 import Header from './../common/Header';
 import * as actions from './settingsActions';
@@ -31,6 +46,7 @@ import {DARK_MODE} from './../Styles';
 const exampleData = {
   car: ['Gas', 'license Renewel', 'Insuranes'],
   'house Hold': ['Electric Bill', 'Water Bill', 'Gas Bill'],
+  shopping: ['groceries', 'cloths', 'food'],
 };
 
 class SettingsContainer extends Component {
@@ -42,25 +58,25 @@ class SettingsContainer extends Component {
   }
 
   render() {
-    const { navigation } = this.props;
+    const {navigation} = this.props;
 
-    const renderItem = ({ item, index, drag, isActive }) => {
+    const renderItem = ({item, index, drag, isActive}) => {
       return (
-        <TouchableOpacity
-          style={styles.itemContainer}
-          onLongPress={drag} >
+        <TouchableOpacity style={styles.itemContainer} onLongPress={drag}>
           <View style={styles.itemStyle}>
-            <Text 
-              style={{ 
-                fontWeight: 'bold', 
+            <Text
+              style={{
+                fontWeight: 'bold',
                 color: 'white',
-                fontSize: 20,}}>
-                  {item}
+                fontSize: 20,
+              }}>
+              }}>
+              {item}
             </Text>
           </View>
         </TouchableOpacity>
-      )
-    }
+      );
+    };
 
     // console.log(this.props.navigation);
     return (
@@ -68,12 +84,19 @@ class SettingsContainer extends Component {
         {/* <Header /> */}
         <Content>
           <List>
+            <ListItem itemDivider>
+              <Text>User Preference</Text>
+            </ListItem>
             <ListItem>
               <Left>
                 <Text>Categories</Text>
               </Left>
               <Right>
-                <Icon  onPress={() => navigation.navigate('MainCategories')} active name="arrow-forward" />
+                <Icon
+                  onPress={() => navigation.navigate('MainCategories')}
+                  active
+                  name="arrow-forward"
+                />
               </Right>
             </ListItem>
           </List>
@@ -87,33 +110,100 @@ class MainCategories extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: exampleData.car,
+      ListData: ['A', 'B', 'C', 'D', 'E', 'F', 'G'],
+      ItemsSelected: [],
     };
+
+    // this.onItemPress = this.onItemPress.bind(this);
+    this.onSelectionChanged = this.onSelectionChanged.bind(this);
+    this.onSort = this.onSort.bind(this);
   }
-  render() {
-    const renderItem = ({ item, index, drag, isActive }) => {
-      return (
-        <TouchableOpacity
-          style={styles.itemContainer}
-          onLongPress={drag} >
-          <View style={styles.itemStyle}>
-          <Text style={{ 
-            fontWeight: 'bold', 
-            color: 'white',
-            fontSize: 20,
-          }}>{item}</Text>
-          </View>
-        </TouchableOpacity>
-      )
+
+  // onItemPress(item) {
+  //   Alert.alert('Alert', item + ' Pressed', [{ text: 'OK', onPress: () => console.log('OK Pressed') }], {
+  //     cancelable: true,
+  //   });
+  // }
+  componentDidMount() {
+    var mainCategories = [];
+    for (var key in exampleData) {
+      mainCategories.push(key);
     }
 
+    this.setState({ data: mainCategories });
+  }
+
+  onSelectionChanged(selectedItems) {
+    this.setState({ data: selectedItems });
+  }
+
+  onSort(newListDataArray) {
+    this.setState({ data: newListDataArray });
+  }
+
+  render() {
+    const {navigation} = this.props;
+    const Item = (item, index, selected, drag) => {
+      return (
+        <View style={{borderWidth: 1, height: 40}} Selected={selected}>
+          <SwipeRow
+            // onLongPress={() => console.log('sdsfsdf')}
+            disableRightSwipe={true}
+            rightOpenValue={-75} >
+            <View onPress={() => console.log('sdsfsdf')} style={{padding: 5, width: '100%', height: 20, alignItems: 'flex-end'}}>
+              <MaterialCommunityIcons name="delete-circle-outline" size={30} color="#4F8EF7" style={{marginRight: 7}}/>
+            </View>
+            <View style={{width: '100%', height: '100%', flexDirection: 'row', backgroundColor: 'yellow'}}>
+              <View style={{flex: 1, paddingTop: 0}}>
+                <List>
+                  <ListItem style={{paddingTop: 0}}>
+                    <Left>
+                      <View style={{textAlign: 'right', paddingLeft: 12}}>
+                        <Text onLongPress={() => drag()} style={{position: 'relative', left: -15, top: 3}}>
+                          <MaterialIcons name="more-vert" size={30} color="#4F8EF7"/>
+                        </Text>
+                      </View>
+                      {/* <MaterialIcons name="more-vert" size={30} color="#4F8EF7" style={{marginRight: 7}}/> */}
+                      <Text style={{marginTop: 7}} onLongPress={() => drag()}>{item}</Text>
+                    </Left>
+                    <Right style={{marginTop: 7}}>
+                      <Icon
+                        onPress={() => navigation.navigate('SubCategories', {category: item})}
+                        active
+                        name="arrow-forward"
+                      />
+                    </Right>
+                  </ListItem>
+                </List>
+              </View>
+              {/* <Text onLongPress={() => drag()} style={{marginLeft: 6}}>{'item'}</Text>
+              <Text style={{marginLeft: 6}}>{item}</Text> */}
+            </View>
+          </SwipeRow>
+        </View>
+      );
+    };
+    // console.log(this.state.data);
     return (
       <View style={{flex: 1}}>
-        <DraggableFlatList
+        <MultiSelectSortableFlatlist
+          ref={MultiSelectSortableFlatlist => (this.MultiSelectSortableFlatlist = MultiSelectSortableFlatlist)}
+          contentContainerStyle={styles.ListContainer}
+          ListHeaderComponentStyle={styles.HeaderStyle}
+          // ListHeaderComponent={
+          //   <Header
+          //     SelectAll={() => this.MultiSelectSortableFlatlist.SelectAll()}
+          //     DeselectAll={() => this.MultiSelectSortableFlatlist.DeselectAll()}
+          //   />
+          // }
+          mode="manual"
           data={this.state.data}
-          renderItem={renderItem}
-          keyExtractor={(item, index) => `draggable-item-${index}`}
-          onDragEnd={({ data }) => this.setState({ data })}
+          keyExtractor={(item, index) => item}
+          // onItemTap={({ item, index }) => this.onItemPress(item)}
+          onItemSelected={({ selectedItems, item, index, drag }) => this.onSelectionChanged(selectedItems)}
+          onItemDeselected={({ selectedItems, item, index, drag }) => this.onSelectionChanged(selectedItems)}
+          onSort={data => this.onSort(data)}
+          renderItem={({ item, index, selected, drag }) => Item(item, index, selected, drag)}
         />
       </View>
     );
@@ -126,31 +216,90 @@ class SubCategories extends Component {
     this.state = {
       data: exampleData.car,
     };
+
+    // this.onItemPress = this.onItemPress.bind(this);
+    this.onSelectionChanged = this.onSelectionChanged.bind(this);
+    this.onSort = this.onSort.bind(this);
   }
-  render() {
-    const renderItem = ({ item, index, drag, isActive }) => {
-      return (
-        <TouchableOpacity
-          style={styles.itemContainer}
-          onLongPress={drag} >
-          <View style={styles.itemStyle}>
-          <Text style={{ 
-            fontWeight: 'bold', 
-            color: 'white',
-            fontSize: 20,
-          }}>{item}</Text>
-          </View>
-        </TouchableOpacity>
-      )
+
+  componentDidMount() {
+    var mainCategories = [];
+    var mainCategory = this.props.navigation.getParam('category');
+    for (var key in exampleData) {
+      if (key === mainCategory) {
+        for (let item in exampleData[key]) {
+          mainCategories.push(exampleData[key][item]);
+        }
+      }
     }
+    // console.log('category', this.props.navigation.getParam('category'));
+    this.setState({ data: mainCategories });
+  }
+
+  onSelectionChanged(selectedItems) {
+    this.setState({ data: selectedItems });
+  }
+
+  onSort(newListDataArray) {
+    this.setState({ data: newListDataArray });
+  }
+
+  render() {
+    const Item = (item, index, selected, drag) => {
+      return (
+        <View style={{borderWidth: 1, height: 40}} Selected={selected}>
+          <SwipeRow
+            // onLongPress={() => console.log('sdsfsdf')}
+            disableRightSwipe={true}
+            rightOpenValue={-75} >
+            <View onPress={() => console.log('sdsfsdf')} style={{padding: 5, width: '100%', height: 20, alignItems: 'flex-end'}}>
+              <MaterialCommunityIcons name="delete-circle-outline" size={30} color="#4F8EF7" style={{marginRight: 7}}/>
+            </View>
+            <View style={{width: '100%', height: '100%', flexDirection: 'row', backgroundColor: 'yellow'}}>
+              <View style={{flex: 1, paddingTop: 0}}>
+                <List>
+                  <ListItem style={{paddingTop: 0}}>
+                    <Left onLongPress={() => drag()}>
+                      <View style={{textAlign: 'right', paddingLeft: 12}}>
+                        <Text onLongPress={() => drag()} style={{position: 'relative', left: -15, top: 3}}>
+                          <MaterialIcons name="more-vert" size={30} color="#4F8EF7"/>
+                        </Text>
+                      </View>
+                      {/* <MaterialIcons name="more-vert" size={30} color="#4F8EF7" style={{marginRight: 7}}/> */}
+                      <Text style={{paddingTop: 8}}>{item}</Text>
+                    </Left>
+                  </ListItem>
+                </List>
+              </View>
+              {/* <Text onLongPress={() => drag()} style={{marginLeft: 6}}>{'item'}</Text>
+              <Text style={{marginLeft: 6}}>{item}</Text> */}
+            </View>
+          </SwipeRow>
+        </View>
+      );
+    };
 
     return (
       <View style={{flex: 1}}>
-        <DraggableFlatList
+        <MultiSelectSortableFlatlist
+          ref={MultiSelectSortableFlatlist => (this.MultiSelectSortableFlatlist = MultiSelectSortableFlatlist)}
+          contentContainerStyle={styles.ListContainer}
+          ListHeaderComponentStyle={styles.HeaderStyle}
+          // ListHeaderComponent={
+          //   <Header
+          //     SelectAll={() => this.MultiSelectSortableFlatlist.SelectAll()}
+          //     DeselectAll={() => this.MultiSelectSortableFlatlist.DeselectAll()}
+          //   />
+          // }
+          mode="manual"
           data={this.state.data}
-          renderItem={renderItem}
-          keyExtractor={(item, index) => `draggable-item-${index}`}
-          onDragEnd={({ data }) => this.setState({ data })} />
+          keyExtractor={(item, index) => item}
+          // onItemTap={({ item, index }) => this.onItemPress(item)}
+          onItemSelected={({ selectedItems, item, index, drag }) => this.onSelectionChanged(selectedItems)}
+          onItemDeselected={({ selectedItems, item, index, drag }) => this.onSelectionChanged(selectedItems)}
+          onSort={data => this.onSort(data)}
+          renderItem={({ item, index, selected, drag }) => Item(item, index, selected, drag)}
+        />
       </View>
     );
   }
@@ -215,7 +364,6 @@ const Settings = createStackNavigator(
         },
         mode: 'modal',
         headerMode: 'screen',
-        headerBackTitleVisible: true,
         headerTruncatedBackTitle: 'back',
       },
     },
@@ -224,7 +372,7 @@ const Settings = createStackNavigator(
       navigationOptions: {
         headerShown: true,
         headerBackTitleVisible: true,
-        // title: 'Settings',
+        title: 'Main Categories',
         // header: ({navigation}) => (
         //   <Header navigation={navigation} title="Settings" />
         // ),
@@ -238,8 +386,7 @@ const Settings = createStackNavigator(
         },
         mode: 'modal',
         headerMode: 'screen',
-        headerBackTitleVisible: true,
-        headerTruncatedBackTitle: '<',
+        // headerTruncatedBackTitle: '<',
       },
     },
     SubCategories: {
@@ -247,7 +394,7 @@ const Settings = createStackNavigator(
       navigationOptions: {
         headerShown: true,
         headerBackTitleVisible: true,
-        // title: 'Settings',
+        title: 'Sub Categories',
         // header: ({navigation}) => (
         //   <Header navigation={navigation} title="Settings" />
         // ),
@@ -261,13 +408,12 @@ const Settings = createStackNavigator(
         },
         mode: 'modal',
         headerMode: 'screen',
-        headerBackTitleVisible: true,
-        headerTruncatedBackTitle: '<',
+        // headerTruncatedBackTitle: '<',
       },
     },
   },
   {
-    // contentComponent: DrawerWithLogoutButton,
+    // initialRouteName: SubCategories,
     mode: 'modal',
   },
 );
