@@ -35,9 +35,13 @@ import * as actions from './settingsActions';
 import {DARK_MODE} from './../Styles';
 
 class SettingsContainer extends Component {
+  componentDidMount() {
+    this.props.setValue('categoryData', this.props.profile.categoryData);
+  }
+
   render() {
     const {navigation} = this.props;
-
+    console.log(this.props.settings);
     return (
       <Container>
         <Content>
@@ -235,21 +239,9 @@ class SubCategoriesContainer extends Component {
   }
 
   componentDidMount() {
-    var subCategories = [];
     var mainCategory = this.props.navigation.getParam('category');
-    // console.log(this.props.settings.mainCategoryList);
-    // console.log(mainCategory);
-    for (let item in this.props.settings.mainCategoryList) {
-      console.log(item);
-      console.log(mainCategory);
-      console.log(this.props.profile);
-      console.log(this.props.settings.categoryData[mainCategory]);
-      console.log(this.props.settings.categoryData[mainCategory][item]);
-      subCategories.push(this.props.settings.mainCategoryList[mainCategory][item]);
-    }
-
     this.props.setValue('newCategory', '');
-    this.props.setValue('subCategoryList', subCategories);
+    this.props.setValue('subCategoryList', this.props.settings.categoryData[mainCategory]);
   }
 
   onSelectionChanged(selectedItems) {
@@ -325,11 +317,31 @@ class SubCategoriesContainer extends Component {
       );
     };
 
+    const Header = () => {
+      return (
+        <View style={{width: '100%', height: 40, backgroundColor: 'yellow', flexDirection: 'row'}}>
+          <MaterialIcons style={{marginTop: 15, marginLeft: 17, marginRight: 7, width: '5%'}} name="create" size={20} color="#4F8EF7"/>
+          <InputHeader
+            style={{width: '85%', marginBottom: 15}}
+            placeholder="Create Categry"
+            value={this.props.settings.newCategory}
+            onChangeText={(e) => this.props.setValue('newCategory', e)} />
+          <Entypo
+            style={{width: '10%', marginTop: 15}}
+            onPress={() => this.onAddItem(this.props.settings.newCategory)}
+            name="add-to-list"
+            size={20}
+            color="#4F8EF7"/>
+        </View>
+      );
+    };
+
     return (
       <View style={{flex: 1}}>
+        {Header()}
         <MultiSelectSortableFlatlist
           ref={MultiSelectSortableFlatlist => (this.MultiSelectSortableFlatlist = MultiSelectSortableFlatlist)}
-          contentContainerStyle={styles.ListContainer}
+          contentContainerStyle={{paddingTop: 0}}
           ListHeaderComponentStyle={styles.HeaderStyle}
           // ListHeaderComponent={
           //   <Header
