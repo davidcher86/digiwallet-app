@@ -10,6 +10,7 @@ const initialState = {
     creditDebt: [],
     dataLaodet: false,
     credit: [],
+    categoryData: [],
     pageSettings: {
         isOpenIndex: null,
     },
@@ -31,7 +32,7 @@ export default (state = initialState, action) => {
                 credit: data.fixedList,
                 sallary: data.sallary,
                 creditDebt: data.creditDebt,
-
+                categoryData: JSON.parse(data.categories),
                 dataLaodet: true,
             });
         case 'CHANGE_OPEN_CREDIT_INDEX':

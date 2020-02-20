@@ -59,6 +59,12 @@ export const handlePickerChange = (itemValue, itemIndex) => {
   };
 };
 
+const defaultCategories = {
+  car: ['Gas', 'license Renewel', 'Insuranes'],
+  'house Hold': ['Electric Bill', 'Water Bill', 'Gas Bill'],
+  shopping: ['groceries', 'cloths', 'food'],
+};
+
 export const handleRegisterAccount = (account, uid, navigation) => dispatch => {
   const json = {
     sallary: account.sallary,
@@ -66,6 +72,7 @@ export const handleRegisterAccount = (account, uid, navigation) => dispatch => {
     details: account.user,
     transactions: account.transactions,
     assets: account.assets,
+    categories: JSON.stringify(defaultCategories),
   };
 
   var dtNow = new Date();

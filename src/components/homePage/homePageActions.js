@@ -35,6 +35,7 @@ export const fetchProfileData = (uid, navigation) => {
         var res = snapshot.val();
 
         if (res && res.assets !== null) {
+          // console.log(res);
           var fixedList = [];
           var totalCredit = 0;
           var currentMonthCredit = 0;

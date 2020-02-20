@@ -227,8 +227,8 @@ const PrimaryNav = createDrawerNavigator(
     },
   },
   {
-    // initialRouteName: 'HomePage',
-    initialRouteName: 'Settings',
+    initialRouteName: 'HomePage',
+    // initialRouteName: 'Settings',
     contentComponent: DrawerContainer,
     edgeWidth: 25,
     headerMode: 'none',

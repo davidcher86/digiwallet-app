@@ -1,11 +1,8 @@
 import React, {Component} from 'react';
 import {
   View,
-  TouchableOpacity,
   Text,
-  Alert,
   StyleSheet,
-  TouchableWithoutFeedback,
   StatusBar,
 } from 'react-native';
 import DraggableFlatList from 'react-native-draggable-flatlist';
@@ -13,6 +10,7 @@ import MultiSelectSortableFlatlist from 'react-native-multiselect-sortable-flatl
 import {SwipeListView, SwipeRow} from 'react-native-swipe-list-view';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import Entypo from 'react-native-vector-icons/Entypo';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -27,61 +25,21 @@ import {
   Header as BaseHeader,
   Content,
   List,
-  // SwipeRow,
+  Input as InputHeader,
   Button as BaseBtn,
   ListItem,
   Text as BaseText,
 } from 'native-base';
 
-import Header from './../common/Header';
 import * as actions from './settingsActions';
 import {DARK_MODE} from './../Styles';
 
-// const exampleData = [...Array(20)].map((d, index) => ({
-//   key: `item-${index}`, // For example only -- don't use index as your key!
-//   label: index,
-//   backgroundColor: `rgb(${Math.floor(Math.random() * 255)}, ${index * 5}, ${132})`,
-// }))
-
-const exampleData = {
-  car: ['Gas', 'license Renewel', 'Insuranes'],
-  'house Hold': ['Electric Bill', 'Water Bill', 'Gas Bill'],
-  shopping: ['groceries', 'cloths', 'food'],
-};
-
 class SettingsContainer extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      data: exampleData.car,
-    };
-  }
-
   render() {
     const {navigation} = this.props;
 
-    const renderItem = ({item, index, drag, isActive}) => {
-      return (
-        <TouchableOpacity style={styles.itemContainer} onLongPress={drag}>
-          <View style={styles.itemStyle}>
-            <Text
-              style={{
-                fontWeight: 'bold',
-                color: 'white',
-                fontSize: 20,
-              }}>
-              }}>
-              {item}
-            </Text>
-          </View>
-        </TouchableOpacity>
-      );
-    };
-
-    // console.log(this.props.navigation);
     return (
       <Container>
-        {/* <Header /> */}
         <Content>
           <List>
             <ListItem itemDivider>
@@ -106,17 +64,15 @@ class SettingsContainer extends Component {
   }
 }
 
-class MainCategories extends Component {
+class MainCategoriesContainer extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      ListData: ['A', 'B', 'C', 'D', 'E', 'F', 'G'],
-      ItemsSelected: [],
-    };
 
     // this.onItemPress = this.onItemPress.bind(this);
     this.onSelectionChanged = this.onSelectionChanged.bind(this);
     this.onSort = this.onSort.bind(this);
+    this.onDeleteItem = this.onDeleteItem.bind(this);
+    this.onAddItem = this.onAddItem.bind(this);
   }
 
   // onItemPress(item) {
@@ -126,23 +82,52 @@ class MainCategories extends Component {
   // }
   componentDidMount() {
     var mainCategories = [];
-    for (var key in exampleData) {
+
+    for (var key in this.props.profile.categoryData) {
       mainCategories.push(key);
     }
 
-    this.setState({ data: mainCategories });
+    this.props.setValue('newCategory', '');
+    this.props.setValue('mainCategoryList', mainCategories);
   }
 
   onSelectionChanged(selectedItems) {
-    this.setState({ data: selectedItems });
+    this.props.setValue('mainCategoryList', selectedItems);
   }
 
   onSort(newListDataArray) {
-    this.setState({ data: newListDataArray });
+    this.props.setValue('mainCategoryList', newListDataArray);
+  }
+
+  onDeleteItem(key) {
+    var newListDataArray = this.props.profile.categoryData;
+    delete newListDataArray[key];
+    var mainCategories = [];
+
+    for (var index in newListDataArray) {
+      mainCategories.push(index);
+    }
+    this.props.setValue('mainCategoryList', mainCategories);
+  }
+
+  onAddItem(item) {
+    console.log('item', item);
+    // console.log('profile', this.props.profile);
+    if (item !== '') {
+      var newListDataArray = this.props.profile.categoryData;
+      var mainCategoryList = this.props.settings.mainCategoryList;
+      // console.log('newListDataArray', newListDataArray);
+      newListDataArray[item] = ['other'];
+      console.log('newListDataArray', newListDataArray);
+      mainCategoryList.push(item);
+      console.log('mainCategoryList', mainCategoryList);
+      this.props.setValue('mainCategoryList', mainCategoryList);
+    }
   }
 
   render() {
     const {navigation} = this.props;
+    // console.log(this.props.settings);
     const Item = (item, index, selected, drag) => {
       return (
         <View style={{borderWidth: 1, height: 40}} Selected={selected}>
@@ -150,32 +135,37 @@ class MainCategories extends Component {
             // onLongPress={() => console.log('sdsfsdf')}
             disableRightSwipe={true}
             rightOpenValue={-75} >
-            <View onPress={() => console.log('sdsfsdf')} style={{padding: 5, width: '100%', height: 20, alignItems: 'flex-end'}}>
-              <MaterialCommunityIcons name="delete-circle-outline" size={30} color="#4F8EF7" style={{marginRight: 7}}/>
+            <View onPress={() => console.log('sdsfsdf')} style={{width: '100%', height: 40, alignItems: 'flex-end', padding: 0}}>
+              <MaterialCommunityIcons
+                onPress={() => this.onAddItem(item)}
+                name="delete-circle-outline"
+                size={30}
+                color="#4F8EF7"
+                style={{marginRight: 7}}/>
             </View>
-            <View style={{width: '100%', height: '100%', flexDirection: 'row', backgroundColor: 'yellow'}}>
-              <View style={{flex: 1, paddingTop: 0}}>
-                <List>
-                  <ListItem style={{paddingTop: 0}}>
-                    <Left>
-                      <View style={{textAlign: 'right', paddingLeft: 12}}>
-                        <Text onLongPress={() => drag()} style={{position: 'relative', left: -15, top: 3}}>
-                          <MaterialIcons name="more-vert" size={30} color="#4F8EF7"/>
-                        </Text>
-                      </View>
-                      {/* <MaterialIcons name="more-vert" size={30} color="#4F8EF7" style={{marginRight: 7}}/> */}
-                      <Text style={{marginTop: 7}} onLongPress={() => drag()}>{item}</Text>
-                    </Left>
-                    <Right style={{marginTop: 7}}>
-                      <Icon
-                        onPress={() => navigation.navigate('SubCategories', {category: item})}
-                        active
-                        name="arrow-forward"
-                      />
-                    </Right>
-                  </ListItem>
-                </List>
-              </View>
+            <View style={{width: '100%', height: 40, flexDirection: 'row', backgroundColor: 'yellow'}}>
+              {/* <View style={{flex: 1, padding: 0, height: 20}}> */}
+              <List style={{flex: 1, backgroundColor: 'green', padding: 0, height: 40}}>
+                <ListItem style={{padding: 0, height: 40}}>
+                  <Left>
+                    <View style={{textAlign: 'right', paddingLeft: 12}}>
+                      <Text onLongPress={() => drag()} style={{position: 'relative', left: -15}}>
+                        <MaterialIcons name="more-vert" size={30} color="#4F8EF7"/>
+                      </Text>
+                    </View>
+                    {/* <MaterialIcons name="more-vert" size={30} color="#4F8EF7" style={{marginRight: 7}}/> */}
+                    <Text style={{marginTop: 7}} onLongPress={() => drag()}>{item}</Text>
+                  </Left>
+                  <Right>
+                    <Icon
+                      onPress={() => navigation.navigate('SubCategories', {category: item})}
+                      active
+                      name="arrow-forward"
+                    />
+                  </Right>
+                </ListItem>
+              </List>
+              {/* </View> */}
               {/* <Text onLongPress={() => drag()} style={{marginLeft: 6}}>{'item'}</Text>
               <Text style={{marginLeft: 6}}>{item}</Text> */}
             </View>
@@ -183,21 +173,44 @@ class MainCategories extends Component {
         </View>
       );
     };
-    // console.log(this.state.data);
+    // console.log(this.props.profile);
+
+    const Header = () => {
+      return (
+        <View style={{width: '100%', height: 40, backgroundColor: 'yellow', flexDirection: 'row'}}>
+          <MaterialIcons style={{marginTop: 15, marginLeft: 17, marginRight: 7, width: '5%'}} name="create" size={20} color="#4F8EF7"/>
+          <InputHeader
+            style={{width: '85%', marginBottom: 15}}
+            placeholder="Create Categry"
+            value={this.props.settings.newCategory}
+            onChangeText={(e) => this.props.setValue('newCategory', e)} />
+          <Entypo
+            style={{width: '10%', marginTop: 15}}
+            onPress={() => this.onAddItem(this.props.settings.newCategory)}
+            name="add-to-list"
+            size={20}
+            color="#4F8EF7"/>
+        </View>
+      );
+    };
+    // console.log(this.props);
     return (
       <View style={{flex: 1}}>
+        {Header()}
         <MultiSelectSortableFlatlist
           ref={MultiSelectSortableFlatlist => (this.MultiSelectSortableFlatlist = MultiSelectSortableFlatlist)}
-          contentContainerStyle={styles.ListContainer}
-          ListHeaderComponentStyle={styles.HeaderStyle}
+          contentContainerStyle={{paddingTop: 0}}
+          // ListHeaderComponentStyle={{padding: 0, margin: 0}}
+          // ListHeaderComponent={() => Header()}
           // ListHeaderComponent={
-          //   <Header
+          //   <BaseHeader
           //     SelectAll={() => this.MultiSelectSortableFlatlist.SelectAll()}
           //     DeselectAll={() => this.MultiSelectSortableFlatlist.DeselectAll()}
           //   />
           // }
+          // style={{paddingTop: 0, borderWidth: 2}}
           mode="manual"
-          data={this.state.data}
+          data={this.props.settings.mainCategoryList}
           keyExtractor={(item, index) => item}
           // onItemTap={({ item, index }) => this.onItemPress(item)}
           onItemSelected={({ selectedItems, item, index, drag }) => this.onSelectionChanged(selectedItems)}
@@ -210,30 +223,33 @@ class MainCategories extends Component {
   }
 }
 
-class SubCategories extends Component {
+class SubCategoriesContainer extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      data: exampleData.car,
-    };
 
     // this.onItemPress = this.onItemPress.bind(this);
     this.onSelectionChanged = this.onSelectionChanged.bind(this);
     this.onSort = this.onSort.bind(this);
+    this.onDeleteItem = this.onDeleteItem.bind(this);
+    this.onAddItem = this.onAddItem.bind(this);
   }
 
   componentDidMount() {
-    var mainCategories = [];
+    var subCategories = [];
     var mainCategory = this.props.navigation.getParam('category');
-    for (var key in exampleData) {
-      if (key === mainCategory) {
-        for (let item in exampleData[key]) {
-          mainCategories.push(exampleData[key][item]);
-        }
-      }
+    // console.log(this.props.settings.mainCategoryList);
+    // console.log(mainCategory);
+    for (let item in this.props.settings.mainCategoryList) {
+      console.log(item);
+      console.log(mainCategory);
+      console.log(this.props.profile);
+      console.log(this.props.settings.categoryData[mainCategory]);
+      console.log(this.props.settings.categoryData[mainCategory][item]);
+      subCategories.push(this.props.settings.mainCategoryList[mainCategory][item]);
     }
-    // console.log('category', this.props.navigation.getParam('category'));
-    this.setState({ data: mainCategories });
+
+    this.props.setValue('newCategory', '');
+    this.props.setValue('subCategoryList', subCategories);
   }
 
   onSelectionChanged(selectedItems) {
@@ -241,7 +257,36 @@ class SubCategories extends Component {
   }
 
   onSort(newListDataArray) {
+    this.props.setValue('subCategoryList', newListDataArray);
     this.setState({ data: newListDataArray });
+  }
+
+  onDeleteItem(index) {
+    var mainCategory = this.props.navigation.getParam('category');
+    var newListDataArray = this.props.profile.categoryData[mainCategory];
+    newListDataArray.splice(index, 1);
+
+    this.props.setValue('subCategoryList', newListDataArray);
+  }
+
+  onAddItem(item) {
+    console.log('item', item);
+    // console.log('profile', this.props.profile);
+    if (item !== '') {
+      var mainCategory = this.props.navigation.getParam('category');
+      var newListDataArray = this.props.profile.categoryData;
+      // var mainCategoryList = this.props.settings.mainCategoryList;
+      var newList = this.props.settings.mainCategoryList[mainCategory];
+      newList.push(item);
+      newListDataArray[mainCategory].push(item);
+      // console.log('newListDataArray', newListDataArray);
+      // newListDataArray[item] = ['other'];
+      // console.log('newListDataArray', newListDataArray);
+      // mainCategoryList.push(item);
+      // console.log('mainCategoryList', mainCategoryList);
+      this.props.setValue('subCategoryList', newList);
+      this.props.setValue('mainCategoryList', newListDataArray);
+    }
   }
 
   render() {
@@ -252,27 +297,28 @@ class SubCategories extends Component {
             // onLongPress={() => console.log('sdsfsdf')}
             disableRightSwipe={true}
             rightOpenValue={-75} >
-            <View onPress={() => console.log('sdsfsdf')} style={{padding: 5, width: '100%', height: 20, alignItems: 'flex-end'}}>
-              <MaterialCommunityIcons name="delete-circle-outline" size={30} color="#4F8EF7" style={{marginRight: 7}}/>
+            <View onPress={() => console.log('sdsfsdf')} style={{width: '100%', height: 40, alignItems: 'flex-end', padding: 0}}>
+              <MaterialCommunityIcons
+                onPress={() => this.onDeleteItem(index)}
+                name="delete-circle-outline"
+                size={30}
+                color="#4F8EF7"
+                style={{marginRight: 7}}/>
             </View>
-            <View style={{width: '100%', height: '100%', flexDirection: 'row', backgroundColor: 'yellow'}}>
-              <View style={{flex: 1, paddingTop: 0}}>
-                <List>
-                  <ListItem style={{paddingTop: 0}}>
-                    <Left onLongPress={() => drag()}>
-                      <View style={{textAlign: 'right', paddingLeft: 12}}>
-                        <Text onLongPress={() => drag()} style={{position: 'relative', left: -15, top: 3}}>
-                          <MaterialIcons name="more-vert" size={30} color="#4F8EF7"/>
-                        </Text>
-                      </View>
-                      {/* <MaterialIcons name="more-vert" size={30} color="#4F8EF7" style={{marginRight: 7}}/> */}
-                      <Text style={{paddingTop: 8}}>{item}</Text>
-                    </Left>
-                  </ListItem>
-                </List>
-              </View>
-              {/* <Text onLongPress={() => drag()} style={{marginLeft: 6}}>{'item'}</Text>
-              <Text style={{marginLeft: 6}}>{item}</Text> */}
+            <View style={{width: '100%', height: 40, flexDirection: 'row', backgroundColor: 'yellow'}}>
+              <List style={{flex: 1, backgroundColor: 'green', padding: 0, height: 40}}>
+                <ListItem style={{padding: 0, height: 40}}>
+                  <Left>
+                    <View style={{textAlign: 'right', paddingLeft: 12}}>
+                      <Text onLongPress={() => drag()} style={{position: 'relative', left: -15}}>
+                        <MaterialIcons name="more-vert" size={30} color="#4F8EF7"/>
+                      </Text>
+                    </View>
+                    {/* <MaterialIcons name="more-vert" size={30} color="#4F8EF7" style={{marginRight: 7}}/> */}
+                    <Text style={{marginTop: 7}} onLongPress={() => drag()}>{item}</Text>
+                  </Left>
+                </ListItem>
+              </List>
             </View>
           </SwipeRow>
         </View>
@@ -292,7 +338,7 @@ class SubCategories extends Component {
           //   />
           // }
           mode="manual"
-          data={this.state.data}
+          data={this.props.settings.subCategoryList}
           keyExtractor={(item, index) => item}
           // onItemTap={({ item, index }) => this.onItemPress(item)}
           onItemSelected={({ selectedItems, item, index, drag }) => this.onSelectionChanged(selectedItems)}
@@ -304,6 +350,28 @@ class SubCategories extends Component {
     );
   }
 }
+
+let mapStateToProps = state => {
+  return {
+    settings: state.settings,
+    profile: state.profile,
+  };
+};
+
+const SettingsScreen = connect(
+  mapStateToProps,
+  actions,
+)(SettingsContainer);
+
+const MainCategories = connect(
+  mapStateToProps,
+  actions,
+)(MainCategoriesContainer);
+
+const SubCategories = connect(
+  mapStateToProps,
+  actions,
+)(SubCategoriesContainer);
 
 const styles = StyleSheet.create({
   ListContainer: {
@@ -331,18 +399,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: wp(4),
   },
 });
-
-const mapStateToProps = state => {
-  return {
-    dashboard: state.dashboard,
-    settings: state.settings,
-  };
-};
-
-const SettingsScreen = connect(
-  mapStateToProps,
-  actions,
-)(SettingsContainer);
 
 const Settings = createStackNavigator(
   {
