@@ -57,6 +57,7 @@ export const fetchProfileData = (uid, navigation) => {
       })
       .catch(fail => {
         console.log(fail);
+        dispatch(endLoading());
       });
   };
 };
