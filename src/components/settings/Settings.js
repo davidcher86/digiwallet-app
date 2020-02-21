@@ -262,7 +262,7 @@ class SubCategoriesContainer extends Component {
   }
 
   onAddItem(item) {
-    // console.log('item', item);
+    console.log('item', item);
     // console.log('profile', this.props.profile);
     if (item !== '') {
       var mainCategory = this.props.navigation.getParam('category');
