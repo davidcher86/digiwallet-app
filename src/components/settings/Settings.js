@@ -3,6 +3,7 @@ import {
   View,
   Text,
   StyleSheet,
+  Switch,
   StatusBar,
 } from 'react-native';
 import DraggableFlatList from 'react-native-draggable-flatlist';
@@ -41,7 +42,7 @@ class SettingsContainer extends Component {
 
   render() {
     const {navigation} = this.props;
-    console.log(this.props.settings);
+    // console.log(this.props.settings);
     return (
       <Container>
         <Content>
@@ -58,6 +59,21 @@ class SettingsContainer extends Component {
                   onPress={() => navigation.navigate('MainCategories')}
                   active
                   name="arrow-forward"
+                />
+              </Right>
+            </ListItem>
+            <ListItem itemDivider>
+              <Text>Disaplay</Text>
+            </ListItem>
+            <ListItem>
+              <Left>
+                <Text>Dark Mode</Text>
+              </Left>
+              <Right>
+                <Switch
+                  // style={{ marginTop: 30 }}
+                  onValueChange={() => this.props.setValue('darkMode', !this.props.settings.darkMode)}
+                  value={this.props.settings.darkMode}
                 />
               </Right>
             </ListItem>
@@ -104,34 +120,36 @@ class MainCategoriesContainer extends Component {
   }
 
   onDeleteItem(key) {
-    var newListDataArray = this.props.profile.categoryData;
-    delete newListDataArray[key];
+    var categoryData = this.props.settings.categoryData;
+    delete categoryData[key];
     var mainCategories = [];
-
-    for (var index in newListDataArray) {
+    for (var index in categoryData) {
       mainCategories.push(index);
     }
+
     this.props.setValue('mainCategoryList', mainCategories);
+    this.props.setValue('categoryData', categoryData);
+    this.props.handleUpdaeCategories(categoryData, this.props.identity.uid);
   }
 
   onAddItem(item) {
-    console.log('item', item);
-    // console.log('profile', this.props.profile);
     if (item !== '') {
-      var newListDataArray = this.props.profile.categoryData;
+      var categoryData = this.props.settings.categoryData;
       var mainCategoryList = this.props.settings.mainCategoryList;
-      // console.log('newListDataArray', newListDataArray);
-      newListDataArray[item] = ['other'];
-      console.log('newListDataArray', newListDataArray);
+
+      categoryData[item] = ['other'];
       mainCategoryList.push(item);
-      console.log('mainCategoryList', mainCategoryList);
+
       this.props.setValue('mainCategoryList', mainCategoryList);
+      this.props.setValue('categoryData', categoryData);
+      this.props.setValue('newCategory', '');
+      this.props.handleUpdaeCategories(categoryData, this.props.identity.uid);
     }
   }
 
   render() {
     const {navigation} = this.props;
-    // console.log(this.props.settings);
+
     const Item = (item, index, selected, drag) => {
       return (
         <View style={{borderWidth: 1, height: 40}} Selected={selected}>
@@ -141,11 +159,11 @@ class MainCategoriesContainer extends Component {
             rightOpenValue={-75} >
             <View onPress={() => console.log('sdsfsdf')} style={{width: '100%', height: 40, alignItems: 'flex-end', padding: 0}}>
               <MaterialCommunityIcons
-                onPress={() => this.onAddItem(item)}
+                onPress={() => this.onDeleteItem(item)}
                 name="delete-circle-outline"
                 size={30}
                 color="#4F8EF7"
-                style={{marginRight: 7}}/>
+                style={{marginRight: 15, marginTop: 4}}/>
             </View>
             <View style={{width: '100%', height: 40, flexDirection: 'row', backgroundColor: 'yellow'}}>
               {/* <View style={{flex: 1, padding: 0, height: 20}}> */}
@@ -255,29 +273,28 @@ class SubCategoriesContainer extends Component {
 
   onDeleteItem(index) {
     var mainCategory = this.props.navigation.getParam('category');
-    var newListDataArray = this.props.profile.categoryData[mainCategory];
+    var newListDataArray = this.props.settings.categoryData[mainCategory];
+    var categoryData = this.props.settings.categoryData;
     newListDataArray.splice(index, 1);
-
+    categoryData[mainCategory] = newListDataArray;
     this.props.setValue('subCategoryList', newListDataArray);
+    this.props.setValue('categoryData', categoryData);
+    this.props.handleUpdaeCategories(categoryData, this.props.identity.uid);
   }
 
   onAddItem(item) {
-    console.log('item', item);
-    // console.log('profile', this.props.profile);
     if (item !== '') {
       var mainCategory = this.props.navigation.getParam('category');
-      var newListDataArray = this.props.profile.categoryData;
-      // var mainCategoryList = this.props.settings.mainCategoryList;
-      var newList = this.props.settings.mainCategoryList[mainCategory];
+      var categoryData = this.props.settings.categoryData;
+      var newList = categoryData[mainCategory];
+
       newList.push(item);
-      newListDataArray[mainCategory].push(item);
-      // console.log('newListDataArray', newListDataArray);
-      // newListDataArray[item] = ['other'];
-      // console.log('newListDataArray', newListDataArray);
-      // mainCategoryList.push(item);
-      // console.log('mainCategoryList', mainCategoryList);
+      categoryData[mainCategory] = newList;
+
+      this.props.setValue('newCategory', '');
       this.props.setValue('subCategoryList', newList);
-      this.props.setValue('mainCategoryList', newListDataArray);
+      this.props.setValue('categoryData', categoryData);
+      this.props.handleUpdaeCategories(categoryData, this.props.identity.uid);
     }
   }
 
@@ -295,7 +312,7 @@ class SubCategoriesContainer extends Component {
                 name="delete-circle-outline"
                 size={30}
                 color="#4F8EF7"
-                style={{marginRight: 7}}/>
+                style={{marginRight: 15, marginTop: 4}}/>
             </View>
             <View style={{width: '100%', height: 40, flexDirection: 'row', backgroundColor: 'yellow'}}>
               <List style={{flex: 1, backgroundColor: 'green', padding: 0, height: 40}}>
@@ -367,6 +384,7 @@ let mapStateToProps = state => {
   return {
     settings: state.settings,
     profile: state.profile,
+    identity: state.identity,
   };
 };
 

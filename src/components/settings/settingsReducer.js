@@ -1,3 +1,5 @@
+import { DARK_MODE } from "../Styles";
+
 const exampleData = {
   car: ['Gas', 'license Renewel', 'Insuranes'],
   'house Hold': ['Electric Bill', 'Water Bill', 'Gas Bill'],
@@ -9,6 +11,7 @@ const initialState = {
   mainCategoryList: [],
   subCategoryList: [],
   newCategory: '',
+  darkMode: true,
 };
 
 export default (state = initialState, action) => {
