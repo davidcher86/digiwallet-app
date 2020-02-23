@@ -216,6 +216,7 @@ const PrimaryNav = createDrawerNavigator(
       screen: Settings,
       navigationOptions: {
         drawerLabel: 'Demo Screen 2',
+        headerBackTitleVisible: true,
       },
     },
     Transactions: {

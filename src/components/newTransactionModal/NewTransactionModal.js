@@ -276,39 +276,63 @@ class NewTransactionModal extends Component {
       );
     };
 
+    const getMainCategoryItems = () => {
+      var itemList = [];
+      for (let key in this.props.profile.categoryData) {
+        itemList.push(<View key={key} style={{margin: 4, width: 130}}>
+                        <Button
+                          onPress={() => {
+                            changeFieldValue('mainCategory', key);
+                            changePageSettings('activeTab', 'subCategory')
+                          }}
+                          buttonStyle={{color: 'green'}}
+                          type="outline"
+                          style={{width: 130, margin: 4}}
+                          title={key}/>
+                      </View>);
+      }
+      return itemList;
+    };
+
     const categoryTab = () => {
       return (
         <View style={DARK_MODE.inputRowContainer}>
           <Text style={[DARK_MODE.h3, {width: '50%'}]}>Main Category</Text>
-          <Picker
-            selectedValue={newTransaction.mainCategory}
-            mode="dropdown"
-            onValueChange={itemValue => {
-              changeFieldValue('mainCategory', itemValue);
-              changePageSettings('activeTab', 'subCategory');
-            }}
-            style={styles.pickerInput}>
-              {renderMainCategories()}
-          </Picker>
+          <ScrollView style={{flexDirection: 'column', marginBottom: 15}}>
+            <View style={{flexWrap: 'wrap', flexDirection: 'row'}}>
+              {getMainCategoryItems()}
+            </View>
+          </ScrollView>
         </View>
       );
+    };
+
+    const getSubCategoryItems = () => {
+      var itemList = [];
+      for (let key in this.props.profile.categoryData[this.props.newTransaction.mainCategory]) {
+        itemList.push(<View style={{margin: 4, width: 130}}>
+                        <Button
+                          onPress={() => {
+                            changeFieldValue('subCategory', this.props.profile.categoryData[this.props.newTransaction.mainCategory][key]);
+                            changePageSettings('activeTab', 'paymentType')
+                          }}
+                          type="outline"
+                          style={{width: 130, margin: 4}}
+                          title={this.props.profile.categoryData[this.props.newTransaction.mainCategory][key]}/>
+                      </View>);
+      }
+      return itemList;
     };
 
     const subCategoryTab = () => {
       return (
         <View style={DARK_MODE.inputRowContainer}>
           <Text style={DARK_MODE.h3}>Sub Category</Text>
-          <Picker
-            selectedValue={newTransaction.subCategory}
-            mode="dropdown"
-            style={styles.pickerInput}
-            onValueChange={itemValue => {
-              changeFieldValue('subCategory', itemValue);
-              changePageSettings('activeTab', 'paymentType');
-            }}>
-              <Picker.Item label="" value="" />
-              {renderSubCategories()}
-          </Picker>
+          <ScrollView style={{flexDirection: 'column', marginBottom: 15}}>
+            <View style={{flexWrap: 'wrap', flexDirection: 'row'}}>
+              {getSubCategoryItems()}
+            </View>
+          </ScrollView>
         </View>
       );
     };

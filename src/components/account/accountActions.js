@@ -66,12 +66,21 @@ const defaultCategories = {
 };
 
 export const handleRegisterAccount = (account, uid, navigation) => dispatch => {
+  var sortedMainCatefories = [];
+  // defaultCategories.forEach(item => {
+    for (var key in defaultCategories) {
+      sortedMainCatefories.push(key);
+    }
+  // });
+
   const json = {
     sallary: account.sallary,
     creditCards: account.creditCards,
     details: account.user,
     transactions: account.transactions,
     assets: account.assets,
+    darkMode: true,
+    sortedMainCatefories: JSON.stringify(sortedMainCatefories),
     categories: JSON.stringify(defaultCategories),
   };
 

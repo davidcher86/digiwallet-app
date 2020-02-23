@@ -121,7 +121,7 @@ class CreditItem extends Component {
         //     inputRange: [0, 1],
         //     outputRange: ['0deg', '360deg'],
         //   })
-          console.log(this.state.iconRotation._value);
+        //   console.log(this.state.iconRotation._value);
         return (
             <Animated.View
                 key={creditItem.uid}

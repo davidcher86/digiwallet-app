@@ -11,6 +11,11 @@ export const DARK_MODE = {
     HEADER_COLOR: '#021d38',
     FAB_COLOR: '#90befd',
     ICON_COLOR: '#4F8EF7',
+    LIST_ITEM_COLOR: '#061925',
+    LIST_INPUT_BACKGROUND: '#0e2135',
+    LIST_ITEM_HEADER_COLOR: '#082233',
+    LIST_ITEM_ICON_COLOR: '#f5f5f5',
+    LIST_HIDDEN_ITEM_COLOR: '#4b7d9e',
   },
   appContainer: {
     flex: 1,
