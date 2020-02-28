@@ -2,10 +2,10 @@ const initialState = {
   isModalOpen: false,
   transactionType: 'EXPANSE',
   amount: 0,
-  categoryList: {
-    car: ['Gas', 'license Renewel', 'Insuranes'],
-    'house Hold': ['Electric Bill', 'Water Bill', 'Gas Bill'],
-  },
+  // categoryList: {
+  //   car: ['Gas', 'license Renewel', 'Insuranes'],
+  //   'house Hold': ['Electric Bill', 'Water Bill', 'Gas Bill'],
+  // },
   mainCategory: '',
   subCategory: '',
   paymentType: 'CASH',
@@ -26,7 +26,7 @@ export default (state = initialState, action) => {
     case 'UPDATE_NEW_TRANSACTION_FORM':
       let currentState = state;
       if (action.field === 'mainCategory' && state.mainCategory !== action.field) {
-        return Object.assign({}, state, {mainCategory: action.value, subCategory: state.categoryList[action.value][0]});
+        return Object.assign({}, state, {mainCategory: action.value, subCategory: ''});
       } else {
         return Object.assign({}, state, {[action.field]: action.value});
       }

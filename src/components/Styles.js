@@ -52,6 +52,11 @@ export const DARK_MODE = {
     fontSize: 15,
     marginBottom: 8,
   },
+  h5Label: {
+    color: '#e4e6e8',
+    fontSize: 14,
+    marginBottom: 2,
+  },
   inputRowContainer: {
     justifyContent: 'center',
     width: '100%',

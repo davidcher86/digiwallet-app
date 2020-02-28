@@ -14,6 +14,7 @@ const AppNavigator = createSwitchNavigator({
   // navigationOptions: ({navigation}) => ({
   //   headerMode: 'screen',
   // }),
-});
+  }
+);
 
 export default createAppContainer(AppNavigator);

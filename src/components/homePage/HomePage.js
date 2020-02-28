@@ -242,13 +242,13 @@ class HomePage extends Component {
             return (
                 <View style={styles.creditListHeaderStyle}>
                     <View style={styles.itemColumn}>
-                        <Text>Type</Text>
+                        <Text style={DARK_MODE.h4Label}>Type</Text>
                     </View>
                     <View style={styles.itemColumn}>
-                        <Text>Amount</Text>
+                        <Text style={DARK_MODE.h4Label}>Amount</Text>
                     </View>
                     <View style={styles.itemColumn}>
-                        <Text>Payments</Text>
+                        <Text style={DARK_MODE.h4Label}>Payments</Text>
                     </View>
                 </View>
             );
@@ -272,7 +272,7 @@ class HomePage extends Component {
                                 <FontAwesome style={{marginLeft: 15}} name="dollar" size={20} color={DARK_MODE.COLORS.ICON_COLOR} />
                             </View>
                             <Divider style={{ backgroundColor: '#cbe3fb', width: 164, margin: 4 }} />
-                            <Text style={DARK_MODE.h3}>{'Current Assets'}</Text>
+                            <Text style={DARK_MODE.h3}>{'Current Balance'}</Text>
                         </View>
                         <View style={styles.h2rowContainer}>
                             <View style={styles.h2RowItem}>
@@ -296,35 +296,12 @@ class HomePage extends Component {
                     {/* <Divider style={{ backgroundColor: '#cbe3fb' }} /> */}
                     <View style={styles.creditListStyle}>
                         <Text style={[DARK_MODE.h2, DARK_MODE.title]}>Credit List</Text>
-                        {/* <SwipeListView
-                            data={profile.credit}
-                            renderItem={ (data, rowMap) => (
-                                <CreditItem
-                                        key={data.item.uid}
-                                        pageSettings={profile.pageSettings}
-                                        openCredit={this.props.openCredit}
-                                        // openTransaction={openTransaction}
-                                        // identity={identity}
-                                        // deleteTransaction={deleteTransaction}
-                                        creditItem={data.item}
-                                />
-                            )}
-                            renderHiddenItem={ (data, rowMap) => (
-                                <View style={styles.rowBack}>
-                                {console.log(data)}
-                                    <Text>Left</Text>
-                                    <Text>Right</Text>
-                                </View>
-                            )}
-                            // leftOpenValue={75}
-                            rightOpenValue={-75}
-                        /> */}
-                        <Animated.View>
+                        {profile.credit.length > 0 && <Animated.View>
                             <FlatList
                                 data={profile.credit}
                                 ListHeaderComponent={creditListHeader}
                                 keyExtractor={(item, index) => item.uid}
-                                // keyExtractor={item => item.uid}
+                                // ListHeaderComponentStyle={{color: DARK_MODE.h4.color}}
                                 renderItem={({item}) => (
                                     <CreditItem
                                         key={item.uid}
@@ -336,7 +313,8 @@ class HomePage extends Component {
                                         creditItem={item}
                                     />
                                 )}/>
-                        </Animated.View>
+                        </Animated.View>}
+                        {profile.credit.length === 0 && <Text style={[DARK_MODE.title, {fontSize: 15, color: '#6087b1'}]}>No Monthly Credit</Text>}
                     </View>
                 </View>
                 <Fab />

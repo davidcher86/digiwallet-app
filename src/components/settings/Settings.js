@@ -104,7 +104,7 @@ class MainCategoriesContainer extends Component {
   //   });
   // }
   componentDidMount() {
-    var mainCategories = JSON.parse(this.props.profile.sortedMainCatefories);
+    var mainCategories = JSON.parse(this.props.profile.sortedMainCategories);
 
     this.props.setValue('newCategory', '');
     this.props.setValue('mainCategoryList', mainCategories);

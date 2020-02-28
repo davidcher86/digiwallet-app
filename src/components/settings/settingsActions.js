@@ -32,7 +32,7 @@ export const handleUpdaeSortedCategories = (data, uid) => dispatch => {
   firebase
     .database()
     .ref(`/users/${uid}/account/`)
-    .update({sortedMainCatefories: JSON.stringify(data)})
+    .update({sortedMainCategories: JSON.stringify(data)})
     .then(res => {
       dispatch(endLoading());
     })
