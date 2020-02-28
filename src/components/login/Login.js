@@ -11,6 +11,7 @@ import { SocialIcon } from 'react-native-elements';
 import { Container, Header, Content, Tab, Tabs, Text as BaseText,TabHeading } from 'native-base';
 // import { AccessToken, LoginManager } from 'react-native-fbsdk';
 // import * as fb from 'react-native-firebase';
+import { LoginButton, AccessToken, LoginManager } from 'react-native-fbsdk';
 
 import {startLoading, endLoading} from './../systemControl/systemControlActions';
 import * as loginActions from './loginActions';
@@ -222,11 +223,51 @@ class LoginForm extends Component {
                 type="outline" />
             </View>
             <View style={{flexDirection: 'row', marginTop: 10, justifyContent: 'space-between'}}>
+            {/* <LoginButton
+              style={styles.socailIcon}
+              onLoginFinished={
+                (error, result) => {
+                  if (error) {
+                    console.log("login has error: " + result.error);
+                  } else if (result.isCancelled) {
+                    console.log("login is cancelled.");
+                  } else {
+                    AccessToken.getCurrentAccessToken().then(
+                      (data) => {
+                        console.log(data.accessToken.toString())
+                      }
+                    )
+                  }
+                }
+              }   
+              onLogoutFinished={() => console.log("logout.")}/> */}
               <SocialIcon
+                title='Facebook'
+                onPress={() => {
+                  LoginManager.logInWithPermissions(["public_profile"]).then(
+                    function(result) {
+                      console.log(result);
+                      if (result.isCancelled) {
+                        console.log("Login cancelled");
+                      } else {
+                        console.log(
+                          "Login success with permissions: " +
+                            result.grantedPermissions.toString()
+                        );
+                      }
+                    },
+                    function(error) {
+                      console.log("Login fail with error: " + error);
+                    }
+                  );
+                }}
+                style={styles.socailIcon}
+                type='facebook'/>
+          {/* <SocialIcon
                 title='Facebook'
                 // onPress={() => this.props.onFacebookRegister(this.props.navigation)}
                 style={styles.socailIcon}
-                type='facebook'/>
+                type='facebook'/> */}
               <SocialIcon
                 title='Google'
                 style={styles.socailIcon}
