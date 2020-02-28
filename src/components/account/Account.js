@@ -8,7 +8,7 @@ import {ProgressSteps, ProgressStep} from 'react-native-progress-steps';
 import DatePicker from 'react-native-datepicker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 // import Picker from '@react-native-community/picker';
-
+import {Radio} from 'native-base';
 import * as actions from './accountActions';
 import Header from './../common/Header';
 import {randomString} from './../common/Actions';
@@ -193,23 +193,32 @@ class Account extends Component {
                 placeholderTextColor={DARK_MODE.COLORS.PLACE_HOLDER_COLOR} />
             </View>
             <View style={DARK_MODE.inputSelectionRowContainer}>
-              <View style={{width: '50%'}}>
+              <View style={{width: '46%'}}>
                 <Text style={DARK_MODE.inputLabel}>Gender</Text>
               </View>
-              <Picker
-                selectedValue={user.gender}
-                style={{height: 50, width: '50%', color: LABEL_COLOR}}
-                onValueChange={itemValue => changeUserFieldValue(itemValue)}>
-                <Picker.Item label="Male" value="male" />
-                <Picker.Item label="Female" value="female" />
-              </Picker>
+              <View style={{width: '54%', flexDirection: 'row'}}>
+                <Radio
+                  onPress={() => changeUserFieldValue('gender', 'male')}
+                  style={{width: '14%', marginRight: 7}}
+                  color="#a1c5ec"
+                  selectedColor={DARK_MODE.COLORS.INPUT_TEXT_COLOR}
+                  selected={user.gender === 'male'} />
+                <Text style={[DARK_MODE.inputLabel, {width: '26%'}]}>Male</Text>
+                <Radio
+                  onPress={() => changeUserFieldValue('gender', 'female')}
+                  style={{width: '14%', marginLeft: 7}}
+                  color="#a1c5ec"
+                  selectedColor={DARK_MODE.COLORS.INPUT_TEXT_COLOR}
+                  selected={user.gender === 'female'} />
+                <Text style={[DARK_MODE.inputLabel, {width: '36%'}]}>Female</Text>
+              </View>
             </View>
             <View style={DARK_MODE.inputSelectionRowContainer}>
-              <View style={{width: '50%'}}>
+              <View style={{width: '46%'}}>
                 <Text style={DARK_MODE.inputLabel}>Date of Birth</Text>
               </View>
               <DatePicker
-                style={{width: '50%'}}
+                style={{width: '54%'}}
                 date={user.birthDate}
                 mode="date"
                 placeholder="select date"

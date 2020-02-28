@@ -16,6 +16,7 @@ import firebase from 'firebase';
 import DatePicker from 'react-native-datepicker';
 // import DateTimePicker from '@react-native-community/datetimepicker';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 import * as actions from './newTransactionModalActions';
 import { DARK_MODE } from './../Styles';
@@ -276,39 +277,75 @@ class NewTransactionModal extends Component {
       );
     };
 
-    const categoryTab = () => {
+    const getMainCategoryItems = () => {
+      const {sortedMainCategories} = this.props.profile;
+      var itemList = [];
+      var categoryList = JSON.parse(sortedMainCategories);
+
+      for (let key in JSON.parse(sortedMainCategories)) {
+        itemList.push(<TouchableOpacity style={{minWidth: 50, margin: 4}} >
+                          <Button
+                            onPress={() => {
+                              changeFieldValue('mainCategory', categoryList[key]);
+                              changePageSettings('activeTab', 'subCategory')
+                            }}
+                            buttonStyle={{borderColor: '#40c56c', height: 30}}
+                            type="outline"
+                            titleStyle={{color: '#40c56c', fontSize: 14}}
+                            title={categoryList[key]}/>
+                        </TouchableOpacity>);
+      }
+      return itemList;
+    };
+
+    const categoryTab = (navigation) => {
       return (
         <View style={DARK_MODE.inputRowContainer}>
-          <Text style={[DARK_MODE.h3, {width: '50%'}]}>Main Category</Text>
-          <Picker
-            selectedValue={newTransaction.mainCategory}
-            mode="dropdown"
-            onValueChange={itemValue => {
-              changeFieldValue('mainCategory', itemValue);
-              changePageSettings('activeTab', 'subCategory');
-            }}
-            style={styles.pickerInput}>
-              {renderMainCategories()}
-          </Picker>
+          <View style={{flexDirection: 'row', paddingTop: 4}}>
+            <Text style={[DARK_MODE.h3, {width: '85%'}]}>Main Category</Text>
+            <FontAwesome
+              style={{marginTop: 2, marginLeft: 17, width: '10%'}}
+              onPress={() => navigation.navigate('MainCategories')}
+              name="edit"
+              size={23}
+              color={DARK_MODE.COLORS.ICON_COLOR} />
+          </View>
+          <ScrollView style={{flexDirection: 'column', marginBottom: 15}}>
+            <View style={{flexWrap: 'wrap', flexDirection: 'row'}}>
+              {getMainCategoryItems()}
+            </View>
+          </ScrollView>
         </View>
       );
+    };
+
+    const getSubCategoryItems = () => {
+      var itemList = [];
+      for (let key in this.props.profile.categoryData[this.props.newTransaction.mainCategory]) {
+        itemList.push(<TouchableOpacity style={{minWidth: 50, margin: 4}} >
+                        <Button
+                          onPress={() => {
+                            changeFieldValue('subCategory', this.props.profile.categoryData[this.props.newTransaction.mainCategory][key]);
+                            changePageSettings('activeTab', 'paymentType')
+                          }}
+                          buttonStyle={{borderColor: '#40c56c', height: 30}}
+                          type="outline"
+                          titleStyle={{color: '#40c56c', fontSize: 14}}
+                          title={this.props.profile.categoryData[this.props.newTransaction.mainCategory][key]}/>
+                      </TouchableOpacity>);
+      }
+      return itemList;
     };
 
     const subCategoryTab = () => {
       return (
         <View style={DARK_MODE.inputRowContainer}>
           <Text style={DARK_MODE.h3}>Sub Category</Text>
-          <Picker
-            selectedValue={newTransaction.subCategory}
-            mode="dropdown"
-            style={styles.pickerInput}
-            onValueChange={itemValue => {
-              changeFieldValue('subCategory', itemValue);
-              changePageSettings('activeTab', 'paymentType');
-            }}>
-              <Picker.Item label="" value="" />
-              {renderSubCategories()}
-          </Picker>
+          <ScrollView style={{flexDirection: 'column', marginBottom: 15}}>
+            <View style={{flexWrap: 'wrap', flexDirection: 'row'}}>
+              {getSubCategoryItems()}
+            </View>
+          </ScrollView>
         </View>
       );
     };
@@ -328,7 +365,10 @@ class NewTransactionModal extends Component {
                 (newTransaction.transactionType === 'CREDIT' ? DARK_MODE.btnGroupActive : {}),
                 {borderTopLeftRadius: 4, borderBottomLeftRadius: 4, width: '33%'}
               ]}
-              onPress={() => changeFieldValue('paymentType', 'CREDIT')}>
+              onPress={() => {
+                changeFieldValue('paymentType', 'CREDIT');
+                changePageSettings('activeTab', 'creditPaymentDetails')
+              }}>
                 <Text style={{
                         textAlign: 'center',
                         fontSize: 15,
@@ -452,6 +492,12 @@ class NewTransactionModal extends Component {
       );
     };
 
+    var invalidTransaction = (
+      newTransaction.amount === 0 ||
+      Object.entries(newTransaction.errors).length === 0 ||
+      newTransaction.mainCategory === '' ||
+      newTransaction.subCategory === '');
+      // console.log(this.props);
     return (
       <Overlay
         isVisible={isModalOpen}
@@ -465,7 +511,7 @@ class NewTransactionModal extends Component {
             {dateRow()}
             <TouchableOpacity style={styles.inputContainer} onPress={() => changePageSettings('activeTab', 'amount')}>
               <Text style={[styles.pickerLabel, DARK_MODE.h3Label, {color: (newTransaction.errors.amount !== undefined ? 'red' : DARK_MODE.h3Label.color)}]}>Amount</Text>
-              <Text style={[styles.pickerInput, {marginBottom: 8}, {color: (newTransaction.errors.amount !== undefined ? 'red' : DARK_MODE.h3Label.color)}]}>
+              <Text style={[styles.pickerInput, {marginBottom: 8}, {color: (newTransaction.errors.amount !== undefined ? 'red' : DARK_MODE.COLORS.LABEL_COLOR)}]}>
                 {newTransaction.amount}
               </Text>
             </TouchableOpacity>
@@ -498,13 +544,13 @@ class NewTransactionModal extends Component {
             {newTransaction.paymentType === 'CREDIT' && (
               <View style={{flexDirection: 'column', backgroundColor: '#1c3c61'}}>
                 <TouchableOpacity style={[ DARK_MODE.h3Label, {width: '100%', paddingLeft: 6}]} onPress={() => changePageSettings('activeTab', 'paymentType')}>
-                  <Text>{'Payment Details - ' + newTransaction.paymentType}</Text>
+                  <Text style={[DARK_MODE.h3Label, {color: '#979ca0'}]}>{'Payment Details - ' + newTransaction.paymentType}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={{flexDirection: 'row', padding: 6}} onPress={() => changePageSettings('activeTab', 'creditPaymentDetails')}>
-                  <Text style={[DARK_MODE.h4Label, {width: '28%'}]}>{'Credit Card:'}</Text>
-                  <Text style={{width: '15%', marginLeft: 5}}>{newTransaction.selectedCreditCard.name}</Text>
-                  <Text style={[DARK_MODE.h4Label, {width: '28%', color: (newTransaction.errors.paymentsAmount !== undefined ? 'red' : null)}]}>{'# payments:'}</Text>
-                  <Text style={{width: '15%', marginLeft: 5, color: (newTransaction.errors.paymentsAmount !== undefined ? 'red' : null)}}>{newTransaction.paymentsAmount}</Text>
+                  <Text style={[DARK_MODE.h4Label, {width: '28%', color: '#979ca0'}]}>{'Credit Card:'}</Text>
+                  <Text style={[DARK_MODE.h3Label, {width: '25%', marginLeft: 5, color: DARK_MODE.COLORS.LABEL_COLOR}]}>{newTransaction.selectedCreditCard.name}</Text>
+                  <Text style={[DARK_MODE.h4Label, {width: '28%', color: (newTransaction.errors.paymentsAmount !== undefined ? 'red' : '#979ca0')}]}>{'# payments:'}</Text>
+                  <Text style={[DARK_MODE.h4Label, {width: '15%', marginLeft: 5, color: (newTransaction.errors.paymentsAmount !== undefined ? 'red' : DARK_MODE.COLORS.LABEL_COLOR)}]}>{newTransaction.paymentsAmount}</Text>
                 </TouchableOpacity>
               </View>
             )}
@@ -520,14 +566,17 @@ class NewTransactionModal extends Component {
             </View>}
             {pageSettings.activeTab === 'final' && buttonsTab()}
             <View style={styles.bottomBtnContainer}>
-                {/* <Button
+                <Button
                   title="ADD"
-                  buttonStyle={styles.bottomBtn}
+                  // style={{flex: 1}}
+                  disabled={invalidTransaction}
+                  buttonStyle={[styles.bottomBtn, {width: 130}]}
                   onPress={() => handleAddNewTransactionAccount(newTransaction, identity.uid)}
-                  type="outline" /> */}
+                  type="outline" />
                 <Button
                   title="CANCEL"
-                  buttonStyle={styles.bottomBtn}
+                  // style={{flex: 1}}
+                  buttonStyle={[styles.bottomBtn, {width: 130}]}
                   onPress={() => {
                     closeNewTransactionModal();
                     resetNewTransactionForm();
@@ -595,13 +644,15 @@ const styles = StyleSheet.create({
   bottomBtnContainer: {
     padding: 2,
     marginTop: 3,
-    flexDirection: 'column',
+    flexDirection: 'row',
+    width: '100%',
+    // borderWidth: 2,
     justifyContent: 'space-around',
     // height: 30,
   },
   bottomBtn: {
-    marginTop: 6,
-    marginBottom: 11,
+    marginTop: 8,
+    marginBottom: 8,
   },
   inputStyle: {
     // borderWidth: 2,

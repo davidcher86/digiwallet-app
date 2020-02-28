@@ -27,7 +27,7 @@ import {
 
 import * as actions from './transactionsActions';
 import Fab from './../common/Fab';
-import { BACKGROUND_COLOR, LABEL_COLOR, INPUT_COLOR } from './../Styles';
+import { DARK_MODE, BACKGROUND_COLOR, LABEL_COLOR, INPUT_COLOR } from './../Styles';
 import Feather from 'react-native-vector-icons/Feather';Entypo
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -46,7 +46,7 @@ class TransactionItem extends Component {
 
   expandItem = () => {
     Animated.timing(this.state.itemHeight, {
-      toValue: 40,
+      toValue: 80,
       duration: 400,
       easing: Easing.linear,
       // useNativeDriver: true
@@ -99,12 +99,14 @@ class TransactionItem extends Component {
       pageSettings,
       openTransaction,
       identity,
+      profile,
       transactionItem,
       deleteTransaction,
     } = this.props;
 
     var isOpened = pageSettings.isOpenIndex === transactionItem.uid;
-
+    const card = profile.creditCards.find(card => card.id === transactionItem.creditCardId);
+    console.log(card);
     return (
       <Animated.View
         key={transactionItem.uid}
@@ -119,7 +121,7 @@ class TransactionItem extends Component {
             /> */}
           </View>
           <View style={styles.left2Section}>
-            <Text>{transactionItem.date}</Text>
+            <Text note>{transactionItem.date}</Text>
           </View>
           <View style={styles.bodySection}>
             <Text note numberOfLines={1}>
@@ -158,25 +160,21 @@ class TransactionItem extends Component {
             {height: this.state.itemHeight, padding: this.state.itemPadding},
             // isOpened ? {height: 80, padding: 6} : {height: 0, padding: 0},
           ]}>
+            {console.log(this.props)}
+            {console.log(profile.creditCards.find(card => card.id === transactionItem.creditCardId))}
           <View style={styles.headerHiddenSection}>
-            <Text>Payment - </Text>
+        {/* <Text style={DARK_MODE.h5Label}>{'Payment - ' + transactionItem.paymentsAmount}</Text> */}
           </View>
           <View style={styles.upperHiddenSection}>
-            <Text>
-              {'Credit Card: ' +
-                (transactionItem.paymentDetails !== undefined
-                  ? transactionItem.paymentDetails.cardType
-                  : '')}
+            <Text style={[DARK_MODE.h5Label, {width: '50%'}]}>
+              {'Credit Card: ' + card.cardType + '-' + card.name}
             </Text>
-            <Text>
-              {'Amount of Payments: ' +
-                (transactionItem.paymentDetails !== undefined
-                  ? transactionItem.paymentDetails.paymentAmount
-                  : '')}
+            <Text style={[DARK_MODE.h5Label, {width: '50%'}]}>
+              {'Amount of Payments: ' + transactionItem.paymentsAmount}
             </Text>
           </View>
           <View style={styles.bottomHiddenSection}>
-            <Text>Description:</Text>
+            <Text style={DARK_MODE.h5Label}>Description:</Text>
             <Text>{transactionItem.description}</Text>
           </View>
         </Animated.View>
@@ -276,6 +274,7 @@ class Transactions extends Component {
       identity,
       transactionsListSorted,
       pageSettings,
+      profile,
       openTransaction,
       deleteTransaction,
     } = this.props;
@@ -294,6 +293,7 @@ class Transactions extends Component {
               pageSettings={pageSettings}
               openTransaction={openTransaction}
               identity={identity}
+              profile={profile}
               deleteTransaction={deleteTransaction}
               transactionItem={item}
             />
@@ -339,7 +339,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderBottomWidth: 1,
     borderStyle: 'dotted',
-    backgroundColor: 'yellow',
+    backgroundColor: DARK_MODE.COLORS.LIST_HIDDEN_ITEM_COLOR,
     // borderColor: 'black',
     // height: 20,
     width: '100%',
@@ -419,6 +419,7 @@ const mapStateToProps = state => {
     transactionsListSorted: state.transactions.sortedTransaction,
     transactionsList: state.transactions.transactions,
     pageSettings: state.transactions.pageSettings,
+    profile: state.profile,
     identity: state.identity,
   };
 };

@@ -21,7 +21,7 @@ const MyHeader = ({navigation, title}) => {
       <Header
         leftComponent={<HamburgerMenu />}
         backgroundColor={DARK_MODE.COLORS.HEADER_COLOR}
-        headerStyle={{height: '20'}}
+        headerStyle={{height: 20}}
         centerComponent={{
           text: title,
           style: {color: '#fff', fontWeight: 'bold', height: 20},

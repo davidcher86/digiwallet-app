@@ -5,12 +5,14 @@ import {
   StyleSheet,
   Switch,
   StatusBar,
+  TouchableOpacity,
 } from 'react-native';
 import DraggableFlatList from 'react-native-draggable-flatlist';
 import MultiSelectSortableFlatlist from 'react-native-multiselect-sortable-flatlist';
 import {SwipeListView, SwipeRow} from 'react-native-swipe-list-view';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {
   widthPercentageToDP as wp,
@@ -32,6 +34,7 @@ import {
   Text as BaseText,
 } from 'native-base';
 
+import Header from './../common/Header';
 import * as actions from './settingsActions';
 import {DARK_MODE} from './../Styles';
 
@@ -44,37 +47,37 @@ class SettingsContainer extends Component {
     const {navigation} = this.props;
     // console.log(this.props.settings);
     return (
-      <Container>
+      <Container style={DARK_MODE.appContainer}>
+        {/* <Header/> */}
         <Content>
           <List>
-            <ListItem itemDivider>
-              <Text>User Preference</Text>
+            <ListItem style={{backgroundColor: DARK_MODE.COLORS.BACKGROUND_COLOR}} itemDivider>
+              <Text style={DARK_MODE.h3}>User Preference</Text>
             </ListItem>
-            <ListItem>
+            <ListItem style={{marginLeft: 0, paddingLeft: 35, backgroundColor: DARK_MODE.COLORS.LIST_ITEM_HEADER_COLOR}}>
               <Left>
-                <Text>Categories</Text>
+                <Text style={DARK_MODE.h4}>Categories</Text>
               </Left>
               <Right>
                 <Icon
                   onPress={() => navigation.navigate('MainCategories')}
                   active
-                  name="arrow-forward"
-                />
+                  color={DARK_MODE.COLORS.LABEL_COLOR}
+                  name="arrow-forward" />
               </Right>
             </ListItem>
-            <ListItem itemDivider>
-              <Text>Disaplay</Text>
+            <ListItem style={{backgroundColor: DARK_MODE.COLORS.BACKGROUND_COLOR}} itemDivider>
+              <Text style={DARK_MODE.h3}>Disaplay</Text>
             </ListItem>
-            <ListItem>
+            <ListItem style={{marginLeft: 0, paddingLeft: 35, backgroundColor: DARK_MODE.COLORS.LIST_ITEM_HEADER_COLOR}}>
               <Left>
-                <Text>Dark Mode</Text>
+                <Text style={DARK_MODE.h4}>Dark Mode</Text>
               </Left>
               <Right>
                 <Switch
                   // style={{ marginTop: 30 }}
                   onValueChange={() => this.props.setValue('darkMode', !this.props.settings.darkMode)}
-                  value={this.props.settings.darkMode}
-                />
+                  value={this.props.settings.darkMode} />
               </Right>
             </ListItem>
           </List>
@@ -101,11 +104,7 @@ class MainCategoriesContainer extends Component {
   //   });
   // }
   componentDidMount() {
-    var mainCategories = [];
-
-    for (var key in this.props.profile.categoryData) {
-      mainCategories.push(key);
-    }
+    var mainCategories = JSON.parse(this.props.profile.sortedMainCategories);
 
     this.props.setValue('newCategory', '');
     this.props.setValue('mainCategoryList', mainCategories);
@@ -117,6 +116,7 @@ class MainCategoriesContainer extends Component {
 
   onSort(newListDataArray) {
     this.props.setValue('mainCategoryList', newListDataArray);
+    this.props.handleUpdaeSortedCategories(newListDataArray, this.props.identity.uid);
   }
 
   onDeleteItem(key) {
@@ -152,34 +152,37 @@ class MainCategoriesContainer extends Component {
 
     const Item = (item, index, selected, drag) => {
       return (
-        <View style={{borderWidth: 1, height: 40}} Selected={selected}>
+        <View style={{eight: 40}} Selected={selected}>
           <SwipeRow
             // onLongPress={() => console.log('sdsfsdf')}
             disableRightSwipe={true}
             rightOpenValue={-75} >
-            <View onPress={() => console.log('sdsfsdf')} style={{width: '100%', height: 40, alignItems: 'flex-end', padding: 0}}>
+            <View
+              onPress={() => console.log('sdsfsdf')}
+              style={{width: '100%', height: 40, alignItems: 'flex-end', padding: 0, backgroundColor: DARK_MODE.COLORS.LIST_HIDDEN_ITEM_COLOR}}>
               <MaterialCommunityIcons
                 onPress={() => this.onDeleteItem(item)}
                 name="delete-circle-outline"
                 size={30}
-                color="#4F8EF7"
+                color={DARK_MODE.COLORS.ICON_COLOR}
                 style={{marginRight: 15, marginTop: 4}}/>
             </View>
-            <View style={{width: '100%', height: 40, flexDirection: 'row', backgroundColor: 'yellow'}}>
+            <View style={{width: '100%', height: 40, flexDirection: 'row'}}>
               {/* <View style={{flex: 1, padding: 0, height: 20}}> */}
-              <List style={{flex: 1, backgroundColor: 'green', padding: 0, height: 40}}>
-                <ListItem style={{padding: 0, height: 40}}>
+              <List style={{flex: 1, backgroundColor: DARK_MODE.COLORS.LIST_ITEM_COLOR, padding: 0, height: 40}}>
+                <ListItem style={{padding: 0, height: 40, marginLeft: 0}}>
                   <Left>
                     <View style={{textAlign: 'right', paddingLeft: 12}}>
-                      <Text onLongPress={() => drag()} style={{position: 'relative', left: -15}}>
-                        <MaterialIcons name="more-vert" size={30} color="#4F8EF7"/>
+                      <Text onLongPress={() => drag()} style={{position: 'relative'}}>
+                        <MaterialIcons name="more-vert" size={30} color={DARK_MODE.COLORS.LIST_ITEM_ICON_COLOR}/>
                       </Text>
                     </View>
                     {/* <MaterialIcons name="more-vert" size={30} color="#4F8EF7" style={{marginRight: 7}}/> */}
-                    <Text style={{marginTop: 7}} onLongPress={() => drag()}>{item}</Text>
+                    <Text style={[DARK_MODE.h4, {marginTop: 7, marginLeft: 15}]} onLongPress={() => drag()}>{item}</Text>
                   </Left>
                   <Right>
                     <Icon
+                      color={DARK_MODE.COLORS.LIST_ITEM_ICON_COLOR}
                       onPress={() => navigation.navigate('SubCategories', {category: item})}
                       active
                       name="arrow-forward"
@@ -199,25 +202,33 @@ class MainCategoriesContainer extends Component {
 
     const Header = () => {
       return (
-        <View style={{width: '100%', height: 40, backgroundColor: 'yellow', flexDirection: 'row'}}>
-          <MaterialIcons style={{marginTop: 15, marginLeft: 17, marginRight: 7, width: '5%'}} name="create" size={20} color="#4F8EF7"/>
-          <InputHeader
-            style={{width: '85%', marginBottom: 15}}
-            placeholder="Create Categry"
-            value={this.props.settings.newCategory}
-            onChangeText={(e) => this.props.setValue('newCategory', e)} />
+        <View style={{width: '100%', paddingTop: 5, height: 40, backgroundColor: DARK_MODE.COLORS.LIST_INPUT_BACKGROUND, flexDirection: 'row'}}>
+          <MaterialIcons
+            style={{marginTop: 7, marginLeft: 17, marginRight: 7, width: '5%'}}
+            name="create"
+            size={20}
+            color={DARK_MODE.COLORS.ICON_COLOR}/>
+          <View style={{width: '78%'}}>
+            <Input
+              style={{width: '45%'}}
+              inputStyle={{color: DARK_MODE.COLORS.INPUT_TEXT_COLOR}}
+              placeholder="Create Categry"
+              placeholderTextColor={DARK_MODE.COLORS.PLACE_HOLDER_COLOR}
+              value={this.props.settings.newCategory}
+              onChangeText={(e) => this.props.setValue('newCategory', e)} />
+          </View>
           <Entypo
-            style={{width: '10%', marginTop: 15}}
+            style={{width: '10%', marginTop: 9}}
             onPress={() => this.onAddItem(this.props.settings.newCategory)}
             name="add-to-list"
             size={20}
-            color="#4F8EF7"/>
+            color={DARK_MODE.COLORS.ICON_COLOR}/>
         </View>
       );
     };
     // console.log(this.props);
     return (
-      <View style={{flex: 1}}>
+      <View style={DARK_MODE.appContainer}>
         {Header()}
         <MultiSelectSortableFlatlist
           ref={MultiSelectSortableFlatlist => (this.MultiSelectSortableFlatlist = MultiSelectSortableFlatlist)}
@@ -267,8 +278,12 @@ class SubCategoriesContainer extends Component {
   }
 
   onSort(newListDataArray) {
+    var mainCategory = this.props.navigation.getParam('category');
+    var categoryData = this.props.settings.categoryData;
+    categoryData[mainCategory] = newListDataArray;
     this.props.setValue('subCategoryList', newListDataArray);
     this.setState({ data: newListDataArray });
+    this.props.handleUpdaeCategories(categoryData, this.props.identity.uid);
   }
 
   onDeleteItem(index) {
@@ -301,30 +316,30 @@ class SubCategoriesContainer extends Component {
   render() {
     const Item = (item, index, selected, drag) => {
       return (
-        <View style={{borderWidth: 1, height: 40}} Selected={selected}>
+        <View style={{height: 40, backgroundColor: DARK_MODE.COLORS.LIST_ITEM_COLOR}} Selected={selected}>
           <SwipeRow
             // onLongPress={() => console.log('sdsfsdf')}
             disableRightSwipe={true}
             rightOpenValue={-75} >
-            <View onPress={() => console.log('sdsfsdf')} style={{width: '100%', height: 40, alignItems: 'flex-end', padding: 0}}>
+            <View onPress={() => console.log('sdsfsdf')} style={{width: '100%', height: 40, alignItems: 'flex-end', padding: 0, backgroundColor: DARK_MODE.COLORS.LIST_HIDDEN_ITEM_COLOR}}>
               <MaterialCommunityIcons
                 onPress={() => this.onDeleteItem(index)}
                 name="delete-circle-outline"
                 size={30}
-                color="#4F8EF7"
+                color={DARK_MODE.COLORS.ICON_COLOR}
                 style={{marginRight: 15, marginTop: 4}}/>
             </View>
             <View style={{width: '100%', height: 40, flexDirection: 'row', backgroundColor: 'yellow'}}>
-              <List style={{flex: 1, backgroundColor: 'green', padding: 0, height: 40}}>
-                <ListItem style={{padding: 0, height: 40}}>
+              <List style={{flex: 1, backgroundColor: DARK_MODE.COLORS.LIST_ITEM_COLOR, padding: 0, height: 40}}>
+                <ListItem style={{padding: 0, height: 40, marginLeft: 0}}>
                   <Left>
                     <View style={{textAlign: 'right', paddingLeft: 12}}>
-                      <Text onLongPress={() => drag()} style={{position: 'relative', left: -15}}>
-                        <MaterialIcons name="more-vert" size={30} color="#4F8EF7"/>
+                      <Text onLongPress={() => drag()} style={{position: 'relative'}}>
+                        <MaterialIcons name="more-vert" size={30} color={DARK_MODE.COLORS.LIST_ITEM_ICON_COLOR} />
                       </Text>
                     </View>
                     {/* <MaterialIcons name="more-vert" size={30} color="#4F8EF7" style={{marginRight: 7}}/> */}
-                    <Text style={{marginTop: 7}} onLongPress={() => drag()}>{item}</Text>
+                    <Text style={[DARK_MODE.h4, {marginTop: 7, marginLeft: 15}]} onLongPress={() => drag()}>{item}</Text>
                   </Left>
                 </ListItem>
               </List>
@@ -336,15 +351,23 @@ class SubCategoriesContainer extends Component {
 
     const Header = () => {
       return (
-        <View style={{width: '100%', height: 40, backgroundColor: 'yellow', flexDirection: 'row'}}>
-          <MaterialIcons style={{marginTop: 15, marginLeft: 17, marginRight: 7, width: '5%'}} name="create" size={20} color="#4F8EF7"/>
-          <InputHeader
-            style={{width: '85%', marginBottom: 15}}
-            placeholder="Create Categry"
-            value={this.props.settings.newCategory}
-            onChangeText={(e) => this.props.setValue('newCategory', e)} />
+        <View style={{width: '100%', paddingTop: 5, height: 40, backgroundColor: DARK_MODE.COLORS.LIST_INPUT_BACKGROUND, flexDirection: 'row'}}>
+          <MaterialIcons
+            style={{marginTop: 7, marginLeft: 17, marginRight: 7, width: '5%'}}
+            name="create"
+            size={20}
+            color={DARK_MODE.COLORS.ICON_COLOR} />
+          <View style={{width: '78%'}}>
+            <Input
+              style={{width: '85%', marginBottom: 15}}
+              inputStyle={{color: DARK_MODE.COLORS.INPUT_TEXT_COLOR}}
+              placeholder="Create Categry"
+              placeholderTextColor={DARK_MODE.COLORS.PLACE_HOLDER_COLOR}
+              value={this.props.settings.newCategory}
+              onChangeText={(e) => this.props.setValue('newCategory', e)} />
+          </View>
           <Entypo
-            style={{width: '10%', marginTop: 15}}
+            style={{width: '10%', marginTop: 9}}
             onPress={() => this.onAddItem(this.props.settings.newCategory)}
             name="add-to-list"
             size={20}
@@ -354,7 +377,7 @@ class SubCategoriesContainer extends Component {
     };
 
     return (
-      <View style={{flex: 1}}>
+      <View style={DARK_MODE.appContainer}>
         {Header()}
         <MultiSelectSortableFlatlist
           ref={MultiSelectSortableFlatlist => (this.MultiSelectSortableFlatlist = MultiSelectSortableFlatlist)}
@@ -434,13 +457,26 @@ const Settings = createStackNavigator(
   {
     Settings: {
       screen: SettingsScreen,
-      navigationOptions: {
-        headerShown: true,
-        headerBackTitleVisible: true,
+      navigationOptions: ({ navigation }) => ({
+        // headerShown: true,
+        headerLeft: () =>
+          <TouchableOpacity onPress={() => navigation.goBack(null)}>
+                <Ionicons
+                  name="ios-arrow-back"
+                  size={20}
+                  color={DARK_MODE.COLORS.ICON_COLOR}
+                  style={{marginLeft: 15, marginTop: 4}}/>
+          </TouchableOpacity>,
+        // headerBackTitleVisible: true,
         // title: 'Settings',
-        // header: ({navigation}) => (
-        //   <Header navigation={navigation} title="Settings" />
-        // ),
+        // header: ({navigation}) => ({
+        //   return (
+              // <Button
+              //   title="Back"
+              //   onPress={ () => navigation.goBack() }
+              // />
+        //     )
+        // }),
         // headerStatusBarHeight: 20,
         headerTitleAlign: 'center',
         // headerBackground: DARK_MODE.COLORS.HEADER_COLOR,
@@ -450,8 +486,8 @@ const Settings = createStackNavigator(
         },
         mode: 'modal',
         headerMode: 'screen',
-        headerTruncatedBackTitle: 'back',
-      },
+        // headerTruncatedBackTitle: 'back',
+      }),
     },
     MainCategories: {
       screen: MainCategories,
@@ -477,10 +513,11 @@ const Settings = createStackNavigator(
     },
     SubCategories: {
       screen: SubCategories,
-      navigationOptions: {
+      navigationOptions: ({ navigation }) => ({
         headerShown: true,
         headerBackTitleVisible: true,
-        title: 'Sub Categories',
+        // title: navigation,
+        title: navigation.getParam('category'),
         // header: ({navigation}) => (
         //   <Header navigation={navigation} title="Settings" />
         // ),
@@ -495,7 +532,7 @@ const Settings = createStackNavigator(
         mode: 'modal',
         headerMode: 'screen',
         // headerTruncatedBackTitle: '<',
-      },
+      }),
     },
   },
   {
