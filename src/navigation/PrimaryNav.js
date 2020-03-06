@@ -7,6 +7,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import firebase from 'firebase';
 // import {
 //   ScrollView,
 //   DrawerItems,
@@ -126,7 +127,11 @@ class DrawerContainer extends Component {
           <TouchableOpacity
             onPress={() => {
               removeUID();
-              navigate('Login');
+              firebase.auth().signOut().then(function() {
+                navigate('Login');
+              }).catch(function(error) {
+                // An error happened.
+              });
             }}
             style={styles.containerBottomItemLogout}>
             <View style={styles.button}>

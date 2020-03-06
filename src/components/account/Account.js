@@ -6,7 +6,6 @@ import {connect} from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
 import {ProgressSteps, ProgressStep} from 'react-native-progress-steps';
 import DatePicker from 'react-native-datepicker';
-import DateTimePicker from '@react-native-community/datetimepicker';
 // import Picker from '@react-native-community/picker';
 import {Radio} from 'native-base';
 import * as actions from './accountActions';
@@ -90,6 +89,7 @@ class Account extends Component {
   // }
 
   componentDidMount() {
+    // AsyncStorage.clear();
     // console.log('navigation', this.props.navigation.getParam('type'));
       switch (this.props.navigation.getParam('type')) {
         case EDIT:
@@ -100,6 +100,12 @@ class Account extends Component {
           break;
         case NEW:
           // this.props.changeAccountFieldValue('formType', NEW);
+          if (this.props.navigation.getParam('firstName') !== undefined) {
+            this.props.changeUserFieldValue('firstName', this.props.navigation.getParam('firstName'));
+          }
+          if (this.props.navigation.getParam('lastName') !== undefined) {
+            this.props.changeUserFieldValue('lastName', this.props.navigation.getParam('lastName'));
+          }
           break;
       }
       // if (this.props.navigation.state.params.type === EDIT
@@ -324,7 +330,8 @@ class Account extends Component {
             if (account.formType === NEW) {
               handleRegisterAccount(this.props.account, this.props.identity.uid, this.props.navigation);
             } else if (account.formType === EDIT) {
-              handleUpdaeAccount(this.props.account, this.props.identity.uid);
+              // console.log(this.props.account);
+              handleUpdaeAccount(this.props.account, this.props.identity.uid, this.props.navigation);
             }
           }}
           errors={false}
@@ -388,7 +395,8 @@ class Account extends Component {
         </ProgressStep>
       );
     };
-
+    // console.log(this.props.navigation.getParam('firstName'));
+    // console.log(this.props.navigation.getParam('lastName'));
     return (
       <KeyboardAvoidingView style={styles.containerStyle}>
         {/* {account.formType === EDIT && <Header navigation={this.props.navigation} title="Account" />} */}

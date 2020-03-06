@@ -23,7 +23,7 @@ class CreditItem extends Component {
         itemPadding: new Animated.Value(0),
         iconRotation: new Animated.Value(0),
       };
-
+      this.rotation = new Animated.Value(0)
       this.expandItem = this.expandItem.bind(this);
       this.closeItem = this.closeItem.bind(this);
       this.toggleItemExpand = this.toggleItemExpand.bind(this);
@@ -33,19 +33,17 @@ class CreditItem extends Component {
 
     rotateDown = () => {
         Animated.timing(this.state.iconRotation, {
-          toValue: 180,
-          duration: 400,
-          easing: Easing.linear,
-          // useNativeDriver: true
+            toValue: 1,
+            duration: 300,
+            easing: Easing.linear
         }).start();
     };
 
     rotateUp = () => {
         Animated.timing(this.state.iconRotation, {
-          toValue: 180,
-          duration: 360,
-          easing: Easing.linear,
-          // useNativeDriver: true
+            toValue: 0,
+            duration: 300,
+            easing: Easing.linear
         }).start();
     };
 
@@ -54,14 +52,12 @@ class CreditItem extends Component {
           toValue: 80,
           duration: 400,
           easing: Easing.linear,
-          // useNativeDriver: true
         }).start();
 
         Animated.timing(this.state.itemPadding, {
           toValue: 6,
           duration: 100,
           easing: Easing.linear,
-          // useNativeDriver: true
         }).start();
     };
 
@@ -70,33 +66,29 @@ class CreditItem extends Component {
           toValue: 0,
           duration: 200,
           easing: Easing.linear,
-          // useNativeDriver: true
         }).start();
 
         Animated.timing(this.state.itemPadding, {
           toValue: 0,
           duration: 100,
           easing: Easing.linear,
-          // useNativeDriver: true
         }).start();
     };
 
     toggleItemExpand(uid) {
-        if (this.props.pageSettings.isOpenIndex === uid) {
-          this.props.openCredit(null);
-          this.closeItem();
-        } else {
-          this.props.openCredit(uid);
-          this.expandItem();
-        }
+        this.props.pageSettings.isOpenIndex === uid
+        ? this.props.openCredit(null)
+        : this.props.openCredit(uid);
     }
 
     componentDidUpdate() {
-        if (
-          this.props.pageSettings.isOpenIndex !== this.props.creditItem.uid
-        ) {
-          this.closeItem();
-        }
+        if (this.props.pageSettings.isOpenIndex === this.props.creditItem.uid) {
+            this.expandItem();
+            this.rotateDown();
+          } else {
+            this.rotateUp();
+            this.closeItem();
+          }
     }
 
     render(){
@@ -105,23 +97,13 @@ class CreditItem extends Component {
             identity,
             creditItem,
           } = this.props;
-        // console.log(PricingCard);
-        // var isOpened = pageSettings.isOpenCreditIndex === creditItem.uid;
-        // var rowIcon = (pageSettings.isOpenCreditIndex === creditItem.uid
-        //                 ? './../../img/collapse-down-icon.png'
-        //                 : './../../img/collapse-up-icon.png');
-        // console.log('rowIcon', rowIcon);
-        const getRowIcon = () => {
-            return pageSettings.isOpenIndex === creditItem.uid
-                    ? <Ionicons name="ios-arrow-up" size={30} color={DARK_MODE.COLORS.ICON_COLOR} />
-                    : <Ionicons name="ios-arrow-down" size={30} color={DARK_MODE.COLORS.ICON_COLOR} />;
-        };
-        // var spinValue = new Animated.Value(0);
-        // const spin = spinValue.interpolate({
-        //     inputRange: [0, 1],
-        //     outputRange: ['0deg', '360deg'],
-        //   })
-        //   console.log(this.state.iconRotation._value);
+
+        var rotateProp = this.state.iconRotation.interpolate({
+            inputRange: [0, 1],
+            outputRange: ["0deg", "180deg"]
+        })
+        // console.log(this.props.pageSettings);
+        // console.log(this.state.iconRotation === 0);
         return (
             <Animated.View
                 key={creditItem.uid}
@@ -137,21 +119,16 @@ class CreditItem extends Component {
                     <View style={styles.itemColumn}>
                         <Text>{creditItem.paymentsAmount}/{creditItem.paymentsRemain}</Text>
                     </View>
-                    <Animated.View style={styles.itemActionColumn}>
+                    <View style={styles.itemActionColumn}>
                         <TouchableOpacity
                             transparent
-                            onPress={() => {
-                                this.toggleItemExpand(creditItem.uid);
-                                this.rotateDown();
-                            }}
-                            // onPress={() => openTransaction(transactionItem.uid)}
+                            onPress={() => this.toggleItemExpand(creditItem.uid)}
                             style={styles.openBtn}>
-                            <Animated.View style={{transform: [{rotate: (this.state.iconRotation._value + 'deg')}] }}>
+                            <Animated.View style={{transform: [{rotateX: rotateProp}] }}>
                                 <Ionicons name="ios-arrow-down" size={30} color={DARK_MODE.COLORS.ICON_COLOR} />
                             </Animated.View>
-                            {/* {getRowIcon()} */}
                         </TouchableOpacity>
-                    </Animated.View>
+                    </View>
                 </View>
                 <Animated.View style={[styles.hiddenItemStyle, {height: this.state.itemHeight, padding: this.state.itemPadding}]}>
                     <Text>fsd</Text>
@@ -167,12 +144,13 @@ class HomePage extends Component {
     }
 
     componentDidMount() {
-        // console.log(this.props);
         this.props.fetchProfileData(this.props.identity.uid, this.props.navigation);
     }
 
-    componentDidUpdate() {
-
+    componentDidUpdate(prevProps, prevState) {
+        if (this.props.profile.credit.length !== prevProps.profile.credit.lengthn) {
+            this.props.fetchProfileData(this.props.identity.uid, this.props.navigation);
+        }
     }
 
     render() {
@@ -296,7 +274,7 @@ class HomePage extends Component {
                     {/* <Divider style={{ backgroundColor: '#cbe3fb' }} /> */}
                     <View style={styles.creditListStyle}>
                         <Text style={[DARK_MODE.h2, DARK_MODE.title]}>Credit List</Text>
-                        {profile.credit.length > 0 && <Animated.View>
+                        {profile.credit.length > 0 && <Animated.View style={{height: 300}}>
                             <FlatList
                                 data={profile.credit}
                                 ListHeaderComponent={creditListHeader}
@@ -345,7 +323,8 @@ const styles = StyleSheet.create({
     creditListItemStyle: {
         padding: 5,
         width: '100%',
-        borderWidth: 2,
+        borderBottomWidth: 1,
+        borderBottomColor: '#e0e0e0',
     },
     vissibleItemStyle: {
         flexDirection: 'row',
@@ -404,6 +383,7 @@ const mapStateToProps = state => {
     return {
         profile: state.profile,
         identity: state.identity,
+        newTransaction: state.newTransactionModal,
      };
 };
 
