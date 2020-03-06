@@ -151,7 +151,7 @@ export const fetchAccount = uid => {
   };
 };
 
-export const handleUpdaeAccount = (account, uid) => dispatch => {
+export const handleUpdaeAccount = (account, uid, navigation) => dispatch => {
   const json = {
     sallary: account.sallary,
     creditCards: account.creditCards,
@@ -159,12 +159,15 @@ export const handleUpdaeAccount = (account, uid) => dispatch => {
     assets: account.assets,
   };
 
-  var dtNow = new Date();
-  dtNow.setDate(account.sallary.paymentDate);
-  if (dtNow < new Date()) {
-    dtNow.setMonth(dtNow.getMonth() + 1);
-  }
-  account.sallary.paymentDate = dtNow.toISOString();
+  // var dtNow = new Date();
+  // dtNow.setDate(account.sallary.paymentDate);
+  // console.log('dtNow', account);
+  // if (dtNow < new Date()) {
+  //   console.log(dtNow.getMonth() + 1);
+  //   dtNow.setMonth(dtNow.getMonth() + 1);
+  // }
+  // console.log(dtNow);
+  // account.sallary.paymentDate = dtNow.toISOString();
 
   dispatch(startLoading());
   firebase
@@ -177,7 +180,8 @@ export const handleUpdaeAccount = (account, uid) => dispatch => {
       creditCards: account.creditCards,
     })
     .then(res => {
-      console.log(res);
+      // console.log(res);
+      navigation.navigate('HomePage');
       dispatch(endLoading());
     });
 };

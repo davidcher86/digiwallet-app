@@ -21,6 +21,7 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookSdk;
 import com.facebook.reactnative.androidsdk.FBSDKPackage;
 import com.facebook.appevents.AppEventsLogger;
+import co.apptailor.googlesignin.RNGoogleSigninPackage;
 
 public class MainApplication extends Application implements ReactApplication {
   private static CallbackManager mCallbackManager = CallbackManager.Factory.create();
@@ -56,6 +57,14 @@ public class MainApplication extends Application implements ReactApplication {
   public ReactNativeHost getReactNativeHost() {
     return mReactNativeHost;
   }
+
+//  @Override
+//  protected List<ReactPackage> getPackages() {
+//    return Arrays.<ReactPackage>asList(
+//        new MainReactPackage(),
+//        new RNGoogleSigninPackage() // <-- this needs to be in the list
+//    );
+//  }
 
   @Override
   public void onCreate() {

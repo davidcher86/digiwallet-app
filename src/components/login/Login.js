@@ -8,6 +8,7 @@ import firebase from 'firebase';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { SocialIcon } from 'react-native-elements';
+import { GoogleSignin, GoogleSigninButton, statusCodes } from '@react-native-community/google-signin';
 import { Container, Header, Content, Tab, Tabs, Text as BaseText,TabHeading } from 'native-base';
 // import { AccessToken, LoginManager } from 'react-native-fbsdk';
 // import * as fb from 'react-native-firebase';
@@ -25,6 +26,17 @@ class LoginForm extends Component {
   }
 
   componentDidMount() {
+    GoogleSignin.configure({
+      scopes: ['https://www.googleapis.com/auth/drive.readonly'],
+      webClientId: '515276977403-0tfnirtec3vdkqsp448mcvn2jk0st9c5.apps.googleusercontent.com',
+      offlineAccess: true,
+      hostedDomain: '',
+      loginHint: '',
+      forceConsentPrompt: true,
+      accountName: '',
+      iosClientId: '515276977403-0tfnirtec3vdkqsp448mcvn2jk0st9c5.apps.googleusercontent.com'
+    });
+
     this.props.startLoading();
     getRememberedUser()
       .then(uid => {
@@ -97,9 +109,9 @@ class LoginForm extends Component {
   }
 
   render() {
-    const {login, pageSettings, onLoginPress, onRegister, validationErrors, navigation} = this.props;
+    const {login, pageSettings, onLoginPress, onRegister, onGoogleRegister, onFacebookRegister, onFacebookLogin, validationErrors, navigation} = this.props;
     const {changeTab} = this.props;
-
+    var provider = new firebase.auth.FacebookAuthProvider();
     const loginComponent = () => {
       return (
         <KeyboardAvoidingView style={styles.tabContainerStyle}>
@@ -146,6 +158,11 @@ class LoginForm extends Component {
             <View style={{flexDirection: 'row', marginTop: 10, justifyContent: 'space-between'}}>
               <SocialIcon
                 title='Facebook'
+                onPress={() => onFacebookLogin(navigation)}
+                // onPress={() => {
+                //   console.log(provider);
+                //   firebase.auth().signInWithPopup(provider)
+                // }}
                 style={styles.socailIcon}
                 type='facebook'/>
               <SocialIcon
@@ -156,6 +173,27 @@ class LoginForm extends Component {
           </View>
         </KeyboardAvoidingView>
       );
+    };
+
+    const signIn = async () => {
+      try {
+        await GoogleSignin.hasPlayServices();
+        console.log('userInfo');
+        const userInfo = await GoogleSignin.signIn();
+        console.log(userInfo);
+        // this.setState({ userInfo: userInfo, loggedIn: true });
+      } catch (error) {
+        console.log(error);
+        if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+          // user cancelled the login flow
+        } else if (error.code === statusCodes.IN_PROGRESS) {
+          // operation (f.e. sign in) is in progress already
+        } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+          // play services not available or outdated
+        } else {
+          // some other error happened
+        }
+      }
     };
 
     const registerComponent = () => {
@@ -239,28 +277,11 @@ class LoginForm extends Component {
                     )
                   }
                 }
-              }   
+              }
               onLogoutFinished={() => console.log("logout.")}/> */}
               <SocialIcon
                 title='Facebook'
-                onPress={() => {
-                  LoginManager.logInWithPermissions(["public_profile"]).then(
-                    function(result) {
-                      console.log(result);
-                      if (result.isCancelled) {
-                        console.log("Login cancelled");
-                      } else {
-                        console.log(
-                          "Login success with permissions: " +
-                            result.grantedPermissions.toString()
-                        );
-                      }
-                    },
-                    function(error) {
-                      console.log("Login fail with error: " + error);
-                    }
-                  );
-                }}
+                onPress={() => onFacebookRegister(navigation)}
                 style={styles.socailIcon}
                 type='facebook'/>
           {/* <SocialIcon
@@ -268,10 +289,18 @@ class LoginForm extends Component {
                 // onPress={() => this.props.onFacebookRegister(this.props.navigation)}
                 style={styles.socailIcon}
                 type='facebook'/> */}
-              <SocialIcon
+                <GoogleSigninButton
+                  style={{ width: 192, height: 48 }}
+                  size={GoogleSigninButton.Size.Wide}
+                  color={GoogleSigninButton.Color.Dark}
+                  onPress={() => signIn()}/>
+              {/* <SocialIcon
+                onPress={() => {
+                  // onGoogleRegister(navigation)
+                }}
                 title='Google'
                 style={styles.socailIcon}
-                type='google'/>
+                type='google'/> */}
             </View>
           </View>
         </KeyboardAvoidingView>

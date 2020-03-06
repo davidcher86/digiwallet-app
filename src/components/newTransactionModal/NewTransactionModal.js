@@ -14,7 +14,6 @@ import {Button, Input, Icon, Overlay, Divider, ButtonGroup} from 'react-native-e
 import {connect} from 'react-redux';
 import firebase from 'firebase';
 import DatePicker from 'react-native-datepicker';
-// import DateTimePicker from '@react-native-community/datetimepicker';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
@@ -44,7 +43,7 @@ class NewTransactionModal extends Component {
   fieldValidation(field) {
     var {newTransaction, setErrors} = this.props;
     var errors = newTransaction.errors;
-    // console.log(newTransaction);
+
     switch (field) {
       case 'amount':
         if (!/^\d+$/.test(newTransaction[field])) {
@@ -56,7 +55,7 @@ class NewTransactionModal extends Component {
         setErrors(errors);
         return true;
       case 'paymentsAmount':
-        if (!/^\d+$/.test(newTransaction[field])) {
+        if (!(/^\d+$/).test(newTransaction[field])) {
           errors.paymentsAmount = 'Only digits allowed';
           setErrors(errors);
           return false;
@@ -262,6 +261,7 @@ class NewTransactionModal extends Component {
                 changePageSettings('activeTab', 'category');
               }
             }}
+            autoFocus={true}
             placeholder="#"
             keyboardType="numeric"
             inputStyle={{color: DARK_MODE.COLORS.INPUT_TEXT_COLOR}}
@@ -283,7 +283,7 @@ class NewTransactionModal extends Component {
       var categoryList = JSON.parse(sortedMainCategories);
 
       for (let key in JSON.parse(sortedMainCategories)) {
-        itemList.push(<TouchableOpacity style={{minWidth: 50, margin: 4}} >
+        itemList.push(<TouchableOpacity key={key} style={{minWidth: 50, margin: 4}} >
                           <Button
                             onPress={() => {
                               changeFieldValue('mainCategory', categoryList[key]);
@@ -450,6 +450,7 @@ class NewTransactionModal extends Component {
               //     changePageSettings('activeTab', 'final');
               //   }
               // }}
+              autoFocus={true}
               placeholder="#"
               keyboardType="numeric"
               inputStyle={{color: DARK_MODE.COLORS.INPUT_TEXT_COLOR}}

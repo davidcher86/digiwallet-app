@@ -5,7 +5,10 @@ import {
   startLoading,
   endLoading,
 } from './../systemControl/systemControlActions';
+import { AccessToken, LoginManager } from 'react-native-fbsdk';
 // import {setIdentity} from './../identity/identityActions';
+// import { GoogleSignin } from 'react-native-google-signin';
+import { GoogleSignin, statusCodes } from '@react-native-community/google-signin';
 
 export const changeUsername = value => {
   return {
@@ -167,56 +170,114 @@ export const onLoginPress = (email, password, navigation) => {
   };
 };
 
+export const onFacebookLogin = navigation => {
+  return dispatch => {
+    dispatch(startLoading());
+    LoginManager.logInWithPermissions(["public_profile"])
+      .then(
+        (result) => {
+          console.log('result', result);
+          if (result.isCancelled) {
+            Alert.alert('Whoops!', 'You cancelled the sign in.');
+          } else {
+            AccessToken.getCurrentAccessToken()
+              .then((data) => {
+                console.log('data', data);
+                const credential = firebase.auth.FacebookAuthProvider.credential(data.accessToken);
+                console.log('cred', credential);
+                // firebase.auth().signInWithCredential(credential)
+                //   .then(r => {
+                //     console.log('r', r);
+                //     rememberUser(r.user.uid);
+                //     // console.log('currentUser', firebase.auth().currentUser);
+                //     navigation.navigate('Account', {
+                //       type: 'NEW',
+                //       registered: true,
+                //       firstName: r.additionalUserInfo.profile.first_name,
+                //       lastName: r.additionalUserInfo.profile.last_name,
+                //     });
+                //     dispatch(endLoading());
+                //   })
+                //   .catch((error) => {
+                //     console.log('error', error.message)
+                //     dispatch(endLoading());
+                //   });
+              });
+          }
+        },
+        (error) => {
+          Alert.alert('Sign in error', error);
+        },
+      );
+  };
+};
+
 export const onFacebookRegister = navigation => {
   return dispatch => {
-    var provider = new firebase.auth.FacebookAuthProvider();
-    // provider.setCustomParameters({
-    //   display: 'popup',
-    // });
-
     dispatch(startLoading());
-    firebase
-      .auth()
-      .signInWithPopup(provider)
-      .then(function(result) {
-        // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-        var token = result.credential.accessToken;
-        // The signed-in user info.
-        var user = result.user;
-        dispatch(endLoading());
-        // ...
-      })
-      .catch(function(error) {
-        console.log(error);
-        // Handle Errors here.
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        // The email of the user's account used.
-        var email = error.email;
-        // The firebase.auth.AuthCredential type that was used.
-        var credential = error.credential;
-        dispatch(endLoading());
-        // ...
-      });
+    // LoginManager.logInWithReadPermissions(['public_profile', 'user_friends', 'email'])
+    LoginManager.logInWithPermissions(["public_profile"])
+      .then(
+        (result) => {
+          console.log('result', result);
+          if (result.isCancelled) {
+            Alert.alert('Whoops!', 'You cancelled the sign in.');
+          } else {
+            AccessToken.getCurrentAccessToken()
+              .then((data) => {
+                const credential = firebase.auth.FacebookAuthProvider.credential(data.accessToken);
+                console.log('credential', credential);
+                firebase.auth().signInWithCredential(credential)
+                  .then(r => {
+                    console.log('r', r);
+                    rememberUser(r.user.uid);
+                    // console.log('currentUser', firebase.auth().currentUser);
+                    navigation.navigate('Account', {
+                      type: 'NEW',
+                      registered: true,
+                      firstName: r.additionalUserInfo.profile.first_name,
+                      lastName: r.additionalUserInfo.profile.last_name,
+                    });
+                    dispatch(endLoading());
+                  })
+                  .catch((error) => {
+                    console.log('error', error.message)
+                    dispatch(endLoading());
+                  });
+              });
+          }
+        },
+        (error) => {
+          Alert.alert('Sign in error', error);
+        },
+      );
+  };
+};
 
-    // firebaseAction(null, 'authentication', 'login', data)
-    //   .then(res => {
-    //     if (res.user !== null) {
-    //       rememberUser(res.user.uid);
-    //       navigation.navigate('HomePage');
-    //       dispatch(setIdentity(res.user.uid));
-    //     }
-    //     dispatch(endLoading());
-    //     dispatch(resetForm());
-    //     return res;
-    //   })
-    //   .catch(res => {
-    //     console.log('Error: ', res);
-    //     dispatch(resetForm());
-    //     dispatch(handleError(res.toString()));
-    //     dispatch(endLoading());
-    //     return null;
-    //   });
+export const onGoogleRegister = navigation => {
+  return async dispatch => {
+    try {
+      // add any configuration settings here:
+      await GoogleSignin.configure();
+
+      const data = await GoogleSignin.signIn();
+      console.log('data', data);
+      // create a new firebase credential with the token
+      const credential = firebase.auth.GoogleAuthProvider.credential(data.idToken, data.accessToken)
+      console.log('credential', credential);
+      // login with credential
+      const firebaseUserCredential = await firebase.auth().signInWithCredential(credential);
+      console.log('firebaseUserCredential', firebaseUserCredential);
+      console.warn(JSON.stringify(firebaseUserCredential.user.toJSON()));
+    } catch (e) {
+      console.error(e);
+    }
+    // dispatch(startLoading());
+    // var provider = new firebase.auth.GoogleAuthProvider();
+
+    // await GoogleSignin.hasPlayServices();
+    // const userInfo = await GoogleSignin.signIn();
+    // console.log('userInfo', userInfo)
   };
 };
 
