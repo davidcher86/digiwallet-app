@@ -28,19 +28,20 @@ class LoginForm extends Component {
   }
 
   componentDidMount() {
-    // GoogleSignin.configure({
-    //   scopes: ['https://www.googleapis.com/auth/drive.readonly'],
-    //   webClientId: '107699463403-eji2084r1ddk6uuorbhh0lm8soc0ej0s.apps.googleusercontent.com',
-    //   offlineAccess: true,
+    GoogleSignin.configure({
+      scopes: ['https://www.googleapis.com/auth/drive.readonly'],
+      webClientId: '515276977403-oa5jvh37s49q5l1ksebcokjkjpoodcri.apps.googleusercontent.com',
+      Client_Id: '515276977403-oa5jvh37s49q5l1ksebcokjkjpoodcri.apps.googleusercontent.com',
+      // offlineAccess: true,
     //   // hostedDomain: '',
     //   // loginHint: '',
-    //   forceConsentPrompt: true,
+      // forceConsentPrompt: true,
     //   // accountName: '',
     //   // androidClientId: '107699463403-eji2084r1ddk6uuorbhh0lm8soc0ej0s.apps.googleusercontent.com',
     //   iosClientId: '107699463403-eji2084r1ddk6uuorbhh0lm8soc0ej0s.apps.googleusercontent.com'
-    // });
+    });
 
-    // console.log(GoogleSignin);
+    console.log(GoogleSignin);
     // GoogleSignin.configure({
     //   scopes: ['https://www.googleapis.com/auth/drive.readonly'],
     //   webClientId: '515276977403-oa5jvh37s49q5l1ksebcokjkjpoodcri.apps.googleusercontent.com',
@@ -127,20 +128,25 @@ class LoginForm extends Component {
     try {
       // console.log(GoogleSignin);
 
-      await GoogleSignin.configure({
-        scopes: ['https://www.googleapis.com/auth/drive.readonly'],
-        // webClientId: '107699463403-eji2084r1ddk6uuorbhh0lm8soc0ej0s.apps.googleusercontent.com',
-        // offlineAccess: true,
-        // hostedDomain: '',
-        // loginHint: '',
-        // forceConsentPrompt: true,
-        // accountName: '',
-        androidClientId: '107699463403-eji2084r1ddk6uuorbhh0lm8soc0ej0s.apps.googleusercontent.com',
-        // iosClientId: '107699463403-eji2084r1ddk6uuorbhh0lm8soc0ej0s.apps.googleusercontent.com'
-      });
+      // await GoogleSignin.configure({
+      //   scopes: ['https://www.googleapis.com/auth/drive.readonly'],
+      //   webClientId: '515276977403-oa5jvh37s49q5l1ksebcokjkjpoodcri.apps.googleusercontent.com',
+      //   // offlineAccess: true,
+      //   // hostedDomain: '',
+      //   // loginHint: '',
+      //   // forceConsentPrompt: true,
+      //   // accountName: '',
+      //   // androidClientId: '515276977403-oa5jvh37s49q5l1ksebcokjkjpoodcri.apps.googleusercontent.com',
+      //   // iosClientId: '107699463403-eji2084r1ddk6uuorbhh0lm8soc0ej0s.apps.googleusercontent.com'
+      // });
 
       console.log(GoogleSignin);
-      await GoogleSignin.hasPlayServices();
+      await GoogleSignin.hasPlayServices({ autoResolve: true }).then(() => {
+
+      })
+      .catch((err) => {
+            console.log("Play services error", err.code, err.message);
+      })
       console.log('userInfo');
 
       const userInfo = await GoogleSignin.signIn()
