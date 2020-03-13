@@ -1,1 +1,44 @@
-{"installed":{"client_id":"515276977403-0tfnirtec3vdkqsp448mcvn2jk0st9c5.apps.googleusercontent.com","project_id":"api-project-515276977403","auth_uri":"https://accounts.google.com/o/oauth2/auth","token_uri":"https://oauth2.googleapis.com/token","auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs","redirect_uris":["urn:ietf:wg:oauth:2.0:oob","http://localhost"]}}
+{
+  "project_info": {
+    "project_number": "107699463403",
+    "firebase_url": "https://authproj-3e757.firebaseio.com",
+    "project_id": "authproj-3e757",
+    "storage_bucket": "authproj-3e757.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:107699463403:android:69081614d2631b9c684aae",
+        "android_client_info": {
+          "package_name": "com.digiwallet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "107699463403-sid0950d10qnqfja2eabmcl2ctfa18qd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.digiwallet",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCGAZ60DZEwmYH2qxwy-5On7CYo7XnSTBc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "107699463403-6u38p0oj7g2dlplb43s7gfj48vg412na.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

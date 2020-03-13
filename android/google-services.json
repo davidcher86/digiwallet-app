@@ -15,7 +15,7 @@
       },
       "oauth_client": [
         {
-          "client_id": "107699463403-appogef11slq9vqh75v92mhsor7jmg2s.apps.googleusercontent.com",
+          "client_id": "107699463403-adn26sfok01hvq3bjgisu7g18fsk4sko.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.digiwallet",
@@ -30,7 +30,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "107699463403-6u38p0oj7g2dlplb43s7gfj48vg412na.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

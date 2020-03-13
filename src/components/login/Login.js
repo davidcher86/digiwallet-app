@@ -8,6 +8,7 @@ import firebase from 'firebase';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { SocialIcon } from 'react-native-elements';
+// import { GoogleSignin, GoogleSigninButton } from 'google-signin';
 import { GoogleSignin, GoogleSigninButton, statusCodes } from '@react-native-community/google-signin';
 import { Container, Header, Content, Tab, Tabs, Text as BaseText,TabHeading } from 'native-base';
 // import { AccessToken, LoginManager } from 'react-native-fbsdk';
@@ -23,20 +24,35 @@ class LoginForm extends Component {
   constructor() {
     super();
     this.fieldValidation = this.fieldValidation.bind(this);
+    this.signIn = this.signIn.bind(this);
   }
 
   componentDidMount() {
-    GoogleSignin.configure({
-      scopes: ['https://www.googleapis.com/auth/drive.readonly'],
-      webClientId: '515276977403-0tfnirtec3vdkqsp448mcvn2jk0st9c5.apps.googleusercontent.com',
-      offlineAccess: true,
-      hostedDomain: '',
-      loginHint: '',
-      forceConsentPrompt: true,
-      accountName: '',
-      iosClientId: '515276977403-0tfnirtec3vdkqsp448mcvn2jk0st9c5.apps.googleusercontent.com'
-    });
+    // GoogleSignin.configure({
+    //   scopes: ['https://www.googleapis.com/auth/drive.readonly'],
+    //   webClientId: '107699463403-eji2084r1ddk6uuorbhh0lm8soc0ej0s.apps.googleusercontent.com',
+    //   offlineAccess: true,
+    //   // hostedDomain: '',
+    //   // loginHint: '',
+    //   forceConsentPrompt: true,
+    //   // accountName: '',
+    //   // androidClientId: '107699463403-eji2084r1ddk6uuorbhh0lm8soc0ej0s.apps.googleusercontent.com',
+    //   iosClientId: '107699463403-eji2084r1ddk6uuorbhh0lm8soc0ej0s.apps.googleusercontent.com'
+    // });
 
+    // console.log(GoogleSignin);
+    // GoogleSignin.configure({
+    //   scopes: ['https://www.googleapis.com/auth/drive.readonly'],
+    //   webClientId: '515276977403-oa5jvh37s49q5l1ksebcokjkjpoodcri.apps.googleusercontent.com',
+    //   offlineAccess: true,
+    //   // client_type: 3,
+    //   // hostedDomain: '',
+    //   // loginHint: '',
+    //   forceConsentPrompt: true,
+    //   // accountName: '',
+    //   // androidClientId: '515276977403-v7hqpbb7mjsrc5sa6fbls0913louvv3o.apps.googleusercontent.com',
+    //   iosClientId: '515276977403-oa5jvh37s49q5l1ksebcokjkjpoodcri.apps.googleusercontent.com'
+    // });
     this.props.startLoading();
     getRememberedUser()
       .then(uid => {
@@ -107,6 +123,43 @@ class LoginForm extends Component {
         return true;
     }
   }
+  signIn = async () => {
+    try {
+      // console.log(GoogleSignin);
+
+      await GoogleSignin.configure({
+        scopes: ['https://www.googleapis.com/auth/drive.readonly'],
+        // webClientId: '107699463403-eji2084r1ddk6uuorbhh0lm8soc0ej0s.apps.googleusercontent.com',
+        // offlineAccess: true,
+        // hostedDomain: '',
+        // loginHint: '',
+        // forceConsentPrompt: true,
+        // accountName: '',
+        androidClientId: '107699463403-eji2084r1ddk6uuorbhh0lm8soc0ej0s.apps.googleusercontent.com',
+        // iosClientId: '107699463403-eji2084r1ddk6uuorbhh0lm8soc0ej0s.apps.googleusercontent.com'
+      });
+
+      console.log(GoogleSignin);
+      await GoogleSignin.hasPlayServices();
+      console.log('userInfo');
+
+      const userInfo = await GoogleSignin.signIn()
+      // const userInfo = await GoogleSignin.signIn();
+      // console.log(userInfo);
+      // this.setState({ userInfo: userInfo, loggedIn: true });
+    } catch (error) {
+      console.log(error);
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        // user cancelled the login flow
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        // operation (f.e. sign in) is in progress already
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        // play services not available or outdated
+      } else {
+        // some other error happened
+      }
+    }
+  }
 
   render() {
     const {login, pageSettings, onLoginPress, onRegister, onGoogleRegister, onFacebookRegister, onFacebookLogin, validationErrors, navigation} = this.props;
@@ -173,27 +226,6 @@ class LoginForm extends Component {
           </View>
         </KeyboardAvoidingView>
       );
-    };
-
-    const signIn = async () => {
-      try {
-        await GoogleSignin.hasPlayServices();
-        console.log('userInfo');
-        const userInfo = await GoogleSignin.signIn();
-        console.log(userInfo);
-        // this.setState({ userInfo: userInfo, loggedIn: true });
-      } catch (error) {
-        console.log(error);
-        if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-          // user cancelled the login flow
-        } else if (error.code === statusCodes.IN_PROGRESS) {
-          // operation (f.e. sign in) is in progress already
-        } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-          // play services not available or outdated
-        } else {
-          // some other error happened
-        }
-      }
     };
 
     const registerComponent = () => {
@@ -293,7 +325,7 @@ class LoginForm extends Component {
                   style={{ width: 192, height: 48 }}
                   size={GoogleSigninButton.Size.Wide}
                   color={GoogleSigninButton.Color.Dark}
-                  onPress={() => signIn()}/>
+                  onPress={() => this.signIn()}/>
               {/* <SocialIcon
                 onPress={() => {
                   // onGoogleRegister(navigation)

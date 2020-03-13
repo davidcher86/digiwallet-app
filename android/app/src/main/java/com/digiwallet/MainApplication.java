@@ -43,6 +43,9 @@ public class MainApplication extends Application implements ReactApplication {
           List<ReactPackage> packages = new PackageList(this).getPackages();
           // Packages that cannot be autolinked yet can be added manually here, for example:
           // packages.add(new MyReactNativePackage());
+//          packages.add(new RNGoogleSigninPackage());
+//          packages.add(new ReanimatedPackage());
+          new RNGoogleSigninPackage();
           new ReanimatedPackage();
           return packages;
         }
@@ -57,14 +60,6 @@ public class MainApplication extends Application implements ReactApplication {
   public ReactNativeHost getReactNativeHost() {
     return mReactNativeHost;
   }
-
-//  @Override
-//  protected List<ReactPackage> getPackages() {
-//    return Arrays.<ReactPackage>asList(
-//        new MainReactPackage(),
-//        new RNGoogleSigninPackage() // <-- this needs to be in the list
-//    );
-//  }
 
   @Override
   public void onCreate() {

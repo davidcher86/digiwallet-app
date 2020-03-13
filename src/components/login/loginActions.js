@@ -7,7 +7,7 @@ import {
 } from './../systemControl/systemControlActions';
 import { AccessToken, LoginManager } from 'react-native-fbsdk';
 // import {setIdentity} from './../identity/identityActions';
-// import { GoogleSignin } from 'react-native-google-signin';
+// import { GoogleSignin, statusCodes } from 'react-native-google-signin';
 import { GoogleSignin, statusCodes } from '@react-native-community/google-signin';
 
 export const changeUsername = value => {
