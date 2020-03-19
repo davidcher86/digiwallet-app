@@ -14,6 +14,7 @@ import { Container, Header, Content, Tab, Tabs, Text as BaseText,TabHeading } fr
 // import { AccessToken, LoginManager } from 'react-native-fbsdk';
 // import * as fb from 'react-native-firebase';
 import { LoginButton, AccessToken, LoginManager } from 'react-native-fbsdk';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import {startLoading, endLoading} from './../systemControl/systemControlActions';
 import * as loginActions from './loginActions';
@@ -28,20 +29,20 @@ class LoginForm extends Component {
   }
 
   componentDidMount() {
+    // AsyncStorage.clear();
     GoogleSignin.configure({
-      scopes: ['https://www.googleapis.com/auth/drive.readonly'],
-      webClientId: '515276977403-oa5jvh37s49q5l1ksebcokjkjpoodcri.apps.googleusercontent.com',
-      Client_Id: '515276977403-oa5jvh37s49q5l1ksebcokjkjpoodcri.apps.googleusercontent.com',
-      // offlineAccess: true,
-    //   // hostedDomain: '',
-    //   // loginHint: '',
+      scopes: ['https://www.googleapis.com/auth/userinfo.profile'],
+      webClientId: '107699463403-eqhj0cibrbljgq1vd8o1htbbkf0a8i7t.apps.googleusercontent.com',
+      // offlineAccess: false,
+      // hostedDomain: '',
+      // loginHint: '',
       // forceConsentPrompt: true,
-    //   // accountName: '',
-    //   // androidClientId: '107699463403-eji2084r1ddk6uuorbhh0lm8soc0ej0s.apps.googleusercontent.com',
-    //   iosClientId: '107699463403-eji2084r1ddk6uuorbhh0lm8soc0ej0s.apps.googleusercontent.com'
+      // accountName: '',
+      // androidClientId: '515276977403-oa5jvh37s49q5l1ksebcokjkjpoodcri.apps.googleusercontent.com',
+      // iosClientId: '107699463403-eji2084r1ddk6uuorbhh0lm8soc0ej0s.apps.googleusercontent.com'
     });
 
-    console.log(GoogleSignin);
+    // console.log(GoogleSignin);
     // GoogleSignin.configure({
     //   scopes: ['https://www.googleapis.com/auth/drive.readonly'],
     //   webClientId: '515276977403-oa5jvh37s49q5l1ksebcokjkjpoodcri.apps.googleusercontent.com',
@@ -129,9 +130,9 @@ class LoginForm extends Component {
       // console.log(GoogleSignin);
 
       // await GoogleSignin.configure({
-      //   scopes: ['https://www.googleapis.com/auth/drive.readonly'],
-      //   webClientId: '515276977403-oa5jvh37s49q5l1ksebcokjkjpoodcri.apps.googleusercontent.com',
-      //   // offlineAccess: true,
+      //   scopes: ['https://www.googleapis.com/auth/userinfo.profile'],
+      //   webClientId: '107699463403-eqhj0cibrbljgq1vd8o1htbbkf0a8i7t.apps.googleusercontent.com',
+      //   // offlineAccess: false,
       //   // hostedDomain: '',
       //   // loginHint: '',
       //   // forceConsentPrompt: true,
@@ -141,7 +142,7 @@ class LoginForm extends Component {
       // });
 
       console.log(GoogleSignin);
-      await GoogleSignin.hasPlayServices({ autoResolve: true }).then(() => {
+      await GoogleSignin.hasPlayServices({ autoResolve: true, showPlayServicesUpdateDialog: true }).then(() => {
 
       })
       .catch((err) => {
@@ -322,23 +323,21 @@ class LoginForm extends Component {
                 onPress={() => onFacebookRegister(navigation)}
                 style={styles.socailIcon}
                 type='facebook'/>
-          {/* <SocialIcon
+              {/* <SocialIcon
                 title='Facebook'
                 // onPress={() => this.props.onFacebookRegister(this.props.navigation)}
                 style={styles.socailIcon}
                 type='facebook'/> */}
-                <GoogleSigninButton
+                {/* <GoogleSigninButton
                   style={{ width: 192, height: 48 }}
                   size={GoogleSigninButton.Size.Wide}
                   color={GoogleSigninButton.Color.Dark}
-                  onPress={() => this.signIn()}/>
-              {/* <SocialIcon
-                onPress={() => {
-                  // onGoogleRegister(navigation)
-                }}
+                  onPress={() => this.signIn()}/> */}
+              <SocialIcon
+                onPress={() => this.signIn()}
                 title='Google'
                 style={styles.socailIcon}
-                type='google'/> */}
+                type='google'/>
             </View>
           </View>
         </KeyboardAvoidingView>

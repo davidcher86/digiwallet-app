@@ -8,18 +8,18 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:107699463403:android:69081614d2631b9c684aae",
+        "mobilesdk_app_id": "1:107699463403:android:dd0c853eaac6d06b684aae",
         "android_client_info": {
           "package_name": "com.digiwallet"
         }
       },
       "oauth_client": [
         {
-          "client_id": "107699463403-adn26sfok01hvq3bjgisu7g18fsk4sko.apps.googleusercontent.com",
+          "client_id": "107699463403-eqhj0cibrbljgq1vd8o1htbbkf0a8i7t.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.digiwallet",
-            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+            "certificate_hash": "7272e8e8cfd5b4eeeb50dd4ef30aa156dcfa18cd"
           }
         }
       ],
@@ -30,12 +30,7 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "107699463403-6u38p0oj7g2dlplb43s7gfj48vg412na.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }

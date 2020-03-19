@@ -148,7 +148,7 @@ class HomePage extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if (this.props.profile.credit.length !== prevProps.profile.credit.lengthn) {
+        if (this.props.profile.assets !== prevProps.profile.assets) {
             this.props.fetchProfileData(this.props.identity.uid, this.props.navigation);
         }
     }
@@ -157,65 +157,62 @@ class HomePage extends Component {
         const {profile, pageSettings} = this.props;
         // console.log(this.props);
         // console.log('pre', DARK_MODE);
-        const getMonthsDiffrence = (firstDate, laterDate) => {
-            // console.log('firstDate', firstDate);
-            // console.log('laterDate', laterDate);
-            var date1 = new Date(firstDate);
-            var date2 = new Date(laterDate);
-            var diffYears = date2.getFullYear() - date1.getFullYear();
-            var diffMonths = date2.getMonth() - date1.getMonth();
-            var diffDays = date2.getDate() - date1.getDate();
+        // const getMonthsDiffrence = (firstDate, laterDate) => {
+        //     // console.log('firstDate', firstDate);
+        //     // console.log('laterDate', laterDate);
+        //     var date1 = new Date(firstDate);
+        //     var date2 = new Date(laterDate);
+        //     var diffYears = date2.getFullYear() - date1.getFullYear();
+        //     var diffMonths = date2.getMonth() - date1.getMonth();
+        //     var diffDays = date2.getDate() - date1.getDate();
 
-            var months = (diffYears*12 + diffMonths);
-            if (diffDays>0) {
-                months += '.' + diffDays;
-            } else if (diffDays < 0) {
-                months--;
-                months += '.' + (new Date(date2.getFullYear(),date2.getMonth(),0).getDate()+diffDays);
-            }
+        //     var months = (diffYears*12 + diffMonths);
+        //     if (diffDays>0) {
+        //         months += '.' + diffDays;
+        //     } else if (diffDays < 0) {
+        //         months--;
+        //         months += '.' + (new Date(date2.getFullYear(),date2.getMonth(),0).getDate()+diffDays);
+        //     }
 
-            return Math.ceil(months);
-        };
+        //     return Math.ceil(months);
+        // };
 
-        var nowDt = new Date();
+        // var nowDt = new Date();
         // console.log('before', profile);
         // console.log(nowDt > new Date(profile.sallary.paymentDate));
-        // if (profile.credit.length > 0) {
-        //     var mapCredit = profile.credit;
-        //     var creditDebt = profile.creditDebt;
-        //     // console.log('creditCardDebtDt', creditCardDebtDt);
-        //     var cardToHandle = profile.creditCards[0].id;
-        //     var creditCardDebtDt = profile.creditCards[0].nextDebtDate;
-        //     var totalCreditDebt = 0;
+        if (profile.credit.length > 0) {
+            // var mapCredit = profile.credit;
+            // var creditDebt = profile.creditDebt;
+            // console.log('creditCardDebtDt', creditCardDebtDt);
+            // var cardToHandle = profile.creditCards[0].id;
+            // var creditCardDebtDt = profile.creditCards[0].nextDebtDate;
+            // var totalCreditDebt = 0;
 
-        //     for (var item in creditDebt) {
-        //         console.log('item  ', creditDebt[item]);
-
-        //         // console.log('1', cardToHandle === mapCredit[item].creditCardId);
-        //         // console.log('2',new Date(mapCredit[item].lastUpdated) < new Date(creditCardDebtDt));
-        //         if (cardToHandle === creditDebt[item].creditCardId && new Date(creditDebt[item].lastUpdated) < new Date(creditCardDebtDt)) {
-        //             var monthsAmount = getMonthsDiffrence(creditDebt[item].lastUpdated, nowDt.toISOString());
-        //             var creditItem = creditDebt[item];
-        //             totalCreditDebt += (creditDebt[item].paymentsRemain >= monthsAmount ? (monthsAmount * mapCredit[item].monthlyPayment) : (mapCredit[item].paymentsRemain * mapCredit[item].monthlyPayment));
-        //             profile.assets -= totalCreditDebt;
-        //             console.log('paymentsRemain ', creditDebt[item].paymentsRemain);
-        //             console.log('monthsAmount ', monthsAmount);
-        //             if (creditDebt[item].paymentsRemain - monthsAmount > 0) {
-        //                 let dt = new Date();
-        //                 creditDebt[item].paymentsRemain = creditItem.paymentsRemain - monthsAmount;
-        //                 creditDebt[item].amountRemain = creditItem.amountRemain - (creditItem.monthlyPayment * monthsAmount);
-        //                 creditDebt[item].lastUpdated = dt.toISOString();
-        //             } else {
-        //                 delete creditDebt[item];
-        //             }
-        //         }
-        //     }
-        //     console.log('totalCreditDebt', totalCreditDebt);
-        //     var dt = new Date(creditCardDebtDt);
-        //     dt.setMonth(dt.getMonth() + 1);
-        //     profile.creditCards[0].nextDebtDate = dt;
-        //   }
-        // console.log('after ', profile);
+            // for (var item in creditDebt) {
+            //     console.log('item  ', creditDebt[item]);
+            //     if (cardToHandle === creditDebt[item].creditCardId && new Date(creditDebt[item].lastUpdated) < new Date(creditCardDebtDt)) {
+            //         var monthsAmount = getMonthsDiffrence(creditDebt[item].lastUpdated, nowDt.toISOString());
+            //         var creditItem = creditDebt[item];
+            //         totalCreditDebt += (creditDebt[item].paymentsRemain >= monthsAmount ? (monthsAmount * mapCredit[item].monthlyPayment) : (mapCredit[item].paymentsRemain * mapCredit[item].monthlyPayment));
+            //         profile.assets -= totalCreditDebt;
+            //         console.log('paymentsRemain ', creditDebt[item].paymentsRemain);
+            //         console.log('monthsAmount ', monthsAmount);
+            //         if (creditDebt[item].paymentsRemain - monthsAmount > 0) {
+            //             let dt = new Date();
+            //             creditDebt[item].paymentsRemain = creditItem.paymentsRemain - monthsAmount;
+            //             creditDebt[item].amountRemain = creditItem.amountRemain - (creditItem.monthlyPayment * monthsAmount);
+            //             creditDebt[item].lastUpdated = dt.toISOString();
+            //         } else {
+            //             delete creditDebt[item];
+            //         }
+            //     }
+            // }
+            // console.log('totalCreditDebt', totalCreditDebt);
+            // var dt = new Date(creditCardDebtDt);
+            // dt.setMonth(dt.getMonth() + 1);
+            // profile.creditCards[0].nextDebtDate = dt;
+          }
+        // console.log('profile ', profile);
         const creditListHeader = () => {
             return (
                 <View style={styles.creditListHeaderStyle}>
@@ -231,7 +228,7 @@ class HomePage extends Component {
                 </View>
             );
         };
-        // console.log(this.props);
+        console.log(this.props);
         return (
             <View style={{flex: 1, height: '100%'}}>
                 {/* <Header navigation={this.props.navigation} title="Home"/> */}
