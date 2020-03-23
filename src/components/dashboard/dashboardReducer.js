@@ -1,6 +1,6 @@
 const initialState = {
   pageSettings: {
-    activeTab: 'Expance'
+    activeTabIndex: 0
   }
 };
 
@@ -8,7 +8,7 @@ export default (state = initialState, action) => {
   switch (action.type) {
     case 'CHANGE_PAGE_SETTINGS':
       let pageSettings = state.pageSettings;
-      pageSettings[action.field] = action.value;
+      pageSettings.activeTabIndex = action.index;
       return Object.assign({}, state, { pageSettings: pageSettings });
     // case 'CHANGE_PASSWORD_FIELD':
     //     return Object.assign({}, state, { password: action.value });

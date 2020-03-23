@@ -1,7 +1,6 @@
-export const setPageSettings = (field, value) => {
+export const setPageSettingsIndex = (index) => {
     return {
         type: 'CHANGE_PAGE_SETTINGS',
-        field,
-        value
+        index
     };
 };

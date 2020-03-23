@@ -34,7 +34,7 @@ class LoginForm extends Component {
       // scopes: ['https://www.googleapis.com/auth/drive.readonly'],
       webClientId: '515276977403-oa5jvh37s49q5l1ksebcokjkjpoodcri.apps.googleusercontent.com',
       // Client_Id: '515276977403-oa5jvh37s49q5l1ksebcokjkjpoodcri.apps.googleusercontent.com',
-      offlineAccess: true,
+      // offlineAccess: true,
     //   // hostedDomain: '',
     //   // loginHint: '',
       // forceConsentPrompt: true,
@@ -144,11 +144,6 @@ class LoginForm extends Component {
 
       console.log(GoogleSignin);
       await GoogleSignin.hasPlayServices({ autoResolve: true, showPlayServicesUpdateDialog: true }).then(() => {
-<<<<<<< HEAD
-        
-=======
-
->>>>>>> ad036a76f6ec79d86dd0b6e3d3f3d8cf0611d49b
       })
       .catch((err) => {
             console.log("Play services error", err.code, err.message);
