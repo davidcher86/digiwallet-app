@@ -1,5 +1,7 @@
-// export const logout = () => {
-//     return {
-//         type: 'LOG_OUTK'
-//     };
-// };
+export const setPageSettings = (field, value) => {
+    return {
+        type: 'CHANGE_PAGE_SETTINGS',
+        field,
+        value
+    };
+};

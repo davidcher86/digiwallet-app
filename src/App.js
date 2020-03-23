@@ -16,6 +16,7 @@ import firebase from 'firebase';
 class App extends Component {
   componentDidMount() {
     console.log('firebase initilised');
+
     if (!firebase.apps.length) {
       firebase.initializeApp({
         apiKey: 'AIzaSyBuhrwvn0lV7B-ugmVEmEXYHsIa_8e-mko',
@@ -30,6 +31,7 @@ class App extends Component {
     } else {
       firebase.app();
     }
+    // console.log(firebase);
   }
 
   render() {
