@@ -1,5 +1,6 @@
 import firebase from 'firebase';
 import {fetchTransactions} from './../transactions/transactionsActions';
+import {fetchProfileData} from './../homePage/homePageActions';
 
 export const toggleNewTransactionModal = () => {
   return {
@@ -68,6 +69,7 @@ export const handleAddNewTransactionAccount = (
       dispatch(resetNewTransactionForm());
       dispatch(closeNewTransactionModal());
       dispatch(fetchTransactions(uid));
+      dispatch(fetchProfileData(uid))
       return res;
     })
     .catch(err => {

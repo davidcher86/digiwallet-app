@@ -1,12 +1,15 @@
 const initialState = {
-  credit: 0,
-  curentAmount: 0,
+  pageSettings: {
+    activeTab: 'Expance'
+  }
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    // case 'CHANGE_USERNAME_FIELD':
-    //     return Object.assign({}, state, { username: action.value });
+    case 'CHANGE_PAGE_SETTINGS':
+      let pageSettings = state.pageSettings;
+      pageSettings[action.field] = action.value;
+      return Object.assign({}, state, { pageSettings: pageSettings });
     // case 'CHANGE_PASSWORD_FIELD':
     //     return Object.assign({}, state, { password: action.value });
     // case 'CHANGE_LOADING_STATE':

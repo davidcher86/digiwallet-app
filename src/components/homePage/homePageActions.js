@@ -24,7 +24,7 @@ export const recieveData = data => {
   };
 };
 
-export const fetchProfileData = (uid, navigation) => {
+export const fetchProfileData = (uid, navigation = null) => {
   return dispatch => {
     dispatch(startLoading());
     const dataRef = firebase.database().ref(`/users/${uid}/account`);

@@ -22,6 +22,7 @@ import com.facebook.FacebookSdk;
 import com.facebook.reactnative.androidsdk.FBSDKPackage;
 import com.facebook.appevents.AppEventsLogger;
 import co.apptailor.googlesignin.RNGoogleSigninPackage;
+// import io.invertase.firebase.auth.RNFirebaseAuthPackage;
 
 public class MainApplication extends Application implements ReactApplication {
   private static CallbackManager mCallbackManager = CallbackManager.Factory.create();
@@ -47,6 +48,7 @@ public class MainApplication extends Application implements ReactApplication {
 //          packages.add(new ReanimatedPackage());
           new RNGoogleSigninPackage();
           new ReanimatedPackage();
+          // new RNFirebaseAuthPackage();
           return packages;
         }
 
