@@ -13,6 +13,13 @@ import Fab from './../common/Fab';
 var ScrollableTabView = require('react-native-scrollable-tab-view');
 
 function Header(props) {
+  const transactions = useSelector(state => state.transactions);
+  const identity = useSelector(state => state.identity);
+
+  useEffect(() => {
+    dispatch(transactionsActions.fetchTransactions(identity.uid));
+  }, []);
+
   return (
     <View style={{flex: 1}}>
       <Text>header</Text>
@@ -21,6 +28,8 @@ function Header(props) {
 }
 
 function ExpanceCharts(props) {
+  const transactions = useSelector(state => state.transactions);
+
   return (
     <View>
       <Text>ExpanceCharts</Text>
@@ -29,6 +38,8 @@ function ExpanceCharts(props) {
 }
 
 function MoneyFlowCharts(props) {
+  const transactions = useSelector(state => state.transactions);
+
   return (
     <View>
       <Text>MoneyFlowCharts</Text>
@@ -36,45 +47,45 @@ function MoneyFlowCharts(props) {
   );
 }
 
-function Dashboard(props) {
-  const dashboard = useSelector(state => state.dashboard);
-  const transactions = useSelector(state => state.transactions);
-  const identity = useSelector(state => state.identity);
-  const dispatch = useDispatch();
+// function Dashboard(props) {
+//   const dashboard = useSelector(state => state.dashboard);
+//   const transactions = useSelector(state => state.transactions);
+//   const identity = useSelector(state => state.identity);
+//   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(transactionsActions.fetchTransactions(identity.uid));
-  }, []);
+  // useEffect(() => {
+  //   dispatch(transactionsActions.fetchTransactions(identity.uid));
+  // }, []);
 
-  console.log('dashboard', dashboard);
-  // console.log('transactions', transactions);
-  const [routes] = React.useState([
-    { key: 'ExpanceCharts', title: 'Expance Charts' },
-    { key: 'MoneyFlowCharts', title: 'Money Flow Charts' },
-  ]);
+//   // console.log('dashboard', dashboard);
+//   // console.log('transactions', transactions);
+//   const [routes] = React.useState([
+//     { key: 'ExpanceCharts', title: 'Expance Charts' },
+//     { key: 'MoneyFlowCharts', title: 'Money Flow Charts' },
+//   ]);
 
-  const renderScene = SceneMap({
-    ExpanceCharts: ExpanceCharts,
-    MoneyFlowCharts: MoneyFlowCharts,
-  });
-  const pageSettings = dashboard.pageSettings;
-  const index = pageSettings.activeTabIndex;
-  const initialLayout = { width: 100 };
-  const HandleChangeTabIndex = (index) => {
-    dispatch(dashboardActions.setPageSettingsIndex(index))
-  };
+//   const renderScene = SceneMap({
+//     ExpanceCharts: ExpanceCharts,
+//     MoneyFlowCharts: MoneyFlowCharts,
+//   });
+//   const pageSettings = dashboard.pageSettings;
+//   const index = pageSettings.activeTabIndex;
+//   const initialLayout = { width: 100 };
+//   const HandleChangeTabIndex = (index) => {
+//     dispatch(dashboardActions.setPageSettingsIndex(index))
+//   };
 
-  return (
-    <View style={{flex: 1}}>
-      <TabView
-        navigationState={{ index, routes }}
-        renderScene={renderScene}
-        onIndexChange={HandleChangeTabIndex}
-        initialLayout={initialLayout}
-      />
-    </View>
-  );
-}
+//   return (
+//     <View style={{flex: 1}}>
+//       <TabView
+//         navigationState={{ index, routes }}
+//         renderScene={renderScene}
+//         onIndexChange={HandleChangeTabIndex}
+//         initialLayout={initialLayout}
+//       />
+//     </View>
+//   );
+// }
 
 const styles = StyleSheet.create({
   containerStyle: {
@@ -86,16 +97,36 @@ const DashboardStack = createMaterialTopTabNavigator(
   {
     ExpanceCharts: {
       screen: ExpanceCharts,
+      navigationOptions: {
+        title: 'Expance Charts'
+      }
       // group: 'Weakly',
     },
     MoneyFlowCharts: {
       screen: MoneyFlowCharts,
+      navigationOptions: {
+        title: 'Money Flow Charts'
+
+      }
       // group: 'Monthly',
     },
   },
   {
-    initialRouteName: 'ExpanceCharts',
-    tabBarComponent: Header,
+    tabBarOptions: {
+      activeTintColor: '#009acc',
+      pressOpacity: true,
+      labelStyle: {
+        fontSize: 12,
+      },
+      tabStyle: {
+        width: 140,
+      },
+      style: {
+        backgroundColor: 'blue',
+      },
+    },
+    // initialRouteName: 'ExpanceCharts',
+    // tabBarComponent: Header,
     // tabBarComponent: BottomTransactionsStack,
     activeColor: '#f0edf6',
     inactiveColor: '#fffff',

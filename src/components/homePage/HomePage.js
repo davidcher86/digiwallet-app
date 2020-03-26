@@ -228,7 +228,7 @@ class HomePage extends Component {
                 </View>
             );
         };
-        console.log(this.props);
+        // console.log(this.props);
         return (
             <View style={{flex: 1, height: '100%'}}>
                 {/* <Header navigation={this.props.navigation} title="Home"/> */}

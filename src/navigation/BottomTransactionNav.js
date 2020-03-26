@@ -158,7 +158,7 @@ const TransactionsStack = createMaterialTopTabNavigator(
     },
   },
   {
-    initialRouteName: 'Daily',
+    // initialRouteName: 'Daily',
     tabBarComponent: BottomTransactionsNav,
     // tabBarComponent: BottomTransactionsStack,
     activeColor: '#f0edf6',

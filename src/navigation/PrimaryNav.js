@@ -6,6 +6,7 @@ import {Input, Icon} from 'react-native-elements';
 import Feather from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+// import {Accordion} from 'react-native-accordion';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import firebase from 'firebase';
 // import {
@@ -20,9 +21,11 @@ import firebase from 'firebase';
 import {
   View,
   Text,
+  Easing,
   StyleSheet,
   Image,
   TouchableOpacity,
+  Animated,
   Platform,
 } from 'react-native';
 import Account from './../components/account/Account';
@@ -36,14 +39,114 @@ import TransactionsStack from './BottomTransactionNav';
 import Header from './../components/common/Header';
 import {DARK_MODE} from './../components/Styles';
 
+// var Accordion = require('react-native-accordion');
+
 class DrawerContainer extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      itemTransactionsOpen: false,
+      itemTransactionsHeight: new Animated.Value(0),
+      itemDashboardOpen: false,
+      itemDashboardHeight: new Animated.Value(0)
+    };
+    this.expandTransaction = this.expandTransaction.bind(this);
+    this.closeTransaction = this.closeTransaction.bind(this);
+    this.expandDashboard = this.expandDashboard.bind(this);
+    this.closeDashboard = this.closeDashboard.bind(this);
+    this.toggleTransactionExpand = this.toggleTransactionExpand.bind(this);
+    this.toggleDashboardExpand = this.toggleDashboardExpand.bind(this);
+  }
+
+  expandDashboard = () => {
+    Animated.timing(this.state.itemDashboardHeight, {
+      toValue: 80,
+      duration: 400,
+      easing: Easing.linear,
+      // useNativeDriver: true
+    }).start();
+  };
+
+  closeDashboard = () => {
+    Animated.timing(this.state.itemDashboardHeight, {
+      toValue: 0,
+      duration: 200,
+      easing: Easing.linear,
+      // useNativeDriver: true
+    }).start();
+  };
+
+  expandTransaction = () => {
+    Animated.timing(this.state.itemTransactionsHeight, {
+      toValue: 160,
+      duration: 400,
+      easing: Easing.linear,
+      // useNativeDriver: true
+    }).start();
+  };
+
+  closeTransaction = () => {
+    Animated.timing(this.state.itemTransactionsHeight, {
+      toValue: 0,
+      duration: 200,
+      easing: Easing.linear,
+      // useNativeDriver: true
+    }).start();
+  };
+
+  toggleDashboardExpand() {
+    if (this.state.itemDashboardOpen) {
+      this.setState({itemDashboardOpen: false});
+      this.closeDashboard();
+    } else {
+      this.setState({itemDashboardOpen: true});
+      this.expandDashboard();
+    }
+  }
+
+  toggleTransactionExpand() {
+    if (this.state.itemTransactionsOpen) {
+      this.setState({itemTransactionsOpen: false});
+      this.closeTransaction();
+    } else {
+      this.setState({itemTransactionsOpen: true});
+      this.expandTransaction();
+    }
   }
 
   render() {
     const {navigate} = this.props.navigation;
+    // console.log(this.state);
+    const data = [
+      {
+          header: 'sectionHeader',
+          member: [
+              {
+                  title: 'memberTitle',
+                  content: 'content',
+              },
+          ]
+      },
+  ]
+  // console.log(this.state);
+    const renderNavButton = (route, title, icon, hiddenBtn, type = null, group = null) => {
+      return (
+        <TouchableOpacity
+            onPress={() => navigate(route, {type: 'EDIT', group: group})}
+            style={(hiddenBtn ? styles.containerHiddenItem : styles.containerBottomItem)}>
+            <View style={styles.button}>
+              {icon}
+              <Text style={styles.txtBottom}>{title}</Text>
+            </View>
+          </TouchableOpacity>
+      );
+    };
+
+    const accountIcon = <MaterialCommunityIcons name="account" style={{marginRight: 7}} size={21} color="#4F8EF7" />;
+
+    const expanceChartsIcon = <MaterialCommunityIcons name="view-dashboard" style={{marginRight: 7}} size={21} color="#4F8EF7" />;
+    const moneyFlowChartsIcon = <MaterialCommunityIcons name="view-dashboard" style={{marginRight: 7}} size={21} color="#4F8EF7" />;
+    const transactionsIcon = <Ionicons name="ios-wallet" style={{marginRight: 11}} size={21} color="#4F8EF7"/>
 
     return (
       <View style={styles.container}>
@@ -65,54 +168,54 @@ class DrawerContainer extends Component {
                 name="home"
                 style={{marginRight: 7}}
                 size={21}
-                color="#4F8EF7"
-              />
+                color="#4F8EF7" />
               <Text style={styles.txtBottom}>Home</Text>
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity
-            onPress={() => navigate('Dashboard')}
-            style={styles.containerBottomItem}>
-            <View style={styles.button}>
-              <MaterialCommunityIcons
-                name="view-dashboard"
-                style={{marginRight: 7}}
-                size={21}
-                color="#4F8EF7"
-              />
-              <Text style={styles.txtBottom}>Dashboard</Text>
-            </View>
-          </TouchableOpacity>
+          <Animated.View>
+            <TouchableOpacity  style={styles.containerBottomItem} onPress={() => this.toggleDashboardExpand()}>
+              <View style={styles.button}>
+                <MaterialCommunityIcons
+                  name="view-dashboard"
+                  style={{marginRight: 7}}
+                  size={21}
+                  color="#4F8EF7"
+                />
+                <Text style={styles.txtBottom}>Dashboard</Text>
+              </View>
+            </TouchableOpacity>
+            <Animated.View style={[styles.itemHiddenSection, {height: this.state.itemDashboardHeight}]}>
+              {renderNavButton('ExpanceCharts', 'Expances', expanceChartsIcon, true)}
+              {renderNavButton('MoneyFlowCharts', 'Money Flow', moneyFlowChartsIcon, true)}
+            </Animated.View>
+          </Animated.View>
 
-          <TouchableOpacity
-            onPress={() => navigate('AccountEdit', {type: 'EDIT'})}
-            style={styles.containerBottomItem}>
-            <View style={styles.button}>
-              <MaterialCommunityIcons
-                name="account"
-                style={{marginRight: 7}}
-                size={21}
-                color="#4F8EF7"
-              />
-              <Text style={styles.txtBottom}>Account</Text>
-            </View>
-          </TouchableOpacity>
+          {renderNavButton('AccountEdit', 'Account', accountIcon, false, 'EDIT')}
 
-          <TouchableOpacity
-            onPress={() => navigate('Transactions', {group: 'Daily'})}
-            style={styles.containerBottomItem}>
-            <View style={styles.button}>
-              <Ionicons
-                name="ios-wallet"
-                style={{marginRight: 11}}
-                size={21}
-                color="#4F8EF7"
-              />
-              <Text style={styles.txtBottom}>Transactions</Text>
-            </View>
-          </TouchableOpacity>
+          <Animated.View style={styles.headerBorderItem}>
+              <TouchableOpacity style={styles.containerBottomItem} onPress={() => this.toggleTransactionExpand()}>
+                <View style={styles.itemVissibleSection}>
+                  <View style={styles.button}>
+                    <Ionicons
+                      name="ios-wallet"
+                      style={{marginRight: 11}}
+                      size={21}
+                      color="#4F8EF7"
+                    />
+                    <Text style={styles.txtBottom}>Transactions</Text>
+                  </View>
+                </View>
+              </TouchableOpacity>
+              <Animated.View style={[styles.itemHiddenSection, {height: this.state.itemTransactionsHeight}]}>
+                {renderNavButton('Daily', 'Daily', expanceChartsIcon, true, null, 'Daily')}
+                {renderNavButton('Weakly', 'Weakly', moneyFlowChartsIcon, true, null, 'Weakly')}
+                {renderNavButton('Monthly', 'Monthly', expanceChartsIcon, true, null, 'Monthly')}
+                {renderNavButton('Yearly', 'Yearly', transactionsIcon, true, null, 'Yearly')}
+              </Animated.View>
+          </Animated.View>
         </View>
+
         <View style={styles.containerLogout}>
           <TouchableOpacity
             onPress={() => {
@@ -289,13 +392,49 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
   },
+  itemVissibleSection: {
 
+  },
+  itemHiddenSection: {
+
+  },
   containertopRowText: {
     flexDirection: 'column',
     marginLeft: 5,
   },
   containerBottom: {
     backgroundColor: '#17BED0',
+  },
+  itemHiddenSection: {
+    overflow: 'hidden',
+    // justifyContent: 'center',
+    // borderBottomWidth: 1,
+    // borderStyle: 'dotted',
+    backgroundColor: DARK_MODE.COLORS.LIST_HIDDEN_ITEM_COLOR,
+    width: '100%',
+  },
+  containerHiddenItem: {
+    padding: 10,
+    paddingLeft: 40,
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    backgroundColor: DARK_MODE.COLORS.HEADER_COLOR,
+    // borderBottomColor: '#E6FAFF',
+    // borderBottomWidth: 0.6,
+  },
+  headerBorderItem: {
+    borderBottomColor: '#E6FAFF',
+    borderBottomWidth: 0.6,
+  },
+  containerHiddenHeaderItem: {
+    padding: 10,
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    backgroundColor: DARK_MODE.COLORS.HEADER_COLOR,
+    borderBottomColor: '#E6FAFF',
+    borderBottomWidth: 0.6,
   },
   containerBottomItem: {
     padding: 10,

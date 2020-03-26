@@ -106,7 +106,7 @@ class TransactionItem extends Component {
 
     var isOpened = pageSettings.isOpenIndex === transactionItem.uid;
     const card = profile.creditCards.find(card => card.id === transactionItem.creditCardId);
-    console.log(card);
+    // console.log(card);
     return (
       <Animated.View
         key={transactionItem.uid}
@@ -160,8 +160,8 @@ class TransactionItem extends Component {
             {height: this.state.itemHeight, padding: this.state.itemPadding},
             // isOpened ? {height: 80, padding: 6} : {height: 0, padding: 0},
           ]}>
-            {console.log(this.props)}
-            {console.log(profile.creditCards.find(card => card.id === transactionItem.creditCardId))}
+            {/* {console.log(this.props)}
+            {console.log(profile.creditCards.find(card => card.id === transactionItem.creditCardId))} */}
           <View style={styles.headerHiddenSection}>
         {/* <Text style={DARK_MODE.h5Label}>{'Payment - ' + transactionItem.paymentsAmount}</Text> */}
           </View>
