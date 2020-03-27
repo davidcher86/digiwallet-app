@@ -25,6 +25,7 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
+  TouchableHighlight,
   Animated,
   Platform,
 } from 'react-native';
@@ -48,7 +49,9 @@ class DrawerContainer extends Component {
       itemTransactionsOpen: false,
       itemTransactionsHeight: new Animated.Value(0),
       itemDashboardOpen: false,
-      itemDashboardHeight: new Animated.Value(0)
+      itemDashboardHeight: new Animated.Value(0),
+      dashboardIconRotation: new Animated.Value(0),
+      transactionsIconRotation: new Animated.Value(0)
     };
     this.expandTransaction = this.expandTransaction.bind(this);
     this.closeTransaction = this.closeTransaction.bind(this);
@@ -116,6 +119,15 @@ class DrawerContainer extends Component {
 
   render() {
     const {navigate} = this.props.navigation;
+    var rotateDashboardProp = this.state.dashboardIconRotation.interpolate({
+      inputRange: [0, 1],
+      outputRange: ["0deg", "180deg"]
+    })
+
+    var rotateTransactionsProp = this.state.transactionsIconRotation.interpolate({
+      inputRange: [0, 1],
+      outputRange: ["0deg", "180deg"]
+    })
     // console.log(this.state);
     const data = [
       {
@@ -128,6 +140,13 @@ class DrawerContainer extends Component {
           ]
       },
   ]
+
+  const accountIcon = <MaterialCommunityIcons name="account" style={{marginRight: 7}} size={21} color="#4F8EF7" />;
+  const expanceChartsIcon = <MaterialCommunityIcons name="view-dashboard" style={{marginRight: 7}} size={21} color="#4F8EF7" />;
+  const moneyFlowChartsIcon = <MaterialCommunityIcons name="view-dashboard" style={{marginRight: 7}} size={21} color="#4F8EF7" />;
+  const transactionsIcon = <Ionicons name="ios-wallet" style={{marginRight: 11}} size={21} color="#4F8EF7"/>
+  const dashboardIcon = <MaterialCommunityIcons name="view-dashboard" style={{marginRight: 7}} size={21} color="#4F8EF7"/>;
+  const homepageIcon = <MaterialCommunityIcons name="home" style={{marginRight: 7}} size={21} color="#4F8EF7"/>
   // console.log(this.state);
     const renderNavButton = (route, title, icon, hiddenBtn, type = null, group = null) => {
       return (
@@ -141,12 +160,23 @@ class DrawerContainer extends Component {
           </TouchableOpacity>
       );
     };
-
-    const accountIcon = <MaterialCommunityIcons name="account" style={{marginRight: 7}} size={21} color="#4F8EF7" />;
-
-    const expanceChartsIcon = <MaterialCommunityIcons name="view-dashboard" style={{marginRight: 7}} size={21} color="#4F8EF7" />;
-    const moneyFlowChartsIcon = <MaterialCommunityIcons name="view-dashboard" style={{marginRight: 7}} size={21} color="#4F8EF7" />;
-    const transactionsIcon = <Ionicons name="ios-wallet" style={{marginRight: 11}} size={21} color="#4F8EF7"/>
+    
+    const renderNavHeader = (title, icon, action, rotateIcon) => {
+      console.log(rotateIcon);
+      return (
+        <TouchableHighlight  
+          style={styles.containerBottomItem} 
+          onPress={action}>
+          <View style={styles.button}>
+              {icon}
+            <Text style={styles.txtBottom}>{title}</Text>            
+            <Animated.View style={{transform: [{rotateX: rotateIcon}], alignSelf: 'flex-end' }}>
+                <Ionicons name="ios-arrow-down" size={30} color={DARK_MODE.COLORS.ICON_COLOR} />
+            </Animated.View>
+          </View>
+        </TouchableHighlight>
+      );
+    };
 
     return (
       <View style={styles.container}>
@@ -160,31 +190,9 @@ class DrawerContainer extends Component {
           />
         </View>
         <View style={styles.containerBottom}>
-          <TouchableOpacity
-            onPress={() => navigate('HomePage')}
-            style={styles.containerBottomItem}>
-            <View style={styles.button}>
-              <MaterialCommunityIcons
-                name="home"
-                style={{marginRight: 7}}
-                size={21}
-                color="#4F8EF7" />
-              <Text style={styles.txtBottom}>Home</Text>
-            </View>
-          </TouchableOpacity>
-
+          {renderNavButton('HomePage', 'Home Page', homepageIcon, false)}
           <Animated.View>
-            <TouchableOpacity  style={styles.containerBottomItem} onPress={() => this.toggleDashboardExpand()}>
-              <View style={styles.button}>
-                <MaterialCommunityIcons
-                  name="view-dashboard"
-                  style={{marginRight: 7}}
-                  size={21}
-                  color="#4F8EF7"
-                />
-                <Text style={styles.txtBottom}>Dashboard</Text>
-              </View>
-            </TouchableOpacity>
+            {renderNavHeader('Dashboard', dashboardIcon, () => this.toggleDashboardExpand(), rotateDashboardProp)}
             <Animated.View style={[styles.itemHiddenSection, {height: this.state.itemDashboardHeight}]}>
               {renderNavButton('ExpanceCharts', 'Expances', expanceChartsIcon, true)}
               {renderNavButton('MoneyFlowCharts', 'Money Flow', moneyFlowChartsIcon, true)}
@@ -194,19 +202,7 @@ class DrawerContainer extends Component {
           {renderNavButton('AccountEdit', 'Account', accountIcon, false, 'EDIT')}
 
           <Animated.View style={styles.headerBorderItem}>
-              <TouchableOpacity style={styles.containerBottomItem} onPress={() => this.toggleTransactionExpand()}>
-                <View style={styles.itemVissibleSection}>
-                  <View style={styles.button}>
-                    <Ionicons
-                      name="ios-wallet"
-                      style={{marginRight: 11}}
-                      size={21}
-                      color="#4F8EF7"
-                    />
-                    <Text style={styles.txtBottom}>Transactions</Text>
-                  </View>
-                </View>
-              </TouchableOpacity>
+            {renderNavHeader('Transactions', transactionsIcon, () => this.toggleTransactionExpand(), rotateTransactionsProp)}
               <Animated.View style={[styles.itemHiddenSection, {height: this.state.itemTransactionsHeight}]}>
                 {renderNavButton('Daily', 'Daily', expanceChartsIcon, true, null, 'Daily')}
                 {renderNavButton('Weakly', 'Weakly', moneyFlowChartsIcon, true, null, 'Weakly')}
@@ -249,7 +245,6 @@ class DrawerContainer extends Component {
 }
 
 const HomePage_StackNavigator = createStackNavigator({
-  //All the screen from the Screen1 will be indexed here
   First: {
     screen: HomePage,
     navigationOptions: ({navigation}) => ({
@@ -262,7 +257,6 @@ const HomePage_StackNavigator = createStackNavigator({
 });
 
 const Dashboard_StackNavigator = createStackNavigator({
-  //All the screen from the Screen2 will be indexed here
   Second: {
     screen: Dashboard,
     navigationOptions: ({navigation}) => ({
@@ -273,7 +267,6 @@ const Dashboard_StackNavigator = createStackNavigator({
 
 const EDIT = 'EDIT';
 const Account_StackNavigator = createStackNavigator({
-  //All the screen from the Screen2 will be indexed here
   Second: {
     screen: Account,
     params: {type: EDIT},
@@ -284,7 +277,6 @@ const Account_StackNavigator = createStackNavigator({
 });
 
 const Transactions_StackNavigator = createStackNavigator({
-  //All the screen from the Screen2 will be indexed here
   Second: {
     screen: BottomTransactionsStack,
     // screen: Transactions,
@@ -364,9 +356,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   txtBottom: {
+    width: '73%',
     marginLeft: 10,
     color: '#E6FAFF',
-    textAlign: 'center',
+    textAlign: 'left',
     fontSize: 15,
     fontWeight: '100',
   },
@@ -438,9 +431,9 @@ const styles = StyleSheet.create({
   },
   containerBottomItem: {
     padding: 10,
-    alignItems: 'center',
+    // alignItems: 'center',
     flexDirection: 'row',
-    justifyContent: 'flex-start',
+    // justifyContent: 'flex-start',
     backgroundColor: DARK_MODE.COLORS.HEADER_COLOR,
     borderBottomColor: '#E6FAFF',
     borderBottomWidth: 0.6,

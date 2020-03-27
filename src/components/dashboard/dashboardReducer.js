@@ -1,4 +1,5 @@
 const initialState = {
+  data: [{ y: 100 }],
   pageSettings: {
     activeTabIndex: 0
   }
@@ -10,6 +11,8 @@ export default (state = initialState, action) => {
       let pageSettings = state.pageSettings;
       pageSettings.activeTabIndex = action.index;
       return Object.assign({}, state, { pageSettings: pageSettings });
+    case 'UPDATE_DASHBOARD_DATA':
+      return Object.assign({}, state, { data: action.data });
     // case 'CHANGE_PASSWORD_FIELD':
     //     return Object.assign({}, state, { password: action.value });
     // case 'CHANGE_LOADING_STATE':

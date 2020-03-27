@@ -4,3 +4,10 @@ export const setPageSettingsIndex = (index) => {
         index
     };
 };
+
+export const updateData = (data) => {
+    return {
+        type: 'UPDATE_DASHBOARD_DATA',
+        data
+    };
+};
