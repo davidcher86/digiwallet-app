@@ -53,67 +53,155 @@ class DrawerContainer extends Component {
       dashboardIconRotation: new Animated.Value(0),
       transactionsIconRotation: new Animated.Value(0)
     };
-    this.expandTransaction = this.expandTransaction.bind(this);
-    this.closeTransaction = this.closeTransaction.bind(this);
-    this.expandDashboard = this.expandDashboard.bind(this);
-    this.closeDashboard = this.closeDashboard.bind(this);
+    // this.expandTransaction = this.expandTransaction.bind(this);
+    // this.closeTransaction = this.closeTransaction.bind(this);
+    // this.expandDashboard = this.expandDashboard.bind(this);
+    // this.closeDashboard = this.closeDashboard.bind(this);
+    this.expandItem = this.expandItem.bind(this);
+    this.closeItem = this.closeItem.bind(this);
     this.toggleTransactionExpand = this.toggleTransactionExpand.bind(this);
     this.toggleDashboardExpand = this.toggleDashboardExpand.bind(this);
+    this.rotateDown = this.rotateDown.bind(this);
+    this.rotateUp = this.rotateUp.bind(this);
   }
 
-  expandDashboard = () => {
-    Animated.timing(this.state.itemDashboardHeight, {
-      toValue: 80,
-      duration: 400,
-      easing: Easing.linear,
-      // useNativeDriver: true
-    }).start();
+  rotateDown = (type) => {
+    switch (type) {
+      case 'TRANSACTION':
+        Animated.timing(this.state.transactionsIconRotation, {
+          toValue: 1,
+          duration: 300,
+          easing: Easing.linear
+        }).start();
+        break;
+      case 'DASHBOARD':
+        Animated.timing(this.state.dashboardIconRotation, {
+          toValue: 1,
+          duration: 300,
+          easing: Easing.linear
+        }).start();
+        break;
+    }
   };
 
-  closeDashboard = () => {
-    Animated.timing(this.state.itemDashboardHeight, {
-      toValue: 0,
-      duration: 200,
-      easing: Easing.linear,
-      // useNativeDriver: true
-    }).start();
+  rotateUp = (type) => {
+    // console.log(type);
+    switch (type) {
+      case 'TRANSACTION':
+        Animated.timing(this.state.transactionsIconRotation, {
+            toValue: 0,
+            duration: 300,
+            easing: Easing.linear
+        }).start();
+        break;
+      case 'DASHBOARD':
+        Animated.timing(this.state.dashboardIconRotation, {
+          toValue: 0,
+          duration: 300,
+          easing: Easing.linear
+        }).start();
+        break;
+    }
   };
 
-  expandTransaction = () => {
-    Animated.timing(this.state.itemTransactionsHeight, {
-      toValue: 160,
-      duration: 400,
-      easing: Easing.linear,
-      // useNativeDriver: true
-    }).start();
+  expandItem = (type) => {
+    switch (type) {
+      case 'TRANSACTION':
+        Animated.timing(this.state.itemTransactionsHeight, {
+          toValue: 170,
+          duration: 400,
+          easing: Easing.linear,
+          // useNativeDriver: true
+        }).start();
+        break;
+      case 'DASHBOARD':
+        Animated.timing(this.state.itemDashboardHeight, {
+          toValue: 80,
+          duration: 400,
+          easing: Easing.linear,
+          // useNativeDriver: true
+        }).start();
+        break;
+    }
   };
 
-  closeTransaction = () => {
-    Animated.timing(this.state.itemTransactionsHeight, {
-      toValue: 0,
-      duration: 200,
-      easing: Easing.linear,
-      // useNativeDriver: true
-    }).start();
+  closeItem = (type) => {
+    switch (type) {
+      case 'TRANSACTION':
+        Animated.timing(this.state.itemTransactionsHeight, {
+          toValue: 0,
+          duration: 400,
+          easing: Easing.linear,
+          // useNativeDriver: true
+        }).start();
+        break;
+      case 'DASHBOARD':
+        Animated.timing(this.state.itemDashboardHeight, {
+          toValue: 0,
+          duration: 200,
+          easing: Easing.linear,
+          // useNativeDriver: true
+        }).start();
+        break;
+    }
   };
+  // expandDashboard = () => {
+    // Animated.timing(this.state.itemDashboardHeight, {
+    //   toValue: 80,
+    //   duration: 400,
+    //   easing: Easing.linear,
+    //   // useNativeDriver: true
+    // }).start();
+  // };
+
+  // closeDashboard = () => {
+    // Animated.timing(this.state.itemDashboardHeight, {
+    //   toValue: 0,
+    //   duration: 200,
+    //   easing: Easing.linear,
+    //   // useNativeDriver: true
+    // }).start();
+  // };
+
+  // expandTransaction = () => {
+  //   Animated.timing(this.state.itemTransactionsHeight, {
+  //     toValue: 160,
+  //     duration: 400,
+  //     easing: Easing.linear,
+  //     // useNativeDriver: true
+  //   }).start();
+  // };
+
+  // closeTransaction = () => {
+  //   Animated.timing(this.state.itemTransactionsHeight, {
+  //     toValue: 0,
+  //     duration: 200,
+  //     easing: Easing.linear,
+  //     // useNativeDriver: true
+  //   }).start();
+  // };
 
   toggleDashboardExpand() {
     if (this.state.itemDashboardOpen) {
       this.setState({itemDashboardOpen: false});
-      this.closeDashboard();
+      this.closeItem('DASHBOARD');
+      this.rotateUp('DASHBOARD');
     } else {
       this.setState({itemDashboardOpen: true});
-      this.expandDashboard();
+      this.expandItem('DASHBOARD');
+      this.rotateDown('DASHBOARD');
     }
   }
 
   toggleTransactionExpand() {
     if (this.state.itemTransactionsOpen) {
       this.setState({itemTransactionsOpen: false});
-      this.closeTransaction();
+      this.closeItem('TRANSACTION');
+      this.rotateUp('TRANSACTION');
     } else {
       this.setState({itemTransactionsOpen: true});
-      this.expandTransaction();
+      this.expandItem('TRANSACTION');
+      this.rotateDown('TRANSACTION');
     }
   }
 
@@ -151,25 +239,24 @@ class DrawerContainer extends Component {
     const renderNavButton = (route, title, icon, hiddenBtn, type = null, group = null) => {
       return (
         <TouchableOpacity
-            onPress={() => navigate(route, {type: 'EDIT', group: group})}
-            style={(hiddenBtn ? styles.containerHiddenItem : styles.containerBottomItem)}>
-            <View style={styles.button}>
-              {icon}
-              <Text style={styles.txtBottom}>{title}</Text>
-            </View>
-          </TouchableOpacity>
+          onPress={() => navigate(route, {type: 'EDIT', group: group})}
+          style={(hiddenBtn ? styles.containerHiddenItem : styles.containerBottomItem)}>
+          <View style={styles.button}>
+            {icon}
+            <Text style={styles.txtBottom}>{title}</Text>
+          </View>
+        </TouchableOpacity>
       );
     };
-    
+
     const renderNavHeader = (title, icon, action, rotateIcon) => {
-      console.log(rotateIcon);
       return (
-        <TouchableHighlight  
-          style={styles.containerBottomItem} 
+        <TouchableHighlight
+          style={styles.containerBottomItem}
           onPress={action}>
           <View style={styles.button}>
               {icon}
-            <Text style={styles.txtBottom}>{title}</Text>            
+            <Text style={styles.txtBottom}>{title}</Text>
             <Animated.View style={{transform: [{rotateX: rotateIcon}], alignSelf: 'flex-end' }}>
                 <Ionicons name="ios-arrow-down" size={30} color={DARK_MODE.COLORS.ICON_COLOR} />
             </Animated.View>
@@ -186,12 +273,14 @@ class DrawerContainer extends Component {
             source={{
               uri:
                 'https://cdn.pixabay.com/photo/2014/04/05/12/20/man-316917_960_720.jpg',
-            }}
-          />
+            }} />
         </View>
         <View style={styles.containerBottom}>
-          {renderNavButton('HomePage', 'Home Page', homepageIcon, false)}
-          <Animated.View>
+
+          <View style={styles.headerBorderItem}>
+            {renderNavButton('HomePage', 'Home Page', homepageIcon, false)}
+          </View>
+          <Animated.View style={styles.headerBorderItem}>
             {renderNavHeader('Dashboard', dashboardIcon, () => this.toggleDashboardExpand(), rotateDashboardProp)}
             <Animated.View style={[styles.itemHiddenSection, {height: this.state.itemDashboardHeight}]}>
               {renderNavButton('ExpanceCharts', 'Expances', expanceChartsIcon, true)}
@@ -199,7 +288,9 @@ class DrawerContainer extends Component {
             </Animated.View>
           </Animated.View>
 
-          {renderNavButton('AccountEdit', 'Account', accountIcon, false, 'EDIT')}
+          <View style={styles.headerBorderItem}>
+            {renderNavButton('AccountEdit', 'Account', accountIcon, false, 'EDIT')}
+          </View>
 
           <Animated.View style={styles.headerBorderItem}>
             {renderNavHeader('Transactions', transactionsIcon, () => this.toggleTransactionExpand(), rotateTransactionsProp)}
@@ -214,9 +305,7 @@ class DrawerContainer extends Component {
 
         <View style={styles.containerLogout}>
           <TouchableOpacity
-            onPress={() => {
-              navigate('Settings');
-            }}
+            onPress={() => navigate('Settings')}
             style={styles.containerBottomItemLogout}>
             <View style={styles.button}>
               <Feather name="settings" size={21} color="#4F8EF7" />
@@ -347,8 +436,8 @@ const styles = StyleSheet.create({
     zIndex: 500,
   },
   containertopRow: {
-    borderBottomWidth: 1,
-    borderColor: '#ddd',
+    // borderBottomWidth: 1,
+    // borderColor: '#ddd',
     marginTop: 20,
     marginBottom: 20,
     paddingBottom: 20,
@@ -385,12 +474,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
   },
-  itemVissibleSection: {
-
-  },
-  itemHiddenSection: {
-
-  },
   containertopRowText: {
     flexDirection: 'column',
     marginLeft: 5,
@@ -426,8 +509,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     backgroundColor: DARK_MODE.COLORS.HEADER_COLOR,
-    borderBottomColor: '#E6FAFF',
-    borderBottomWidth: 0.6,
+    // borderBottomColor: '#E6FAFF',
+    // borderBottomWidth: 0.6,
   },
   containerBottomItem: {
     padding: 10,
@@ -435,8 +518,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     // justifyContent: 'flex-start',
     backgroundColor: DARK_MODE.COLORS.HEADER_COLOR,
-    borderBottomColor: '#E6FAFF',
-    borderBottomWidth: 0.6,
+    // borderBottomColor: '#E6FAFF',
+    // borderBottomWidth: 0.6,
   },
   containerLogout: {
     position: 'absolute',
@@ -455,8 +538,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flex: 1,
     justifyContent: 'flex-start',
-    borderBottomColor: '#E6FAFF',
-    borderBottomWidth: 0.5,
+    // borderBottomColor: '#E6FAFF',
+    // borderBottomWidth: 0.5,
   },
 });
 
