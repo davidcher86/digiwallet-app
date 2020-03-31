@@ -275,8 +275,7 @@ class DrawerContainer extends Component {
                 'https://cdn.pixabay.com/photo/2014/04/05/12/20/man-316917_960_720.jpg',
             }} />
         </View>
-        <View style={styles.containerBottom}>
-
+        <View>
           <View style={styles.headerBorderItem}>
             {renderNavButton('HomePage', 'Home Page', homepageIcon, false)}
           </View>
@@ -477,9 +476,6 @@ const styles = StyleSheet.create({
   containertopRowText: {
     flexDirection: 'column',
     marginLeft: 5,
-  },
-  containerBottom: {
-    backgroundColor: '#17BED0',
   },
   itemHiddenSection: {
     overflow: 'hidden',

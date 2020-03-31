@@ -45,7 +45,6 @@ function ExpanceCharts(props) {
         // console.log('data', data);
         dispatch(dashboardActions.updateData(data));
       }, [transactionList]);
-    //   console.log('mainCategoriesData', mainCategoriesData);
       return (
         <Card style={styles.cardContainer}>
           <CardItem header>
@@ -59,6 +58,7 @@ function ExpanceCharts(props) {
                   standalone={false}
                   data={mainCategoriesData}
                   height={300}
+                  dataComponent={<Slice id={'label'} events={{ onClick: (e) => console.log(e.target.id) }}/>}
                   labelComponent={<VictoryLabel events={() => console.log('sdf')} dy={-10} dy={-10}/>}
                   // labelRadius
                   // padAngle={7}
@@ -68,19 +68,19 @@ function ExpanceCharts(props) {
                       target: "data",
                       eventHandlers: {
                         onPress: (e) => {
-                            console.log(e);
                           return [
                             {
                               target: "data",
-                              mutation: ({ style }) => {
-                                return style.fill === "#c43a31" ? null : { style: { fill: "#c43a31" } };
+                              mutation: (props) => {
+                                  console.log(props.datum.y);
+                                return props.style.fill === "#c43a31" ? null : { style: { fill: "#c43a31" } };
                               }
                             }, {
                               target: "labels",
                               mutation: ({ text }) => {
                                 return text === "clicked" ? null : { text: "clicked" };
                               }
-                            }
+                            },
                           ];
                         }
                       }
