@@ -7,6 +7,7 @@ import {Card, Body, CardItem} from 'native-base';
 import { TabView, SceneMap } from 'react-native-tab-view';
 import {createMaterialTopTabNavigator} from 'react-navigation-tabs';
 import { VictoryPie, VictoryLabel, VictoryBar, VictoryChart, VictoryContainer, VictoryTheme } from 'victory-native';
+import Svg from 'react-native-svg';
 
 import * as dashboardActions from './dashboardActions';
 import * as transactionsActions from './../transactions/transactionsActions';
@@ -14,33 +15,70 @@ import * as transactionsActions from './../transactions/transactionsActions';
 const graphicColor = ['tomato', 'orange', 'gold', 'cyan', 'navy']; // Colors
 const wantedGraphicData = [{ y: 10, label: 'test 1' }, { y: 50, label: 'test 2' }, { y: 30, label: 'test 3' }, { y: 10, label: 'test 4' }];
 
-function groupToPie(list, keyGetter) {
+function groupToBars(list, keyGetter) {
     var data = [];
 
     list.forEach((item) => {
          const key = keyGetter(item);
+         console.log(item);
          if (!data.some(t => t.label === key)) {
-          data.push({label: key, y: item.amount});
+          // data.push({label: key, y: (item.transactionType === 'INCOME' ? item.amount : (-item.amount))});
+          data.push({label: key, y: (item.transactionType === 'INCOME' ? item.amount : (-item.amount))});
          } else {
            const index = data.findIndex(t => t.label === key);
-           data[index].y = data[index].y + item.amount;
+           data[index].y = data[index].y + (item.transactionType === 'INCOME' ? item.amount : (-item.amount));
+          //  data[index].y0 = 20;
          }
     });
 
     return data;
 }
 function MoneyFlowCharts(props) {
-    const transactionList = useSelector(state => state.transactions.transactions);
+    // const transactionList = useSelector(state => state.transactions.transactions);
     // const state = useSelector(state => state);
-    const dashboard = useSelector(state => state.dashboard);
-    const dispatch = useDispatch();
+    // const dashboard = useSelector(state => state.dashboard);
+    // const dispatch = useDispatch();
 
     // const newData = transactions.transactions.f;
-    useEffect(() => {
-      dispatch(dashboardActions.updateData(wantedGraphicData));
-    }, []);
-    console.log('newData', transactionList);
+    // useEffect(() => {
+    //   const data = groupToBars(transactionList, item => item.mainCategory);
+    //   console.log('MoneyFlow data', data);
+    //   // dispatch(dashboardActions.updateData(wantedGraphicData));
+    // }, [transactionList, currentRoute]);
+    // console.log('newData', transactionList);
+    // const sampleData = [
+    //   { x: 1, y: 2, y0: 1 },
+    //   { x: 2, y: 3, y0: 2 },
+    //   { x: 3, y: 5, y0: 2 },
+    //   { x: 4, y: 4, y0: 3 },
+    //   { x: 5, y: 6, y0: 3 }
+    // ];
+
     const moneyFlowChart1 = (data) => {
+      const dispatch = useDispatch();
+      const mainCategoriesData = useSelector(state => state.dashboard.data.expances.mainCategoriesData);
+      const transactionList = useSelector(state => state.transactions.transactions);
+
+      const dateFixedTransactionList = transactionList.map(item => {
+        return Object.assign({}, item , { fixedDate: (new Date(item.date)).toLocaleDateString()})
+      });
+      const currentRoute = props.navigation.state.key;
+      // const xCategories = dateFixedTransactionList.map(item => item.fixedDate);
+      var xCategories = [];
+      dateFixedTransactionList.forEach(item => {
+        if (xCategories.length === 0) {
+          xCategories.push(item.fixedDate);
+        } else if (!xCategories.some(val => val === item.fixedDate)) {
+          xCategories.push(item.fixedDate);
+        }
+      });
+      useEffect(() => {
+        const data = groupToBars(dateFixedTransactionList, item => item.fixedDate);
+        console.log('MoneyFlow data', data);
+        dispatch(dashboardActions.updateData(data));
+      }, [transactionList, currentRoute]);
+      console.log('xCategories', xCategories);
+
       return (
         <Card style={styles.cardContainer}>
           <CardItem header>
@@ -48,17 +86,26 @@ function MoneyFlowCharts(props) {
           </CardItem>
           <CardItem>
             <View style={{flex: 1, flexDirection: 'row', alignContent: 'center', backgroundColor: 'yellow'}}>
-                <VictoryPie
-                  padding={100}
-                  // labelRadius
-                  // padAngle={7}
-                  // padAngle={({ datum }) => datum.y}
-                  innerRadius={68}
-                  style={{backgroundColor: 'green'}}
-                  duration={2000}
-                  animate={{ duration: 2000, easing: 'linear' }}
-                  colorScale={graphicColor}
-                  data={dashboard.data} />
+              <Svg width={400} height={320} viewBox="0 40 400 200" style={{ width: "100%", height: "auto" }}>
+                <VictoryChart
+                  theme={VictoryTheme.material}
+                  dependentAxis={true}
+                  // domain={{x: xCategories, y: [0, 1000]}}
+                  animate={{ duration: 2000, easing: 'linear' }}>
+                  <VictoryBar
+                    key
+                    barWidth={8}
+                    alignment={'middle'}
+                    // labels={({ datum }) => console.log(datum)}
+                    // domain={{x: xCategories}}
+                    categories={{ x: xCategories }}
+                    // maxDomain={{ x: 43 }}
+                    // labelPlacement={'parallel'}
+                    // labelComponent={<VictoryLabel dx={0} dy={5} key={datum} verticalAnchor="start" />}
+                    style={{ data: { fill: "#c43a31" } }}
+                    data={mainCategoriesData} />
+                </VictoryChart>
+              </Svg>
             </View>
           </CardItem>
           <CardItem footer>

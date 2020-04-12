@@ -18,13 +18,13 @@ function groupToPie(list, keyGetter) {
     var data = [];
 
     list.forEach((item) => {
-         const key = keyGetter(item);
-         if (!data.some(t => t.label === key)) {
-          data.push({label: key, y: item.amount});
-         } else {
-           const index = data.findIndex(t => t.label === key);
-           data[index].y = data[index].y + item.amount;
-         }
+      const key = keyGetter(item);
+      if (!data.some(t => t.label === key)) {
+        data.push({label: key, y: item.amount});
+      } else {
+        const index = data.findIndex(t => t.label === key);
+        data[index].y = data[index].y + item.amount;
+      }
     });
 
     return data;
@@ -42,9 +42,12 @@ function ExpanceCharts(props) {
       const mainCategoriesData = useSelector(state => state.dashboard.data.expances.mainCategoriesData);
       useEffect(() => {
         var data = groupToPie(transactionList, item => item.mainCategory);
-        // console.log('data', data);
+        console.log('Expance data', data);
         dispatch(dashboardActions.updateData(data));
-      }, [transactionList]);
+      }, [transactionList, currentRoute]);
+
+      // console.log('selected', dashboard.expances);
+
       return (
         <Card style={styles.cardContainer}>
           <CardItem header>
@@ -52,14 +55,14 @@ function ExpanceCharts(props) {
           </CardItem>
           <CardItem>
             <View style={{flexDirection: 'row', width: '82%', justifyContent: 'center', margin: 30}}>
-            <Svg width={300} height={220} viewBox="0 30 400 200" style={{ width: "100%", height: "auto" }}>
+              <Svg width={300} height={220} viewBox="0 30 400 200" style={{ width: "100%", height: "auto" }}>
                 <VictoryPie
                   // padding={100}
                   standalone={false}
                   data={mainCategoriesData}
                   height={300}
-                  dataComponent={<Slice id={'label'} events={{ onClick: (e) => console.log(e.target.id) }}/>}
-                  labelComponent={<VictoryLabel events={() => console.log('sdf')} dy={-10} dy={-10}/>}
+                  // dataComponent={<Slice id={'label'} events={{ onClick: (e) => console.log(e.target.id) }}/>}
+                  // labelComponent={<VictoryLabel events={() => console.log('sdf')} dy={-10} dy={-10}/>}
                   // labelRadius
                   // padAngle={7}
                   // padAngle={({ datum }) => datum.y}
@@ -72,7 +75,9 @@ function ExpanceCharts(props) {
                             {
                               target: "data",
                               mutation: (props) => {
-                                  console.log(props.datum.y);
+                                // console.log(props);
+                                dispatch(dashboardActions.updateSelected(props.datum.label))
+                                  // console.log(props.datum.label);
                                 return props.style.fill === "#c43a31" ? null : { style: { fill: "#c43a31" } };
                               }
                             }, {
@@ -91,7 +96,7 @@ function ExpanceCharts(props) {
                   duration={2000}
                   animate={{ duration: 2000, easing: 'linear' }}
                   colorScale={graphicColor} />
-                  </Svg>
+              </Svg>
             </View>
           </CardItem>
           <CardItem footer>
@@ -104,9 +109,22 @@ function ExpanceCharts(props) {
     const expanceChart2 = (data) => {
       const transactionList = useSelector(state => state.transactions.transactions);
       const dashboard = useSelector(state => state.dashboard);
+      const selectedCategory = useSelector(state => state.dashboard.data.expances.selectedSubCategory);
       const dispatch = useDispatch();
       const subCategoriesData = useSelector(state => state.dashboard.data.expances.subCategoriesData);
+      // console.log('dashboard', dashboard);
+      useEffect(() => {
+        if (selectedCategory !== '') {
+          var list = transactionList;
+          list = transactionList.filter(item => item.mainCategory === selectedCategory);
 
+          data = groupToPie(list, item => item.subCategory);
+          // console.log('transactionList', transactionList);
+          // console.log('change', transactionList);
+          dispatch(dashboardActions.updateSubData(data));
+        }
+      }, [selectedCategory]);
+      // console.log('subCategoriesData', subCategoriesData);
       return (
         <Card style={styles.cardContainer}>
           <CardItem header>
@@ -114,19 +132,21 @@ function ExpanceCharts(props) {
           </CardItem>
           <CardItem>
             <View style={{flexDirection: 'row', width: '82%', justifyContent: 'center', margin: 30}}>
-              <VictoryPie
-                // padding={100}
-                height={260}
-                labelComponent={<VictoryLabel dy={-10} dy={-10}/>}
-                // labelRadius
-                // padAngle={7}
-                // padAngle={({ datum }) => datum.y}
-                innerRadius={66}
-                style={{backgroundColor: 'green'}}
-                duration={2000}
-                animate={{ duration: 2000, easing: 'linear' }}
-                colorScale={graphicColor}
-                data={subCategoriesData} />
+              <Svg width={300} height={220} viewBox="0 30 400 200" style={{ width: "100%", height: "auto" }}>
+                <VictoryPie
+                  // padding={100}
+                  height={300}
+                  labelComponent={<VictoryLabel dy={-10} dy={-10}/>}
+                  // labelRadius
+                  // padAngle={7}
+                  // padAngle={({ datum }) => datum.y}
+                  innerRadius={66}
+                  style={{backgroundColor: 'green'}}
+                  duration={2000}
+                  animate={{ duration: 2000, easing: 'linear' }}
+                  colorScale={graphicColor}
+                  data={subCategoriesData} />
+              </Svg>
             </View>
           </CardItem>
           <CardItem footer>

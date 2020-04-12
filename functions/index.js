@@ -140,7 +140,11 @@ exports.updateNewTransaction = functions.database
           dbBalanceRef = admin.database().ref(`/users/${context.params.uId}/account`);
           return dbBalanceRef.transaction(assets => {
             if (assets) {
-              assets = assets + parseFloat(newItem.amount);
+              if (newItem.transactionType == 'INCOME') {
+                assets = assets - parseFloat(newItem.amount);
+              } else {
+                assets = assets + parseFloat(newItem.amount);
+              }
             }
             return assets;
           });
@@ -156,7 +160,11 @@ exports.updateNewTransaction = functions.database
 
           return dbBalanceRef.transaction(assets => {
             if (assets) {
-              assets = assets - parseFloat(newItem.amount);
+              if (newItem.transactionType == 'INCOME') {
+                assets = assets + parseFloat(newItem.amount);
+              } else {
+                assets = assets - parseFloat(newItem.amount);
+              }
             }
             return assets;
           });
@@ -172,10 +180,10 @@ exports.updateNewTransaction = functions.database
 
       var dbRef = admin.database().ref(`/users/${context.params.uId}/account/`)
       dbRef.update({lastUpdate})
-      .then(res => {
-        return res;
-      });
-    }
+        .then(res => {
+          return res;
+        });
+      }
 
     return null;
   });
