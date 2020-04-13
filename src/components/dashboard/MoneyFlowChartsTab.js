@@ -6,7 +6,7 @@ import firebase from 'firebase';
 import {Card, Body, CardItem} from 'native-base';
 import { TabView, SceneMap } from 'react-native-tab-view';
 import {createMaterialTopTabNavigator} from 'react-navigation-tabs';
-import { VictoryPie, VictoryLabel, VictoryAxis, Bar, VictoryBar, VictoryChart, VictoryContainer, VictoryTheme } from 'victory-native';
+import { VictoryPie, VictoryLabel, VictoryAxis, Bar, LineSegment, VictoryStack, VictoryBar, VictoryChart, VictoryContainer, VictoryTheme } from 'victory-native';
 import Svg from 'react-native-svg';
 
 import * as dashboardActions from './dashboardActions';
@@ -16,23 +16,26 @@ const graphicColor = ['tomato', 'orange', 'gold', 'cyan', 'navy']; // Colors
 const wantedGraphicData = [{ y: 10, label: 'test 1' }, { y: 50, label: 'test 2' }, { y: 30, label: 'test 3' }, { y: 10, label: 'test 4' }];
 
 function getCategories(range, date) {
-  var list = [' '];
+  const fixedDate = date.split('/');
+  var list = [date[1] + '/1'];
 
   switch (range) {
     case "MONTH":
-      var fixewdDate = date.split('/');
-      // console.log(fixewdDate);
-      for (var i = 1; i <= 31 ; i = i + 10) {
-        // console.log(i);
+      // console.log(fixedDate);
+      for (var i = 0; i <= 31 ; i++) {
         if (i !== 0) {
-          list.push(fixewdDate[0] + '/' + i);
+          if (i % 10 === 0) {
+          list.push(fixedDate[0] + '/' + i);
+          } else {
+            list.push(' ');
+          }
         }
       }
       break;
     default:
       break;
   }
-
+  // console.log(list);
   return list;
 }
 
@@ -61,6 +64,7 @@ function MoneyFlowCharts(props) {
     const moneyFlowChart1 = (currentRoute) => {
       const dispatch = useDispatch();
       const mainCategoriesData = useSelector(state => state.dashboard.data.expances.mainCategoriesData);
+      const selectedCategory = useSelector(state => state.dashboard.data.expances.selectedSubCategory);
       const transactionList = useSelector(state => state.transactions.transactions);
 
       const dateFixedTransactionList = (transactionList.length > 0 ? transactionList.map(item => {
@@ -68,7 +72,7 @@ function MoneyFlowCharts(props) {
       }) : []);
 
       // const currentRoute = props.navigation.state.key;
-      console.log('dateFixedTransactionList', dateFixedTransactionList);
+      // console.log('dateFixedTransactionList', dateFixedTransactionList);
       // const xCategories = dateFixedTransactionList.map(item => item.fixedDate);
       var xCategories = [];
       dateFixedTransactionList.forEach(item => {
@@ -85,13 +89,13 @@ function MoneyFlowCharts(props) {
         dispatch(dashboardActions.updateData(data));
       }, [transactionList]);
 
-      // const highY;
-      // const lowY;
-
       const s = getCategories('MONTH', '04/20');
-      const t = ['04/16/20', '04/01/20', '04/03/20', '04/10/20', '04/16/20', '04/02/20', '04/26/20', '04/30/20'];
-      console.log('s', s);
-      // console.log('xCategories', xCategories);
+      var counter = 0;
+      const tickVal = s.map(item => {
+        return counter++;
+      })
+      // console.log('s', s);
+      console.log('selectedCategory', selectedCategory);
       return (
         <Card style={styles.cardContainer}>
           <CardItem header>
@@ -102,29 +106,56 @@ function MoneyFlowCharts(props) {
               <Svg width={400} height={400} viewBox="0 0 400 400">
               <VictoryChart domainPadding={30} tick>
                     <VictoryAxis
-                    // domain={[-2000, 2000]}
+                    // domain={[minDomainY - 500, maxDomainY + 500]}
                       dependentAxis={true}
                       // style={{
                       //   grid: { stroke: "grey" }
                       // }}
                     />
-                    <VictoryAxis tickValues={[0, 1 ,10, 20, 30, 31]} tickFormat={s} offsetY={50} />
-
+                    <VictoryAxis
+                      style={{
+                        grid: { strokeWidth: 5, stroke: "grey", strokeOpacity: 0.3 }
+                      }}
+                    tickValues={tickVal} tickFormat={s} offsetY={50} />
                     {mainCategoriesData.length > 1 && <VictoryBar
                         barWidth={8}
                         alignment={'middle'}
                         animate={{ duration: 2000, easing: 'linear' }}
                         width={400}
-                        // categories={{ x: getCategories('MONTH', '04/20') }}
-                        // categories={{ x: s }}
-                        labels={({ datum }) => datum.y}
+                        events={[{
+                          target: "data",
+                          eventHandlers: {
+                            onPress: () => {
+                              return [
+                                {
+                                  target: "data",
+                                  mutation: (props) => {
+                                    const fill = props.style && props.style.fill;
+                                    console.log(props);
+                                    dispatch(dashboardActions.updateSelected(props.datum.label))
+                                    return null;
+                                    // return fill === "black" ? null : { style: { fill: "black" } };
+                                  }
+                                }
+                              ];
+                            }
+                          }
+                        }]}
+                        labels={({ datum }) => {datum.y}}
                         labelComponent={<VictoryLabel text={(datum) => datum.datum.y} dx={0} verticalAnchor="start" />}
                         style={{
-                          data: { paddingLeft: 50, fill: "#c43a31", opacity: 0.7 },
+                          data: { fill: ({datum}) => {
+                            if (datum.y < 0) {
+                              return 'red';
+                            } else if (datum.y > 0) {
+                              return 'green';
+                            }
+                          }, opacity: 0.7 },
+                        //   data: { paddingLeft: 50, fill: "#c43a31", opacity: 0.7 },
                           labels: { fontSize: 12 },
                           parent: { border: "1px solid #ccc" }
                         }}
-                        style={{ data: { fill: "#c43a31" }}}
+                        // style={{ data: { fill: "#c43a31" }, backgroundColor: "green"}}
                         data={mainCategoriesData}
                         />}
                 </VictoryChart>
