@@ -23,6 +23,7 @@ function Header(props) {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    console.log('sssss');
     dispatch(transactionsActions.fetchTransactions(identity.uid));
   }, []);
 
