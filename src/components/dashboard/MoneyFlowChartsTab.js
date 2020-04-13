@@ -16,15 +16,17 @@ const graphicColor = ['tomato', 'orange', 'gold', 'cyan', 'navy']; // Colors
 const wantedGraphicData = [{ y: 10, label: 'test 1' }, { y: 50, label: 'test 2' }, { y: 30, label: 'test 3' }, { y: 10, label: 'test 4' }];
 
 function getCategories(range, date) {
-  var list = [];
+  var list = [' '];
 
   switch (range) {
     case "MONTH":
       var fixewdDate = date.split('/');
       // console.log(fixewdDate);
-      for (var i = 1; i < 31 ; i = i + 5) {
-        console.log(i);
-        list.push(fixewdDate[0] + '/' + i +  '/20');
+      for (var i = 1; i <= 31 ; i = i + 10) {
+        // console.log(i);
+        if (i !== 0) {
+          list.push(fixewdDate[0] + '/' + i);
+        }
       }
       break;
     default:
@@ -40,13 +42,14 @@ function groupToBars(list, keyGetter) {
     list.forEach((item) => {
          const key = keyGetter(item);
         //  console.log(item);
+        var fixedDate = key.split('/');
          const amount = (item.transactionType === 'INCOME' ? item.amount : (-item.amount));
          if (!data.some(t => t.label === key)) {
-          data.push({label: key, y: amount});
+          data.push({label: key, y: amount, x: Number(fixedDate[1])});
          } else {
            const index = data.findIndex(t => t.label === key);
            data[index].y = data[index].y + amount;
-          //  data[index].y0 = 20;
+           data[index].x = Number(fixedDate[1]);
          }
     });
     // console.log('dataaa', data);
@@ -97,13 +100,41 @@ function MoneyFlowCharts(props) {
           <CardItem>
             <View style={{flex: 1, flexDirection: 'row', alignContent: 'center', backgroundColor: 'yellow'}}>
               <Svg width={400} height={400} viewBox="0 0 400 400">
+              <VictoryChart domainPadding={30} tick>
+                    <VictoryAxis
+                    // domain={[-2000, 2000]}
+                      dependentAxis={true}
+                      // style={{
+                      //   grid: { stroke: "grey" }
+                      // }}
+                    />
+                    <VictoryAxis tickValues={[0, 1 ,10, 20, 30, 31]} tickFormat={s} offsetY={50} />
+
+                    {mainCategoriesData.length > 1 && <VictoryBar
+                        barWidth={8}
+                        alignment={'middle'}
+                        animate={{ duration: 2000, easing: 'linear' }}
+                        width={400}
+                        // categories={{ x: getCategories('MONTH', '04/20') }}
+                        // categories={{ x: s }}
+                        labels={({ datum }) => datum.y}
+                        labelComponent={<VictoryLabel text={(datum) => datum.datum.y} dx={0} verticalAnchor="start" />}
+                        style={{
+                          data: { paddingLeft: 50, fill: "#c43a31", opacity: 0.7 },
+                          labels: { fontSize: 12 },
+                          parent: { border: "1px solid #ccc" }
+                        }}
+                        style={{ data: { fill: "#c43a31" }}}
+                        data={mainCategoriesData}
+                        />}
+                </VictoryChart>
               {/* <VictoryChart
                 // domainPadding={{x: [-20, -20]}}
                 categories={{ x: s }}
                 style={{border: '1px solid #ccc'}}
                 // padding={{ top: 20, bottom: 60 }}
                 animate={{ duration: 2000, easing: 'linear' }}> */}
-                    <VictoryAxis crossAxis
+                    {/* <VictoryAxis crossAxis
                   width={400}
                   height={400}
                   domain={[-1, 10]}
@@ -133,7 +164,7 @@ function MoneyFlowCharts(props) {
                   theme={VictoryTheme.material}
                   offsetX={50}
                   standalone={false}
-                />
+                /> */}
                 {/* </VictoryChart> */}
                 {/* <VictoryChart
                   theme={VictoryTheme.material}
