@@ -60,13 +60,12 @@ function groupToBars(list, keyGetter) {
 }
 function MoneyFlowCharts(props) {
     const currentRoute = props.navigation.state.key;
+    const dispatch = useDispatch();
+    const selectedCategory = useSelector(state => state.dashboard.data.expances.selectedSubCategory);
+    const mainCategoriesData = useSelector(state => state.dashboard.data.expances.mainCategoriesData);
+    const transactionList = useSelector(state => state.transactions.transactions);
 
     const moneyFlowChart1 = (currentRoute) => {
-      const dispatch = useDispatch();
-      const mainCategoriesData = useSelector(state => state.dashboard.data.expances.mainCategoriesData);
-      const selectedCategory = useSelector(state => state.dashboard.data.expances.selectedSubCategory);
-      const transactionList = useSelector(state => state.transactions.transactions);
-
       const dateFixedTransactionList = (transactionList.length > 0 ? transactionList.map(item => {
         return Object.assign({}, item , { fixedDate: (new Date(item.date)).toLocaleDateString()})
       }) : []);
@@ -102,22 +101,21 @@ function MoneyFlowCharts(props) {
             <Text>NativeBase</Text>
           </CardItem>
           <CardItem>
-            <View style={{flex: 1, flexDirection: 'row', alignContent: 'center', backgroundColor: 'yellow'}}>
-              <Svg width={400} height={400} viewBox="0 0 400 400">
-              <VictoryChart domainPadding={30} tick>
-                    <VictoryAxis
-                    // domain={[minDomainY - 500, maxDomainY + 500]}
-                      dependentAxis={true}
-                      // style={{
-                      //   grid: { stroke: "grey" }
-                      // }}
-                    />
-                    <VictoryAxis
-                      style={{
-                        grid: { strokeWidth: 5, stroke: "grey", strokeOpacity: 0.3 }
-                      }}
+            <View style={{flex: 1, flexDirection: 'column', alignContent: 'center', backgroundColor: 'yellow'}}>
+              <Svg width={400} height={300} viewBox="0 0 400 300">
+                <VictoryChart domainPadding={30} tick>
+                  <VictoryAxis
+                    dependentAxis={true}
+                    // style={{
+                    //   grid: { stroke: "grey" }
+                    // }}
+                  />
+                  <VictoryAxis
+                    style={{
+                      grid: { strokeWidth: 5, stroke: "grey", strokeOpacity: 0.3 }
+                    }}
                     tickValues={tickVal} tickFormat={s} offsetY={50} />
-                    {mainCategoriesData.length > 1 && <VictoryBar
+                      {mainCategoriesData.length > 1 && <VictoryBar
                         barWidth={8}
                         alignment={'middle'}
                         animate={{ duration: 2000, easing: 'linear' }}
@@ -131,7 +129,7 @@ function MoneyFlowCharts(props) {
                                   target: "data",
                                   mutation: (props) => {
                                     const fill = props.style && props.style.fill;
-                                    console.log(props);
+                                    // console.log(props);
                                     dispatch(dashboardActions.updateSelected(props.datum.label))
                                     return null;
                                     // return fill === "black" ? null : { style: { fill: "black" } };
@@ -142,79 +140,35 @@ function MoneyFlowCharts(props) {
                           }
                         }]}
                         labels={({ datum }) => {datum.y}}
-                        labelComponent={<VictoryLabel text={(datum) => datum.datum.y} dx={0} verticalAnchor="start" />}
-                        style={{
-                          data: { fill: ({datum}) => {
-                            if (datum.y < 0) {
-                              return 'red';
-                            } else if (datum.y > 0) {
-                              return 'green';
-                            }
-                          }, opacity: 0.7 },
-                        //   data: { paddingLeft: 50, fill: "#c43a31", opacity: 0.7 },
-                          labels: { fontSize: 12 },
-                          parent: { border: "1px solid #ccc" }
-                        }}
-                        // style={{ data: { fill: "#c43a31" }, backgroundColor: "green"}}
-                        data={mainCategoriesData}
-                        />}
+                        labelComponent={<VictoryLabel
+                                          text={(datum) => datum.datum.y}
+                                          dy={(datum) => {
+                                            console.log(datum);
+                                            if (datum.datum.y > 0) {
+                                              return -15;
+                                            } else {
+                                              return 10;
+                                            }
+                                          }}
+                                          verticalAnchor="start" />}
+                                        style={{
+                                          data: { fill: ({datum}) => {
+                                            if (datum.y < 0) {
+                                              return 'red';
+                                            } else if (datum.y > 0) {
+                                              return 'green';
+                                            }
+                                          }, opacity: 0.7 },
+                                        //   data: { paddingLeft: 50, fill: "#c43a31", opacity: 0.7 },
+                                          labels: { fontSize: 12 },
+                                          parent: { border: "1px solid #ccc" }
+                                        }}
+                                        // style={{ data: { fill: "#c43a31" }, backgroundColor: "green"}}
+                                        data={mainCategoriesData}
+                                        />}
                 </VictoryChart>
-              {/* <VictoryChart
-                // domainPadding={{x: [-20, -20]}}
-                categories={{ x: s }}
-                style={{border: '1px solid #ccc'}}
-                // padding={{ top: 20, bottom: 60 }}
-                animate={{ duration: 2000, easing: 'linear' }}> */}
-                    {/* <VictoryAxis crossAxis
-                  width={400}
-                  height={400}
-                  domain={[-1, 10]}
-                  theme={VictoryTheme.material}
-                  offsetY={50}
-                  tickCount={10}
-                  tickFormat={date => date.toLocaleString('en-us', { month:'short' })}
-                  standalone={false}
-                />
-                {(mainCategoriesData.length > 0 && xCategories.length > 0) && <VictoryBar
-                    barWidth={8}
-                    alignment={'middle'}
-                    animate={{ duration: 2000, easing: 'linear' }}
-                    width={200}
-                    categories={{ x: getCategories('MONTH', '04/20') }}
-                    // categories={{ x: t }}
-                    // labels={({ datum }) => datum.y}
-                    labelComponent={<VictoryLabel text={(datum) => datum.datum.y} dx={0} verticalAnchor="start" />}
-                    style={{ data: { fill: "#c43a31" }}}
-                    data={mainCategoriesData}
-                    />}
-
-                <VictoryAxis dependentAxis crossAxis
-                  width={400}
-                  height={400}
-                  domain={[-1000, 1000]}
-                  theme={VictoryTheme.material}
-                  offsetX={50}
-                  standalone={false}
-                /> */}
-                {/* </VictoryChart> */}
-                {/* <VictoryChart
-                  theme={VictoryTheme.material}
-                  dependentAxis={true}
-                  animate={{ duration: 2000, easing: 'linear' }}>
-                  <VictoryBar
-                    barWidth={8}
-                    alignment={'middle'}
-                    labels={({ datum }) => datum.y}
-                    categories={{ x: xCategories }}
-                    labelComponent={<VictoryLabel text={(datum) => datum.datum.y} dx={0} verticalAnchor="start" />}
-                    style={{ data: { fill: "#c43a31" } }}
-                    data={mainCategoriesData} />
-                </VictoryChart> */}
               </Svg>
             </View>
-          </CardItem>
-          <CardItem footer>
-            <Text>GeekyAnts</Text>
           </CardItem>
         </Card>
       );
@@ -224,13 +178,13 @@ function MoneyFlowCharts(props) {
       return (
         <Card style={styles.cardContainer}>
           <CardItem header>
-            <Text>NativeBase</Text>
+            <Text>Details</Text>
           </CardItem>
           <CardItem>
             <Body>
-              <Text>
-                //Your text here
-              </Text>
+              <View style={{height: 100, width: '100%', backgroundColor: 'green'}}>
+                <View><Text>{'selected:' + selectedCategory}</Text></View>
+              </View>
             </Body>
           </CardItem>
           <CardItem footer>
@@ -240,10 +194,11 @@ function MoneyFlowCharts(props) {
       );
     };
 
+    // const selectedCategory = useSelector(state => state.dashboard.data.expances.selectedSubCategory);
     return (
       <ScrollView>
         {moneyFlowChart1(currentRoute)}
-        {moneyFlowChart2({})}
+        {selectedCategory !== '' && moneyFlowChart2({})}
         <Text>MoneyFlowCharts</Text>
       </ScrollView>
     );
