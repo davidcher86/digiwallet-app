@@ -5,23 +5,63 @@ export const setPageSettingsIndex = (index) => {
     };
 };
 
-export const updateData = (data) => {
+export const updateExpanceData = (data) => {
     return {
-        type: 'UPDATE_DASHBOARD_DATA',
+        type: 'UPDATE_EXPANCES_DATA',
         data
     };
 };
 
-export const updateSubData = (data) => {
+export const updateExpanceList = (data) => {
     return {
-        type: 'UPDATE_DASHBOARD_SUB_DATA',
+        type: 'UPDATE_EXPANCES_LIST',
         data
     };
 };
 
-export const updateSelected = (value) => {
+export const updateBalanceList = (data) => {
     return {
-        type: 'UPDATE_SELECTED_SUB_CATEGORY_PIE',
+        type: 'UPDATE_BALANCE_LIST',
+        data
+    };
+};
+
+export const updateFlowList = (data) => {
+    return {
+        type: 'UPDATE_FLOW_LIST',
+        data
+    };
+};
+
+export const updateFlowData = (data) => {
+    return {
+        type: 'UPDATE_FLOW_DATA',
+        data
+    };
+};
+
+export const updateExpanceSubData = (data) => {
+    return {
+        type: 'UPDATE_DASHBOARD_EXPANCE_SUB_DATA',
+        data
+    };
+};
+
+export const updateExpanceSelected = (value) => {
+    return {
+        type: 'UPDATE_EXPANCE_SELECTED_SUB_CATEGORY_PIE',
         value
+    };
+};
+
+export const resetFlow = () => {
+    return {
+        type: 'RESET_FLOW_DASHBOARD'
+    };
+};
+
+export const resetExpance = () => {
+    return {
+        type: 'RESET_EXPANCES_DASHBOARD'
     };
 };

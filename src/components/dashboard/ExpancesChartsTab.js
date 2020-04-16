@@ -6,6 +6,7 @@ import firebase from 'firebase';
 import {Card, Body, CardItem} from 'native-base';
 import { TabView, SceneMap } from 'react-native-tab-view';
 import {createMaterialTopTabNavigator} from 'react-navigation-tabs';
+import {useNavigationState} from 'react-navigation-hooks';
 import { VictoryPie, VictoryLabel, Slice, VictoryBar, VictoryChart, VictoryContainer, VictoryTheme } from 'victory-native';
 import Svg from 'react-native-svg';
 
@@ -31,23 +32,42 @@ function groupToPie(list, keyGetter) {
 }
 
 function ExpanceCharts(props) {
-    const transactions = useSelector(state => state.transactions);
+  const dispatch = useDispatch();
+  const transactionList = useSelector(state => state.transactions.transactions);
+  const selectedExpanseSubCategory = useSelector(state => state.dashboard.data.expances.selectedExpanseSubCategory);
+  const dashboard = useSelector(state => state.dashboard);
+  const subExpanseCategoriesData = useSelector(state => state.dashboard.data.expances.subExpanseCategoriesData);
+  const mainExpanseCategoriesData = useSelector(state => state.dashboard.data.expances.mainExpanseCategoriesData);
+  const navigation = props.navigation;
 
-    const expanceChart1 = (data) => {
-      const transactionList = useSelector(state => state.transactions.transactions);
-      const currentRoute = props.navigation.state.key;
-    //   console.log('currentRoute', currentRoute);
-      const dashboard = useSelector(state => state.dashboard);
-      const dispatch = useDispatch();
-      const mainCategoriesData = useSelector(state => state.dashboard.data.expances.mainCategoriesData);
-      useEffect(() => {
-        var data = groupToPie(transactionList, item => item.mainCategory);
-        console.log('Expance data', data);
-        dispatch(dashboardActions.updateData(data));
-      }, [transactionList, currentRoute]);
+  useEffect(() => {
+    if (!navigation.isFocused()) {
+      dispatch(dashboardActions.resetExpance());
+    } else {
+      const fixedList = (transactionList.length > 0 ? transactionList.map(item => {
+        return Object.assign({}, item , { fixedDate: (new Date(item.date)).toLocaleDateString()})
+      }) : []);
 
-      // console.log('selected', dashboard.expances);
+      dispatch(dashboardActions.updateExpanceList(fixedList));
+    }
+  }, [navigation, transactionList]);
 
+  useEffect(() => {
+    if (dashboard.data.expances.list.length > 0 && dashboard.data.expances.mainExpanseCategoriesData.length === 1) {
+      const data = groupToPie(dashboard.data.expances.list, item => item.mainCategory);
+      dispatch(dashboardActions.updateExpanceData(data));
+    }
+  }, [dashboard]);
+
+  useEffect(() => {
+    if (selectedExpanseSubCategory !== '') {
+      const list = dashboard.data.expances.list.filter(item => item.mainCategory === selectedExpanseSubCategory);
+      const data = groupToPie(list, item => item.subCategory);
+      dispatch(dashboardActions.updateExpanceSubData(data));
+    }
+  }, [selectedExpanseSubCategory]);
+
+  const expanceChart1 = (data) => {
       return (
         <Card style={styles.cardContainer}>
           <CardItem header>
@@ -59,7 +79,7 @@ function ExpanceCharts(props) {
                 <VictoryPie
                   // padding={100}
                   standalone={false}
-                  data={mainCategoriesData}
+                  data={mainExpanseCategoriesData}
                   height={300}
                   // dataComponent={<Slice id={'label'} events={{ onClick: (e) => console.log(e.target.id) }}/>}
                   // labelComponent={<VictoryLabel events={() => console.log('sdf')} dy={-10} dy={-10}/>}
@@ -76,7 +96,7 @@ function ExpanceCharts(props) {
                               target: "data",
                               mutation: (props) => {
                                 // console.log(props);
-                                dispatch(dashboardActions.updateSelected(props.datum.label))
+                                dispatch(dashboardActions.updateExpanceSelected(props.datum.label))
                                   // console.log(props.datum.label);
                                 return props.style.fill === "#c43a31" ? null : { style: { fill: "#c43a31" } };
                               }
@@ -107,24 +127,6 @@ function ExpanceCharts(props) {
     };
 
     const expanceChart2 = (data) => {
-      const transactionList = useSelector(state => state.transactions.transactions);
-      const dashboard = useSelector(state => state.dashboard);
-      const selectedCategory = useSelector(state => state.dashboard.data.expances.selectedSubCategory);
-      const dispatch = useDispatch();
-      const subCategoriesData = useSelector(state => state.dashboard.data.expances.subCategoriesData);
-      // console.log('dashboard', dashboard);
-      useEffect(() => {
-        if (selectedCategory !== '') {
-          var list = transactionList;
-          list = transactionList.filter(item => item.mainCategory === selectedCategory);
-
-          data = groupToPie(list, item => item.subCategory);
-          // console.log('transactionList', transactionList);
-          // console.log('change', transactionList);
-          dispatch(dashboardActions.updateSubData(data));
-        }
-      }, [selectedCategory]);
-      // console.log('subCategoriesData', subCategoriesData);
       return (
         <Card style={styles.cardContainer}>
           <CardItem header>
@@ -145,7 +147,7 @@ function ExpanceCharts(props) {
                   duration={2000}
                   animate={{ duration: 2000, easing: 'linear' }}
                   colorScale={graphicColor}
-                  data={subCategoriesData} />
+                  data={subExpanseCategoriesData} />
               </Svg>
             </View>
           </CardItem>
@@ -166,19 +168,19 @@ function ExpanceCharts(props) {
 }
 
 const styles = StyleSheet.create({
-containerStyle: {
-    // flex: 1,
-    // padding: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'column'
-    // padding: 10,
-},
-cardContainer: {
-    // width: '90%',
-    // height: 400,
-    margin: 15,
-},
+  containerStyle: {
+      // flex: 1,
+      // padding: 20,
+      alignItems: 'center',
+      justifyContent: 'center',
+      flexDirection: 'column'
+      // padding: 10,
+  },
+  cardContainer: {
+      // width: '90%',
+      // height: 400,
+      margin: 15,
+  },
 });
 
 export default ExpanceCharts;

@@ -1,10 +1,25 @@
+const initialStateExpances = {
+  list: [],
+  mainExpanseCategoriesData: [{ y: 100 }],
+  selectedExpanseSubCategory: '',
+  subExpanseCategoriesData: [{ y: 100 }]
+};
+
+const initialStateFlow = {
+  list: [],
+  mainFlowCategoriesData: [{ y: 100, x: 1, label: '' }]
+};
+
+const initialBalanace = {
+  list: [],
+  mainFlowCategoriesData: [{ y: 100, x: 1, label: '' }]
+};
+
 const initialState = {
   data: {
-    expances: {
-      mainCategoriesData: [{ y: 100 }],
-      selectedSubCategory: '',
-      subCategoriesData: [{ y: 100 }]
-    }
+    expances: initialStateExpances,
+    flow: initialStateFlow,
+    balance: initialBalanace
   },
   pageSettings: {
     activeTabIndex: 0
@@ -18,24 +33,49 @@ export default (state = initialState, action) => {
       let pageSettings = state.pageSettings;
       pageSettings.activeTabIndex = action.index;
       return Object.assign({}, state, { pageSettings: pageSettings });
-    case 'UPDATE_DASHBOARD_DATA':
+    case 'UPDATE_EXPANCE_DATA':
       newData = state.data;
-      newData.expances.mainCategoriesData = action.data;
+      newData.expances.mainExpanseCategoriesData = action.data;
       return Object.assign({}, state, { data: newData });
-    case 'UPDATE_DASHBOARD_SUB_DATA':
+    case 'UPDATE_BALANCE_LIST':
       newData = state.data;
-      newData.expances.subCategoriesData = action.data;
+      newData.balance.list = action.data;
       return Object.assign({}, state, { data: newData });
-    case 'UPDATE_SELECTED_SUB_CATEGORY_PIE':
+    case 'UPDATE_FLOW_LIST':
+      newData = state.data;
+      newData.flow.list = action.data;
+      return Object.assign({}, state, { data: newData });
+    case 'UPDATE_EXPANCES_LIST':
+      newData = state.data;
+      newData.expances.list = action.data;
+      return Object.assign({}, state, { data: newData });
+    case 'UPDATE_EXPANCES_DATA':
+      newData = state.data;
+      newData.expances.mainExpanseCategoriesData = action.data;
+    case 'UPDATE_FLOW_DATA':
+      newData = state.data;
+      newData.flow.mainFlowCategoriesData = action.data;
+      return Object.assign({}, state, { data: newData });
+    case 'UPDATE_DASHBOARD_EXPANCE_SUB_DATA':
+      newData = state.data;
+      newData.expances.subExpanseCategoriesData = action.data;
+      return Object.assign({}, state, { data: newData });
+    case 'UPDATE_EXPANCE_SELECTED_SUB_CATEGORY_PIE':
       newData = state.data.expances;
-      newData.selectedSubCategory = action.value;
-        return Object.assign({}, state, { expances: newData });
-    // case 'CHANGE_LOADING_STATE':
-    //     return Object.assign({}, state, { loading: action.value });
-    // case 'CHANGE_ERROR':
-    //     return Object.assign({}, state, { error: action.value });
-    // case 'RESET_FORM':
-    //     return Object.assign({}, state, { error: '', username: '', password: '', loading: false });
+      newData.selectedExpanseSubCategory = action.value;
+      return Object.assign({}, state, { expances: newData });
+    case 'RESET_EXPANCES_DASHBOARD':
+      newData = state.data;
+      newData.expances.mainExpanseCategoriesData = [{ y: 100 }];
+      newData.expances.list = [];
+      newData.expances.selectedExpanseSubCategory = '';
+      newData.expances.subExpanseCategoriesData = [{ y: 100 }];
+      return Object.assign({}, state, { data: newData });
+    case 'RESET_FLOW_DASHBOARD':
+      newData = state.data;
+      newData.flow.mainFlowCategoriesData = [{ y: 100, x: 1, label: '' }];
+      newData.flow.list = [];
+      return Object.assign({}, state, { data: newData });
     default:
       return state;
   }
