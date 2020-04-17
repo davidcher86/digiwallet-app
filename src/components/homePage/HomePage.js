@@ -286,7 +286,7 @@ class HomePage extends Component {
                     </View>
                     {/* <Divider style={{ backgroundColor: '#cbe3fb' }} /> */}
                     <View style={styles.creditListStyle}>
-                        <Text style={[DARK_MODE.h2, DARK_MODE.title]}>Credit Status</Text>                       
+                        <Text style={[DARK_MODE.h2, DARK_MODE.title]}>Credit Status</Text>
                         <View style={styles.creditProgressContainer}>
                             <AnimatedCircularProgress
                                 size={200}
