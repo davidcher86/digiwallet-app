@@ -53,10 +53,7 @@ class DrawerContainer extends Component {
       dashboardIconRotation: new Animated.Value(0),
       transactionsIconRotation: new Animated.Value(0)
     };
-    // this.expandTransaction = this.expandTransaction.bind(this);
-    // this.closeTransaction = this.closeTransaction.bind(this);
-    // this.expandDashboard = this.expandDashboard.bind(this);
-    // this.closeDashboard = this.closeDashboard.bind(this);
+
     this.expandItem = this.expandItem.bind(this);
     this.closeItem = this.closeItem.bind(this);
     this.toggleTransactionExpand = this.toggleTransactionExpand.bind(this);
@@ -116,7 +113,7 @@ class DrawerContainer extends Component {
         break;
       case 'DASHBOARD':
         Animated.timing(this.state.itemDashboardHeight, {
-          toValue: 80,
+          toValue: 120,
           duration: 400,
           easing: Easing.linear,
           // useNativeDriver: true
@@ -145,41 +142,6 @@ class DrawerContainer extends Component {
         break;
     }
   };
-  // expandDashboard = () => {
-    // Animated.timing(this.state.itemDashboardHeight, {
-    //   toValue: 80,
-    //   duration: 400,
-    //   easing: Easing.linear,
-    //   // useNativeDriver: true
-    // }).start();
-  // };
-
-  // closeDashboard = () => {
-    // Animated.timing(this.state.itemDashboardHeight, {
-    //   toValue: 0,
-    //   duration: 200,
-    //   easing: Easing.linear,
-    //   // useNativeDriver: true
-    // }).start();
-  // };
-
-  // expandTransaction = () => {
-  //   Animated.timing(this.state.itemTransactionsHeight, {
-  //     toValue: 160,
-  //     duration: 400,
-  //     easing: Easing.linear,
-  //     // useNativeDriver: true
-  //   }).start();
-  // };
-
-  // closeTransaction = () => {
-  //   Animated.timing(this.state.itemTransactionsHeight, {
-  //     toValue: 0,
-  //     duration: 200,
-  //     easing: Easing.linear,
-  //     // useNativeDriver: true
-  //   }).start();
-  // };
 
   toggleDashboardExpand() {
     if (this.state.itemDashboardOpen) {
@@ -216,7 +178,7 @@ class DrawerContainer extends Component {
       inputRange: [0, 1],
       outputRange: ["0deg", "180deg"]
     })
-    // console.log(this.state);
+
     const data = [
       {
           header: 'sectionHeader',
@@ -236,34 +198,34 @@ class DrawerContainer extends Component {
   const dashboardIcon = <MaterialCommunityIcons name="view-dashboard" style={{marginRight: 7}} size={21} color="#4F8EF7"/>;
   const homepageIcon = <MaterialCommunityIcons name="home" style={{marginRight: 7}} size={21} color="#4F8EF7"/>
   // console.log(this.state);
-    const renderNavButton = (route, title, icon, hiddenBtn, type = null, group = null) => {
-      return (
-        <TouchableOpacity
-          onPress={() => navigate(route, {type: 'EDIT', group: group})}
-          style={(hiddenBtn ? styles.containerHiddenItem : styles.containerBottomItem)}>
-          <View style={styles.button}>
-            {icon}
-            <Text style={styles.txtBottom}>{title}</Text>
-          </View>
-        </TouchableOpacity>
-      );
-    };
+  const renderNavButton = (route, title, icon, hiddenBtn, type = null, group = null) => {
+    return (
+      <TouchableOpacity
+        onPress={() => navigate(route, {type: 'EDIT', group: group})}
+        style={(hiddenBtn ? styles.containerHiddenItem : styles.containerBottomItem)}>
+        <View style={styles.button}>
+          {icon}
+          <Text style={styles.txtBottom}>{title}</Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
 
-    const renderNavHeader = (title, icon, action, rotateIcon) => {
-      return (
-        <TouchableHighlight
-          style={styles.containerBottomItem}
-          onPress={action}>
-          <View style={styles.button}>
-              {icon}
-            <Text style={styles.txtBottom}>{title}</Text>
-            <Animated.View style={{transform: [{rotateX: rotateIcon}], alignSelf: 'flex-end' }}>
-                <Ionicons name="ios-arrow-down" size={30} color={DARK_MODE.COLORS.ICON_COLOR} />
-            </Animated.View>
-          </View>
-        </TouchableHighlight>
-      );
-    };
+  const renderNavHeader = (title, icon, action, rotateIcon) => {
+    return (
+      <TouchableHighlight
+        style={styles.containerBottomItem}
+        onPress={action}>
+        <View style={styles.button}>
+            {icon}
+          <Text style={styles.txtBottom}>{title}</Text>
+          <Animated.View style={{transform: [{rotateX: rotateIcon}], alignSelf: 'flex-end' }}>
+              <Ionicons name="ios-arrow-down" size={30} color={DARK_MODE.COLORS.ICON_COLOR} />
+          </Animated.View>
+        </View>
+      </TouchableHighlight>
+    );
+  };
 
     return (
       <View style={styles.container}>
@@ -284,6 +246,7 @@ class DrawerContainer extends Component {
             <Animated.View style={[styles.itemHiddenSection, {height: this.state.itemDashboardHeight}]}>
               {renderNavButton('ExpanceCharts', 'Expances', expanceChartsIcon, true)}
               {renderNavButton('MoneyFlowCharts', 'Money Flow', moneyFlowChartsIcon, true)}
+              {renderNavButton('BalanceCharts', 'Balance', moneyFlowChartsIcon, true)}
             </Animated.View>
           </Animated.View>
 

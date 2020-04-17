@@ -305,11 +305,27 @@ class Account extends Component {
                 <Picker
                   selectedValue={creditCards[0].billingDate}
                   style={{height: 50, width: '50%', color: INPUT_COLOR}}
-                  onValueChange={itemValue =>
-                    changeCreditFieldValue('billingDate', itemValue, 0)
-                  }>
+                  onValueChange={itemValue => changeCreditFieldValue('billingDate', itemValue, 0)}>
                   {renderDays()}
                 </Picker>
+              </View>
+              {console.log(creditCards[0])}
+              <View style={[styles.inputRowContainer,{flexDirection: 'row', alignItems: 'center'}]}>
+                <Input
+                  style={{width: '100%'}}
+                  autoCorrect={false}
+                  value={creditCards[0].creditLimit.toString()}
+                  // value={'0'}
+                  placeholder="Credit Limit"
+                  inputStyle={{color: DARK_MODE.COLORS.INPUT_TEXT_COLOR}}
+                  // onChangeText={text => this.props.changeUsername(text)}
+                  onChangeText={text => changeCreditFieldValue('creditLimit', Number(text), 0)}
+                  leftIcon={{name: 'mail'}}
+                  autoCapitalize="none"
+                  errorStyle={{color: 'red'}}
+                  errorMessage={errors.initialAssets}
+                  // label="Initial Amount"
+                  placeholderTextColor={DARK_MODE.COLORS.PLACE_HOLDER_COLOR} />
               </View>
             </View>
           </View>

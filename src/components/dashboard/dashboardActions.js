@@ -40,6 +40,13 @@ export const updateFlowData = (data) => {
     };
 };
 
+export const updateBalanceData = (data) => {
+    return {
+        type: 'UPDATE_BALANCE_DATA',
+        data
+    };
+};
+
 export const updateExpanceSubData = (data) => {
     return {
         type: 'UPDATE_DASHBOARD_EXPANCE_SUB_DATA',
@@ -63,5 +70,11 @@ export const resetFlow = () => {
 export const resetExpance = () => {
     return {
         type: 'RESET_EXPANCES_DASHBOARD'
+    };
+};
+
+export const resetBalance = () => {
+    return {
+        type: 'RESET_BALANCE_DASHBOARD'
     };
 };

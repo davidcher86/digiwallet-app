@@ -7,6 +7,7 @@ const initialState = {
     userDetails: null,
     creditCards: [],
     creditCardList: [],
+    creditLimit: 0,
     creditDebt: [],
     dataLaodet: false,
     credit: [],

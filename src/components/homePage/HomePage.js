@@ -8,6 +8,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { Divider } from 'react-native-elements';
+import { AnimatedCircularProgress } from 'react-native-circular-progress';
 
 import * as actions from './homePageActions';
 import Header from './../common/Header';
@@ -290,6 +291,9 @@ class HomePage extends Component {
                                 )}/>
                         </Animated.View>}
                         {profile.credit.length === 0 && <Text style={[DARK_MODE.title, {fontSize: 15, color: '#6087b1'}]}>No Monthly Credit</Text>}
+                        <View style={styles.creditListStyle}>
+
+                        </View>
                     </View>
                 </View>
                 <Fab />

@@ -6,7 +6,7 @@ const initialState = {
     firstName: '',
     lastName: '',
     gender: 'male',
-    birthDate: '2016-05-01',
+    birthDate: '2016-05-01'
   },
   creditCards: [
     {
@@ -14,26 +14,26 @@ const initialState = {
       name: 'Card1',
       cardType: 'visa',
       billingDate: '1',
-      // monthlyLiabilities: 0,
+      creditLimit: 0
     },
   ],
   sallary: {
     paymentDate: '1',
-    amount: 10000,
+    amount: 10000
   },
   transactions: {},
   liability: 0,
   assets: 1000,
   validationErrors: {
     firstNameError: '',
-    lastNameError: '',
+    lastNameError: ''
   },
   pageSettings: {
-    step: 0,
+    step: 0
   },
   registerData: {},
   formType: 'NEW',
-  errors: {},
+  errors: {}
 };
 
 export default (state = initialState, action) => {

@@ -52,6 +52,10 @@ export default (state = initialState, action) => {
     case 'UPDATE_EXPANCES_DATA':
       newData = state.data;
       newData.expances.mainExpanseCategoriesData = action.data;
+    case 'UPDATE_BALANCE_DATA':
+      newData = state.data;
+      newData.balance.mainFlowCategoriesData = action.data;
+      return Object.assign({}, state, { data: newData });
     case 'UPDATE_FLOW_DATA':
       newData = state.data;
       newData.flow.mainFlowCategoriesData = action.data;
@@ -75,6 +79,11 @@ export default (state = initialState, action) => {
       newData = state.data;
       newData.flow.mainFlowCategoriesData = [{ y: 100, x: 1, label: '' }];
       newData.flow.list = [];
+      return Object.assign({}, state, { data: newData });
+    case 'RESET_BALANCE_DASHBOARD':
+      newData = state.data;
+      newData.balance.mainFlowCategoriesData = [{ y: 100, x: 1, label: '' }];
+      newData.balance.list = [];
       return Object.assign({}, state, { data: newData });
     default:
       return state;
