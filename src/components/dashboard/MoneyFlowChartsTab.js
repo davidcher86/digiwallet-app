@@ -6,10 +6,11 @@ import firebase from 'firebase';
 import {Card, Body, CardItem} from 'native-base';
 import { TabView, SceneMap } from 'react-native-tab-view';
 import {createMaterialTopTabNavigator} from 'react-navigation-tabs';
+// import LinearGradient from 'react-native-linear-gradient';
 import * as Progress from 'react-native-progress';
 import {useNavigationState} from 'react-navigation-hooks';
 import { VictoryPie, VictoryTooltip, VictoryLabel, VictoryAxis, Bar, LineSegment, VictoryStack, VictoryBar, VictoryChart, VictoryContainer, VictoryTheme } from 'victory-native';
-import Svg from 'react-native-svg';
+import {Svg, Defs, Stop, LinearGradient} from 'react-native-svg';
 
 import * as dashboardActions from './dashboardActions';
 import * as transactionsActions from './../transactions/transactionsActions';
@@ -104,6 +105,11 @@ function MoneyFlowCharts(props) {
           <CardItem>
             <View style={{flex: 1, flexDirection: 'column', alignContent: 'center', backgroundColor: 'yellow'}}>
               <Svg width={400} height={300} viewBox="0 0 400 300">
+              {/* <LinearGradient colors={['#4c669f', '#3b5998', '#192f6a']} style={styles.linearGradient}>
+  <Text style={styles.buttonText}>
+    Sign in with Facebook
+  </Text>
+</LinearGradient> */}
                 <VictoryChart domainPadding={30} tick>
                   {dashboard.data.flow.mainFlowCategoriesData.length > 1 && <VictoryAxis
                     dependentAxis={true}/>}
@@ -112,6 +118,22 @@ function MoneyFlowCharts(props) {
                       grid: { strokeWidth: 5, stroke: "grey", strokeOpacity: 0.3 }
                     }}
                     tickValues={tickVal} tickFormat={s} offsetY={50} />
+                  <LinearGradient id="gradientDown" y1="0%" y2="100%" >
+                      <Stop offset="0%" stopColor="red" stopOpacity={1}/>
+                      <Stop offset="70%" stopColor="red" stopOpacity={0.7}/>
+                      <Stop offset="80%" stopColor="red" stopOpacity={0.55}/>
+                      <Stop offset="90%" stopColor="red" stopOpacity={0.4}/>
+                      <Stop offset="95%" stopColor="red" stopOpacity={0.2}/>
+                      <Stop offset="100%" stopColor="red" stopOpacity={0}/>
+                  </LinearGradient>
+                  <LinearGradient id="gradientUp" y1="0%" y2="100%" >
+                    <Stop offset="0%" stopColor="green" stopOpacity={0}/>
+                    <Stop offset="5%" stopColor="green" stopOpacity={0.2}/>
+                    <Stop offset="10%" stopColor="green" stopOpacity={0.4}/>
+                    <Stop offset="20%" stopColor="green" stopOpacity={0.55}/>
+                    <Stop offset="30%" stopColor="green" stopOpacity={0.7}/>
+                    <Stop offset="100%" stopColor="green" stopOpacity={1}/>
+                  </LinearGradient>
                       {dashboard.data.flow.mainFlowCategoriesData.length > 1 && <VictoryBar
                         barWidth={8}
                         alignment={'middle'}
@@ -154,9 +176,11 @@ function MoneyFlowCharts(props) {
                         style={{
                           data: { fill: ({datum}) => {
                             if (datum.y < 0) {
-                              return 'red';
+                              return 'url(#gradientDown)';
+                              // return 'red';
                             } else if (datum.y > 0) {
-                              return 'green';
+                              return 'url(#gradientUp)';
+                              // return 'green';
                             }
                           }, opacity: 0.7 },
                         //   data: { paddingLeft: 50, fill: "#c43a31", opacity: 0.7 },

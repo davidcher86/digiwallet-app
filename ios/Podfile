@@ -53,6 +53,8 @@ target 'digiwallet' do
 
   pod 'RNSVG', :path => '../node_modules/react-native-svg'
 
+  pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
+
   target 'digiwalletTests' do
     inherit! :search_paths
     # Pods for testing

@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
+import com.BV.LinearGradient.LinearGradientPackage;
 import com.horcrux.svg.SvgPackage;
 import com.facebook.reactnative.androidsdk.FBSDKPackage;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
@@ -49,6 +50,7 @@ public class MainApplication extends Application implements ReactApplication {
 //          packages.add(new ReanimatedPackage());
           new RNGoogleSigninPackage();
           new ReanimatedPackage();
+          // new LinearGradientPackage();
           // new RNFirebaseAuthPackage();
           return packages;
         }

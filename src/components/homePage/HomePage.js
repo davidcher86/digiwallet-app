@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React, { Component } from 'react';
-import { View, TouchableOpacity, Image, Animated, Text, StyleSheet, Easing, FlatList } from 'react-native';
+import { View, TouchableOpacity, Image, Animated, Text, StyleSheet, Easing, FlatList, ScrollView } from 'react-native';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import { Button, Input, PricingCard } from 'react-native-elements';
 import { connect } from 'react-redux';
@@ -8,6 +8,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { Divider } from 'react-native-elements';
+import { Circle  } from 'react-native-svg';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 
 import * as actions from './homePageActions';
@@ -229,9 +230,23 @@ class HomePage extends Component {
                 </View>
             );
         };
-        // console.log(this.props);
+
+        var creditLimit = 0;
+        profile.creditCardList.forEach(card => {
+            creditLimit = creditLimit + card.creditLimit;
+        });
+        console.log(Math.round(profile.totalCredit/creditLimit * 100));
+        console.log(profile);
+        var secondaryColor = '#048822'
+        var firstColor = '#08a52b';
+        // if (Math.round(profile.totalCredit/creditLimit) > 0.85) {
+            // secondaryColor = '#e21f00';
+        // } else if (Math.round(profile.totalCredit/creditLimit) > 0.6) {
+            secondaryColor = '#fdcf27';
+            firstColor = '#529a2d'
+        // }
         return (
-            <View style={{flex: 1, height: '100%'}}>
+            <ScrollView style={{flex: 1, height: '100%'}}>
                 {/* <Header navigation={this.props.navigation} title="Home"/> */}
                 <View style={[DARK_MODE.appContainer, {padding: 20}]}>
                     <View style={styles.upperContainer}>
@@ -271,7 +286,36 @@ class HomePage extends Component {
                     </View>
                     {/* <Divider style={{ backgroundColor: '#cbe3fb' }} /> */}
                     <View style={styles.creditListStyle}>
-                        <Text style={[DARK_MODE.h2, DARK_MODE.title]}>Credit List</Text>
+                        <Text style={[DARK_MODE.h2, DARK_MODE.title]}>Credit Status</Text>
+                        <View style={styles.creditProgressContainer}>
+                            <AnimatedCircularProgress
+                                size={200}
+                                width={18}
+                                backgroundWidth={30}
+                                fill={60}
+                                // fill={Math.round(profile.totalCredit/creditLimit * 100)}
+                                dashedTint={{ width: 20 }}
+                                dashedBackground={{ width: 10 }}
+                                // lineCap={'square'}
+                                arcSweepAngle={180}
+                                prefill={0}
+                                duration={2000}
+                                rotation={270}
+                                tintTransparency={0.7}
+                                tintColorSecondary={secondaryColor}
+                                // tintColor={'#08a52b'}
+                                tintColor={firstColor}
+                                // renderCap={({ center }) => <Circle cx={center.x} cy={center.y} r="10" fill="blue" />}
+                                backgroundColor="#3d5875">
+                                {
+                                    (fill) => (
+                                    <Text>
+                                        { creditLimit }
+                                    </Text>
+                                    )
+                                }
+                            </AnimatedCircularProgress>
+                        </View>
                         {profile.credit.length > 0 && <Animated.View style={{height: 300}}>
                             <FlatList
                                 data={profile.credit}
@@ -291,13 +335,10 @@ class HomePage extends Component {
                                 )}/>
                         </Animated.View>}
                         {profile.credit.length === 0 && <Text style={[DARK_MODE.title, {fontSize: 15, color: '#6087b1'}]}>No Monthly Credit</Text>}
-                        <View style={styles.creditListStyle}>
-
-                        </View>
                     </View>
                 </View>
                 <Fab />
-            </View>
+            </ScrollView>
         );
     }
 }
@@ -305,6 +346,12 @@ const styles = StyleSheet.create({
     creditListStyle: {
         padding: 15,
         // borderWidth: 2,
+    },
+    creditProgressContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        height: 150,
+        padding: 15,
     },
     upperContainer: {
         // borderWidth: 1,
