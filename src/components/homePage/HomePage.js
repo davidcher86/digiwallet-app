@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React, { Component } from 'react';
-import { View, TouchableOpacity, Image, Animated, Text, StyleSheet, Easing, FlatList, ScrollView } from 'react-native';
+import { View, TouchableOpacity, Image, Animated, Text, StyleSheet, Easing, SafeAreaView, FlatList, ScrollView } from 'react-native';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import { Button, Input, PricingCard } from 'react-native-elements';
 import { connect } from 'react-redux';
@@ -245,19 +245,12 @@ class HomePage extends Component {
             secondaryColor = '#fdcf27';
             firstColor = '#529a2d'
         // }
-        return (
-            <ScrollView style={{flex: 1, height: '100%'}}>
-                {/* <Header navigation={this.props.navigation} title="Home"/> */}
-                <View style={[DARK_MODE.appContainer, {padding: 20}]}>
+
+        const upperComponent = () => {
+            return (
+                <View style={[DARK_MODE.appContainer, {padding: -20}]}>
                     <View style={styles.upperContainer}>
                         <View style={styles.h1rowContainer}>
-                        {/* <PricingCard
-                            color="#4f9deb"
-                            title="Free"
-                            price="$0"
-                            info={['1 User', 'Basic Support', 'All Core Features']}
-                            button={{ title: null, icon: null }}
-                            /> */}
                             <View style={{flexDirection: 'row'}}>
                                 <Text style={DARK_MODE.h2}>{profile.assets.toFixed(2)}</Text>
                                 <FontAwesome style={{marginLeft: 15}} name="dollar" size={20} color={DARK_MODE.COLORS.ICON_COLOR} />
@@ -284,9 +277,8 @@ class HomePage extends Component {
                             </View>
                         </View>
                     </View>
-                    {/* <Divider style={{ backgroundColor: '#cbe3fb' }} /> */}
                     <View style={styles.creditListStyle}>
-                        <Text style={[DARK_MODE.h2, DARK_MODE.title]}>Credit Status</Text>
+                    <Text style={[DARK_MODE.h2, DARK_MODE.title]}>Credit Status</Text>
                         <View style={styles.creditProgressContainer}>
                             <AnimatedCircularProgress
                                 size={200}
@@ -316,29 +308,38 @@ class HomePage extends Component {
                                 }
                             </AnimatedCircularProgress>
                         </View>
-                        {profile.credit.length > 0 && <Animated.View style={{height: 300}}>
-                            <FlatList
-                                data={profile.credit}
-                                ListHeaderComponent={creditListHeader}
-                                keyExtractor={(item, index) => item.uid}
-                                // ListHeaderComponentStyle={{color: DARK_MODE.h4.color}}
-                                renderItem={({item}) => (
-                                    <CreditItem
-                                        key={item.uid}
-                                        pageSettings={profile.pageSettings}
-                                        openCredit={this.props.openCredit}
-                                        // openTransaction={openTransaction}
-                                        // identity={identity}
-                                        // deleteTransaction={deleteTransaction}
-                                        creditItem={item}
-                                    />
-                                )}/>
-                        </Animated.View>}
-                        {profile.credit.length === 0 && <Text style={[DARK_MODE.title, {fontSize: 15, color: '#6087b1'}]}>No Monthly Credit</Text>}
+                    </View>
+                    {profile.credit.length > 0 && creditListHeader()}
+                </View>
+            );
+        };
+
+        return (
+            <View nestedScrollEnabled={true} style={{flex: 1, height: '100%'}}>
+                <View style={[DARK_MODE.appContainer]}>
+                    <View style={{padding: 20, paddingBottom: 30}}>
+                        <FlatList
+                            data={profile.credit}
+                            ListHeaderComponent={upperComponent()}
+                            showsVerticalScrollIndicator={false}
+                            keyExtractor={(item, index) => item.uid}
+                            ListEmptyComponent={() => <Text style={[DARK_MODE.title, {fontSize: 15, color: '#6087b1'}]}>No Monthly Credit</Text>}
+                            renderItem={({item}) => (
+                                <CreditItem
+                                    key={item.uid}
+                                    pageSettings={profile.pageSettings}
+                                    openCredit={this.props.openCredit}
+                                    // openTransaction={openTransaction}
+                                    // identity={identity}
+                                    // deleteTransaction={deleteTransaction}
+                                    creditItem={item}
+                                />
+                            )}
+                            />
                     </View>
                 </View>
                 <Fab />
-            </ScrollView>
+            </View>
         );
     }
 }
