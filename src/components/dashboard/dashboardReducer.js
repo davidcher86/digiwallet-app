@@ -12,7 +12,7 @@ const initialStateFlow = {
 
 const initialBalanace = {
   list: [],
-  mainFlowCategoriesData: [{ y: 100, x: 1, label: '' }]
+  mainBallanceCategoriesData: [{ y: 100, x: 1, label: '' }]
 };
 
 const initialState = {
@@ -54,7 +54,7 @@ export default (state = initialState, action) => {
       newData.expances.mainExpanseCategoriesData = action.data;
     case 'UPDATE_BALANCE_DATA':
       newData = state.data;
-      newData.balance.mainFlowCategoriesData = action.data;
+      newData.balance.mainBallanceCategoriesData = action.data;
       return Object.assign({}, state, { data: newData });
     case 'UPDATE_FLOW_DATA':
       newData = state.data;
