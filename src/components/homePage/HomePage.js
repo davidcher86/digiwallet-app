@@ -157,7 +157,13 @@ class HomePage extends Component {
 
     render() {
         const {profile, pageSettings} = this.props;
-        // console.log(this.props);
+        const createUUID = () => {
+            return 'xxxxxxxx-xxxx-4xxx'.replace(/[xy]/g, function(c) {
+               var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+               return v.toString(16);
+            });
+         }
+        // console.log(createUUID());
         // console.log('pre', DARK_MODE);
         // const getMonthsDiffrence = (firstDate, laterDate) => {
         //     // console.log('firstDate', firstDate);
@@ -235,8 +241,7 @@ class HomePage extends Component {
         profile.creditCardList.forEach(card => {
             creditLimit = creditLimit + card.creditLimit;
         });
-        console.log(Math.round(profile.totalCredit/creditLimit * 100));
-        console.log(profile);
+
         var secondaryColor = '#048822'
         var firstColor = '#08a52b';
         // if (Math.round(profile.totalCredit/creditLimit) > 0.85) {

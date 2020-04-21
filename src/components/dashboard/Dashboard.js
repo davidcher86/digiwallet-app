@@ -14,6 +14,7 @@ import MoneyFlowCharts from './MoneyFlowChartsTab';
 import BalanceCharts from './BalanceChartsTab';
 import * as dashboardActions from './dashboardActions';
 import * as transactionsActions from './../transactions/transactionsActions';
+import * as homePageActions from './../homePage/homePageActions';
 import Fab from './../common/Fab';
 
 var ScrollableTabView = require('react-native-scrollable-tab-view');
@@ -21,11 +22,13 @@ var ScrollableTabView = require('react-native-scrollable-tab-view');
 function Header(props) {
   const {navigate} = props.navigation;
   const transactions = useSelector(state => state.transactions);
+  const profile = useSelector(state => state.profile);
   const identity = useSelector(state => state.identity);
   const dispatch = useDispatch();
-
+  // console.log(navigate);
   useEffect(() => {
     dispatch(transactionsActions.fetchTransactions(identity.uid));
+    dispatch(homePageActions.fetchProfileData(identity.uid, props.navigation));
   }, []);
 
   return (

@@ -122,23 +122,11 @@ function MoneyFlowCharts(props) {
                     <Stop offset="0%" stopColor="red" stopOpacity={1}/>
                     <Stop offset="70%" stopColor="red" stopOpacity={1}/>
                     <Stop offset="100%" stopColor="red" stopOpacity={0.1}/>
-                    {/* <Stop offset="0%" stopColor="red" stopOpacity={1}/>
-                    <Stop offset="70%" stopColor="red" stopOpacity={0.7}/>
-                    <Stop offset="80%" stopColor="red" stopOpacity={0.55}/>
-                    <Stop offset="90%" stopColor="red" stopOpacity={0.4}/>
-                    <Stop offset="95%" stopColor="red" stopOpacity={0.2}/>
-                    <Stop offset="100%" stopColor="red" stopOpacity={0}/> */}
                   </LinearGradient>
                   <LinearGradient id="gradientUp" y1="0%" y2="100%" >
                     <Stop offset="100%" stopColor="green" stopOpacity={1}/>
                     <Stop offset="30%" stopColor="green" stopOpacity={1}/>
                     <Stop offset="0%" stopColor="green" stopOpacity={0.1}/>
-                    {/* <Stop offset="0%" stopColor="green" stopOpacity={0}/>
-                    <Stop offset="5%" stopColor="green" stopOpacity={0.2}/>
-                    <Stop offset="10%" stopColor="green" stopOpacity={0.4}/>
-                    <Stop offset="20%" stopColor="green" stopOpacity={0.55}/>
-                    <Stop offset="30%" stopColor="green" stopOpacity={0.7}/>
-                    <Stop offset="100%" stopColor="green" stopOpacity={1}/> */}
                   </LinearGradient>
                       {dashboard.data.flow.mainFlowCategoriesData.length > 1 && <VictoryBar
                         barWidth={8}

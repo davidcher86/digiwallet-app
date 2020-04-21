@@ -14,7 +14,7 @@ const initialState = {
       name: 'Card1',
       cardType: 'visa',
       billingDate: '1',
-      creditLimit: 0
+      creditLimit: 11000
     },
   ],
   sallary: {

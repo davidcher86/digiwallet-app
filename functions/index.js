@@ -13,6 +13,13 @@ const DELETE_ACTION_CREDIT = "DELETE_CREDIT";
 const DELETE_ACTION_CASH = "DELETE_CASH";
 const DELETE_ACTION_CHECK = "DELETE_CHECK";
 
+const createUUID = () => {
+  return 'xxxxxxxx-xxxx-4xxx'.replace(/[xy]/g, function(c) {
+     var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+     return v.toString(16);
+  });
+}
+
 exports.updateNewTransaction = functions.database
   .ref('/users/{uId}/account/transactions')
   .onWrite(async (change, context) => {
@@ -69,8 +76,8 @@ exports.updateNewTransaction = functions.database
         newItem = after[item];
       }
 
-      console.log('newItem', newItem);
-      if (newItem !==null && newItem.paymentType === 'CREDIT') {
+      // console.log('newItem', newItem);
+      if (newItem !== null && actionType !== null && newItem.paymentType === 'CREDIT') {
         var tmpDate = new Date(newItem.date);
         // tmpDate.setDate(tmpDate.getDate() - 1);
         newItem.lastUpdated = tmpDate;
@@ -88,7 +95,7 @@ exports.updateNewTransaction = functions.database
         if (after !==null) {
           if (!after.hasOwnProperty(item)) {
             uid = item;
-            switch (after[item].paymentType) {
+            switch (before[item].paymentType) {
               case 'CREDIT':
                 console.log('CREDIT');
                 actionType = DELETE_ACTION_CREDIT;
@@ -102,14 +109,14 @@ exports.updateNewTransaction = functions.database
                 actionType = DELETE_ACTION_CHECK;
                 break;
               default:
-                console.log('default item', after[item]);
+                console.log('default item', before[item]);
             }
             // actionType = DELETE_ACTION;
             newItem = before[item];
           }
         } else {
           uid = item;
-          switch (after[item].paymentType) {
+          switch (before[item].paymentType) {
             case 'CREDIT':
               console.log('CREDIT');
               actionType = DELETE_ACTION_CREDIT;
@@ -130,24 +137,54 @@ exports.updateNewTransaction = functions.database
         }
       }
     }
-    console.log(actionType);
+    console.log('newItem', newItem);
 
+    var newBallanceRecord = {};
+    var balanceChange = 0;
     if (newItem !== null && uid !== null && actionType !== null) {
-      var dbCreditRef;
+      var dbCreditRef, dbBalanceTrendRef;
       switch (actionType) {
         case DELETE_ACTION_CASH:
           console.log('Inintiated with UID: ' + uid + ', action: ' + DELETE_ACTION + ' transaction, on ' + lastUpdate);
-          dbBalanceRef = admin.database().ref(`/users/${context.params.uId}/account`);
-          return dbBalanceRef.transaction(assets => {
+          newItem.id = uid;
+          dbBalanceRef = admin.database().ref(`/users/${context.params.uId}/account/assets`);
+          dbBalanceRef.transaction(assets => {
             if (assets) {
               if (newItem.transactionType == 'INCOME') {
-                assets = assets - parseFloat(newItem.amount);
-              } else {
                 assets = assets + parseFloat(newItem.amount);
+              } else {
+                assets = assets - parseFloat(newItem.amount);
               }
+              balanceChange = parseFloat(newItem.amount);
             }
+
+            dbBalanceTrendRef = admin.database().ref(`/users/${context.params.uId}/account/balanceTrend`);
+            dbBalanceTrendRef.once('value').then(function(snapshot) {
+              var list = snapshot.val();
+              if (list !== null && list !== undefined && newItem !== null) {
+                delete list[newItem.id]
+                for (var uid in list) {
+                    if ((new Date (list[uid].date)) > (new Date(newItem.date))) {
+                      if (newItem.transactionType == 'INCOME') {
+                        list[uid].ballance = list[uid].ballance - parseFloat(newItem.amount)
+                      } else {
+                        list[uid].ballance = list[uid].ballance + parseFloat(newItem.amount)
+                      }
+                    }
+                }
+
+                var ref = admin.database().ref(`/users/${context.params.uId}/account`);
+                ref.update({balanceTrend: list})
+                  .then(res => {
+                    return res;
+                  });
+              }
+            })
+
             return assets;
           });
+
+          break;
         case DELETE_ACTION_CREDIT:
           console.log('Inintiated with UID: ' + uid + ', action: ' + DELETE_ACTION + ' transaction, on ' + lastUpdate);
           dbCreditRef = admin.database().ref(`/users/${context.params.uId}/account/creditDebt/${uid}`);
@@ -155,19 +192,36 @@ exports.updateNewTransaction = functions.database
           break;
         case ADD_ACTION_CASH:
           console.log('Inintiated with UID: ' + uid + ', action: ' + ADD_ACTION + ' transaction, on ' + lastUpdate);
-          console.log(parseFloat(newItem.amount));
           dbBalanceRef = admin.database().ref(`/users/${context.params.uId}/account/assets`);
 
-          return dbBalanceRef.transaction(assets => {
+          dbBalanceRef.transaction(assets => {
             if (assets) {
               if (newItem.transactionType == 'INCOME') {
                 assets = assets + parseFloat(newItem.amount);
+                balanceChange = parseFloat(newItem.amount);
               } else {
                 assets = assets - parseFloat(newItem.amount);
+                balanceChange = parseFloat(newItem.amount);
               }
             }
+
+            newBallanceRecord.ballance = assets;
+            newBallanceRecord.date = newItem.date;
+            newBallanceRecord.balanceChange = balanceChange;
+            newBallanceRecord.type = newItem.transactionType;
+            console.log('newBallanceRecord', newBallanceRecord);
+
+            dbBalanceTrendRef = admin.database().ref(`/users/${context.params.uId}/account/balanceTrend`);
+            dbBalanceTrendRef.update({[uid]: newBallanceRecord})
+              .then(res => {
+                console.log('res', res);
+                return res;
+              });
+
             return assets;
           });
+
+          break;
         case ADD_ACTION_CREDIT:
           console.log('Inintiated with UID: ' + uid + ', action: ' + ADD_ACTION + ' transaction, on ' + lastUpdate);
           dbCreditRef = admin.database().ref(`/users/${context.params.uId}/account/creditDebt`);
@@ -178,12 +232,28 @@ exports.updateNewTransaction = functions.database
           break;
       }
 
+      // dbBalanceTrendRef = admin.database().ref(`/users/${context.params.uId}/account`);
+      // dbBalanceTrendRef.once('value').then(function(snapshot) {
+      //   var data = snapshot.val();
+      //   console.log('dat-snap');
+      //   console.log(data);
+      //   return null;
+      // })
+
       var dbRef = admin.database().ref(`/users/${context.params.uId}/account/`)
       dbRef.update({lastUpdate})
         .then(res => {
+          console.log('final res', res);
           return res;
         });
       }
+
+      // var dbRef = admin.database().ref(`/users/${context.params.uId}/account/balanceTrend`)
+      // dbRef.update({[uid]: newBallanceRecord})
+      //   .then(res => {
+      //     return res;
+      //   });
+      // }
 
     return null;
   });

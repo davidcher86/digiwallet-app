@@ -32,6 +32,7 @@ export default (state = initialState, action) => {
                 currentMonthCredit: data.currentMonthCredit,
                 credit: data.fixedList,
                 sallary: data.sallary,
+                balanceTrend: data.balanceTrend,
                 sortedMainCategories: data.sortedMainCategories,
                 creditDebt: data.creditDebt,
                 categoryData: JSON.parse(data.categories),
