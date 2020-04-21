@@ -105,11 +105,6 @@ function MoneyFlowCharts(props) {
           <CardItem>
             <View style={{flex: 1, flexDirection: 'column', alignContent: 'center', backgroundColor: 'yellow'}}>
               <Svg width={400} height={300} viewBox="0 0 400 300">
-              {/* <LinearGradient colors={['#4c669f', '#3b5998', '#192f6a']} style={styles.linearGradient}>
-  <Text style={styles.buttonText}>
-    Sign in with Facebook
-  </Text>
-</LinearGradient> */}
                 <VictoryChart domainPadding={30} tick>
                   {dashboard.data.flow.mainFlowCategoriesData.length > 1 && <VictoryAxis
                     dependentAxis={true}/>}
