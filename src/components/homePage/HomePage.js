@@ -220,7 +220,7 @@ class HomePage extends Component {
             // dt.setMonth(dt.getMonth() + 1);
             // profile.creditCards[0].nextDebtDate = dt;
           }
-        // console.log('profile ', profile);
+        console.log('profile ', profile);
         const creditListHeader = () => {
             return (
                 <View style={styles.creditListHeaderStyle}>
