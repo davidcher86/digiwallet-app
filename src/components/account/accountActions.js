@@ -72,7 +72,8 @@ export const handleRegisterAccount = (account, uid, navigation) => dispatch => {
       sortedMainCategories.push(key);
     }
   // });
-
+  const dt = new Date();
+  const balanceTrend = {'initial': {balanceChange: 26, ballance: 290, date: "2020-04-19T10:35:25.775Z", type: "INITIAL"}}
   const json = {
     sallary: account.sallary,
     creditCards: account.creditCards,
