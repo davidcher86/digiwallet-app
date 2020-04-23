@@ -7,12 +7,13 @@ const initialStateExpances = {
 
 const initialStateFlow = {
   list: [],
-  mainFlowCategoriesData: [{ y: 100, x: 1, label: '' }]
+  mainFlowCategoriesData: [{ y: 0, x: 1, label: 'init' }]
 };
 
 const initialBalanace = {
   list: [],
-  mainBallanceCategoriesData: [{ y: 100, x: 1, label: '' }]
+  mainBallanceCategoriesData: [{ y: 100, x: 1, label: 'init' }]
+  // mainBallanceCategoriesData: [{ y: 100, x: 1, label: '' }]
 };
 
 const initialState = {
@@ -77,12 +78,12 @@ export default (state = initialState, action) => {
       return Object.assign({}, state, { data: newData });
     case 'RESET_FLOW_DASHBOARD':
       newData = state.data;
-      newData.flow.mainFlowCategoriesData = [{ y: 100, x: 1, label: '' }];
+      newData.flow.mainFlowCategoriesData = [{ y: 0, x: 1, label: 'init' }];
       newData.flow.list = [];
       return Object.assign({}, state, { data: newData });
     case 'RESET_BALANCE_DASHBOARD':
       newData = state.data;
-      newData.balance.mainFlowCategoriesData = [{ y: 100, x: 1, label: '' }];
+      newData.balance.mainBallanceCategoriesData = [{ y: 100, x: 1, label: 'init' }];
       newData.balance.list = [];
       return Object.assign({}, state, { data: newData });
     default:

@@ -12,6 +12,7 @@ import {useNavigationState} from 'react-navigation-hooks';
 import { VictoryPie, VictoryTooltip, VictoryLabel, VictoryAxis, Bar, LineSegment, VictoryStack, VictoryBar, VictoryChart, VictoryContainer, VictoryTheme } from 'victory-native';
 import {Svg, Defs, Stop, LinearGradient} from 'react-native-svg';
 
+import { DARK_MODE } from './../Styles';
 import * as dashboardActions from './dashboardActions';
 import * as transactionsActions from './../transactions/transactionsActions';
 
@@ -69,7 +70,6 @@ function MoneyFlowCharts(props) {
   const transactionList = useSelector(state => state.transactions.transactions);
 
   useEffect(() => {
-    console.log(navigation);
     if (!navigation.isFocused()) {
       dispatch(dashboardActions.resetFlow());
     } else {
@@ -82,14 +82,16 @@ function MoneyFlowCharts(props) {
   }, [navigation, transactionList]);
 
   useEffect(() => {
-    if (dashboard.data.flow.list.length > 0 && dashboard.data.flow.mainFlowCategoriesData.length === 1) {
-      // console.log('sdfsdf');
+    if (dashboard.data.flow.list.length > 0 &&
+           dashboard.data.flow.mainFlowCategoriesData.length === 1 &&
+           dashboard.data.flow.mainFlowCategoriesData[0].label === 'init') {
+
       const data = groupToBars(dashboard.data.flow.list, item => item.fixedDate);
       dispatch(dashboardActions.updateFlowData(data));
     }
   }, [dashboard]);
 
-  // console.log(dashboard);
+  // console.log(dashboard.data.flow);
     const moneyFlowChart1 = () => {
       const s = getCategories('MONTH', '04/20');
       var counter = 0;
@@ -99,96 +101,108 @@ function MoneyFlowCharts(props) {
 
       return (
         <Card style={styles.cardContainer}>
-          <CardItem header>
+          <CardItem style={{backgroundColor: DARK_MODE.COLORS.CARD_BACKGROUND}} header>
             <Text>Money Flow</Text>
           </CardItem>
-          <CardItem>
-            <View style={{flex: 1, flexDirection: 'column', alignContent: 'center', backgroundColor: 'yellow'}}>
-              <Svg width={400} height={300} viewBox="0 0 400 300">
-                <VictoryChart domainPadding={30} tick>
-                  {dashboard.data.flow.mainFlowCategoriesData.length > 1 && <VictoryAxis
-                    dependentAxis={true}/>}
-                  <VictoryAxis
-                    style={{
-                      grid: { strokeWidth: 5, stroke: "grey", strokeOpacity: 0.3 }
-                    }}
-                    tickValues={tickVal} tickFormat={s} offsetY={50} />
-                  <LinearGradient id="gradientDown" y1="0%" y2="100%" >
-                    <Stop offset="0%" stopColor="red" stopOpacity={1}/>
-                    <Stop offset="70%" stopColor="red" stopOpacity={1}/>
-                    <Stop offset="100%" stopColor="red" stopOpacity={0.1}/>
-                  </LinearGradient>
-                  <LinearGradient id="gradientUp" y1="0%" y2="100%" >
-                    <Stop offset="100%" stopColor="green" stopOpacity={1}/>
-                    <Stop offset="30%" stopColor="green" stopOpacity={1}/>
-                    <Stop offset="0%" stopColor="green" stopOpacity={0.1}/>
-                  </LinearGradient>
-                      {dashboard.data.flow.mainFlowCategoriesData.length > 1 && <VictoryBar
-                        barWidth={8}
-                        alignment={'middle'}
-                        animate={{ duration: 2000, easing: 'linear' }}
-                        width={400}
-                        // events={[{
-                        //   target: "data",
-                        //   eventHandlers: {
-                        //     onPress: () => {
-                        //       return [
-                        //         {
-                        //           target: "data",
-                        //           mutation: (props) => {
-                        //             const fill = props.style && props.style.fill;
-                        //             // console.log(props);
-                        //             dispatch(dashboardActions.updateSelected(props.datum.label))
-                        //             return null;
-                        //             // return fill === "black" ? null : { style: { fill: "black" } };
-                        //           }
-                        //         }
-                        //       ];
-                        //     }
-                        //   }
-                        // }]}
-                        labels={({ datum }) => {datum.y}}
-                        labelComponent={<VictoryTooltip
-                                          renderInPortal={false}
-                                          pointerLength={0}
-                                          text={(datum) => datum.datum.y}
-                                          cornerRadius={4}/>}
-                        // labelComponent={<VictoryLabel
-                        //                   text={(datum) => datum.datum.y}
-                        //                   dy={(datum) => {
-                        //                     if (datum.datum.y > 0) {
-                        //                       return -15;
-                        //                     } else {
-                        //                       return 10;
-                        //                     }
-                        //                   }}
-                        //                   verticalAnchor="start" />}
-                        style={{
-                          data: { fill: ({datum}) => {
-                            if (datum.y < 0) {
-                              return 'url(#gradientDown)';
-                              // return 'red';
-                            } else if (datum.y > 0) {
-                              return 'url(#gradientUp)';
-                              // return 'green';
-                            }
-                          }, opacity: 0.7 },
-                        //   data: { paddingLeft: 50, fill: "#c43a31", opacity: 0.7 },
-                          labels: { fontSize: 12 },
-                          parent: { border: "1px solid #ccc" }
-                        }}
-                        // events={[{
-                        //   target: "data",
-                        //   eventHandlers: {
-                        //     onPress: () => {
-                        //       return console.log('sdfdsf');
-                        //     }
-                        //   }
-                        // }]}
-                        // style={{ data: { fill: "#c43a31" }, backgroundColor: "green"}}
-                        data={mainFlowCategoriesData} />}
-                </VictoryChart>
-              </Svg>
+          <CardItem style={{backgroundColor: DARK_MODE.COLORS.CARD_BACKGROUND}}>
+            <View style={{flex: 1, flexDirection: 'column', alignContent: 'center', marginRight: 10}}>
+              <ScrollView horizontal={true}>
+                <Svg width={500} height={300} viewBox="0 0 500 300">
+                  <VictoryChart domainPadding={20} width={500} tick animate={{duration: 10}}>
+                    {dashboard.data.flow.mainFlowCategoriesData.length > 0 &&
+                    dashboard.data.flow.mainFlowCategoriesData[0].label !== 'init' &&
+                    <VictoryAxis
+                      style={{
+                        tickLabels: {fill: "#fffdfd", fontSize: 13, padding: 15},
+                        axis: {stroke: "#e8e8e8"}
+                      }}
+                      dependentAxis={true}/>}
+                    <VictoryAxis
+                      style={{
+                        axis: {stroke: "#e8e8e8"},
+                        tickLabels: {fill: "#fffdfd", fontSize: 13, padding: 15},
+                        grid: { strokeWidth: 5, stroke: "grey", strokeOpacity: 0.3 }
+                      }}
+                      tickValues={tickVal} tickFormat={s} offsetY={50} />
+                    <LinearGradient id="gradientDown" y1="0%" y2="100%" >
+                      <Stop offset="0%" stopColor="red" stopOpacity={1}/>
+                      <Stop offset="70%" stopColor="red" stopOpacity={1}/>
+                      <Stop offset="100%" stopColor="red" stopOpacity={0.1}/>
+                    </LinearGradient>
+                    <LinearGradient id="gradientUp" y1="0%" y2="100%" >
+                      <Stop offset="100%" stopColor="green" stopOpacity={1}/>
+                      <Stop offset="30%" stopColor="green" stopOpacity={1}/>
+                      <Stop offset="0%" stopColor="green" stopOpacity={0.1}/>
+                    </LinearGradient>
+                        {dashboard.data.flow.mainFlowCategoriesData.length > 0 &&
+                        dashboard.data.flow.mainFlowCategoriesData[0].label !== 'init' &&
+                        <VictoryBar
+                          barWidth={8}
+                          alignment={'middle'}
+                          animate={{ duration: 2000, easing: 'linear' }}
+                          // width={300}
+                          // events={[{
+                          //   target: "data",
+                          //   eventHandlers: {
+                          //     onPress: () => {
+                          //       return [
+                          //         {
+                          //           target: "data",
+                          //           mutation: (props) => {
+                          //             const fill = props.style && props.style.fill;
+                          //             // console.log(props);
+                          //             dispatch(dashboardActions.updateSelected(props.datum.label))
+                          //             return null;
+                          //             // return fill === "black" ? null : { style: { fill: "black" } };
+                          //           }
+                          //         }
+                          //       ];
+                          //     }
+                          //   }
+                          // }]}
+                          labels={({ datum }) => {datum.y}}
+                          labelComponent={<VictoryTooltip
+                                            renderInPortal={false}
+                                            pointerLength={0}
+                                            text={(datum) => datum.datum.y}
+                                            cornerRadius={4}/>}
+                          // labelComponent={<VictoryLabel
+                          //                   text={(datum) => datum.datum.y}
+                          //                   dy={(datum) => {
+                          //                     if (datum.datum.y > 0) {
+                          //                       return -15;
+                          //                     } else {
+                          //                       return 10;
+                          //                     }
+                          //                   }}
+                          //                   verticalAnchor="start" />}
+                          style={{
+                            data: { fill: ({datum}) => {
+                              if (datum.y < 0) {
+                                return 'url(#gradientDown)';
+                                // return 'red';
+                              } else if (datum.y > 0) {
+                                return 'url(#gradientUp)';
+                                // return 'green';
+                              }
+                            }, opacity: 0.7 },
+                          //   data: { paddingLeft: 50, fill: "#c43a31", opacity: 0.7 },
+                            labels: { fontSize: 12 },
+                            parent: { border: "1px solid #ccc" }
+                          }}
+                          // events={[{
+                          //   target: "data",
+                          //   eventHandlers: {
+                          //     onPress: () => {
+                          //       return console.log('sdfdsf');
+                          //     }
+                          //   }
+                          // }]}
+                          // style={{ data: { fill: "#c43a31" }, backgroundColor: "green"}}
+                          data={mainFlowCategoriesData} />}
+                  </VictoryChart>
+                </Svg>
+              </ScrollView>
             </View>
           </CardItem>
         </Card>
@@ -213,10 +227,10 @@ function MoneyFlowCharts(props) {
       // console.log('totalMoneyFlow', totalMoneyFlow);
       return (
         <Card style={styles.cardContainer}>
-          <CardItem header>
+          <CardItem style={{backgroundColor: DARK_MODE.COLORS.CARD_BACKGROUND}} header>
             <Text>Total</Text>
           </CardItem>
-          <CardItem>
+          <CardItem style={{backgroundColor: DARK_MODE.COLORS.CARD_BACKGROUND}}>
             <Body>
               <View style={{height: 100, width: '100%', backgroundColor: '#d2d2d2'}}>
                 <Text style={{ marginLeft: 10 }}>Total Income</Text>
@@ -256,7 +270,7 @@ function MoneyFlowCharts(props) {
 
     // const selectedCategory = useSelector(state => state.dashboard.data.expances.selectedSubCategory);
     return (
-      <View style={styles.containerStyle}>
+      <View style={[DARK_MODE.appContainer, styles.containerStyle]}>
         <ScrollView>
           {moneyFlowTotal({})}
           {moneyFlowChart1({})}
@@ -267,10 +281,9 @@ function MoneyFlowCharts(props) {
 
   const styles = StyleSheet.create({
     containerStyle: {
-      flex: 1,
       justifyContent: 'center',
       flexDirection: 'column',
-      padding: 10
+      padding: 15
     },
     cardContainer: {
       // width: '90%',
