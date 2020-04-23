@@ -1,4 +1,4 @@
-import React, {Component, useEffect} from 'react';
+import React, {Component, useEffect, useState} from 'react';
 import {View, TouchableOpacity, Text, StyleSheet, ScrollView} from 'react-native';
 import {Button, Input, Icon} from 'react-native-elements';
 import {connect, useSelector, useDispatch} from 'react-redux';
@@ -20,7 +20,8 @@ import Fab from './../common/Fab';
 var ScrollableTabView = require('react-native-scrollable-tab-view');
 
 function Header(props) {
-  const {navigate} = props.navigation;
+  // const {navigate} = props.navigation;
+  const {navigation} = props;
   const transactions = useSelector(state => state.transactions);
   const profile = useSelector(state => state.profile);
   const identity = useSelector(state => state.identity);
@@ -31,31 +32,42 @@ function Header(props) {
     dispatch(homePageActions.fetchProfileData(identity.uid, props.navigation));
   }, []);
 
+  // useEffect(() => {
+    // console.log("afsf");
+  // }, [navigate]);
+  // console.log(navigation);
+
   return (
-    <View style={{height: 50, flexDirection: 'row'}}>
+    <View style={{height: 50, flexDirection: 'row', backgroundColor: "#08191f"}}>
       <TouchableOpacity
-        style={{width: 130}}
+        style={{width: 130, flexDirection: 'column', alignSelf: "center"}}
         onPress={() => {
           // dispatch(dashboardActions.resetFlow());
-          navigate('ExpanceCharts', {type: 'ReplaceCurrentScreen'})
+          navigation.navigate('ExpanceCharts', {type: 'ReplaceCurrentScreen'})
           }}>
-        <Text>Expances</Text>
+        <Text style={(navigation.state.index === 0
+                      ? {color: "#ffffff", fontSize: 18, alignSelf: "center", flex: 1, textAlignVertical: "center"}
+                      : {color: "#b5c6cc", alignSelf: "center", flex: 1, textAlignVertical: "center"})}>Expances</Text>
       </TouchableOpacity>
       <TouchableOpacity
-        style={{width: 130}}
+        style={{width: 130, flexDirection: 'column', alignSelf: "center"}}
         onPress={() => {
           // dispatch(dashboardActions.reset());
-          navigate('MoneyFlowCharts', {type: 'ReplaceCurrentScreen'})
+          navigation.navigate('MoneyFlowCharts', {type: 'ReplaceCurrentScreen'})
         }}>
-        <Text>Money Flow</Text>
+        <Text style={(navigation.state.index === 1
+                      ? {color: "#ffffff", fontSize: 18, alignSelf: "center", flex: 1, textAlignVertical: "center"}
+                      : {color: "#b5c6cc", alignSelf: "center", flex: 1, textAlignVertical: "center"})}>Money Flow</Text>
       </TouchableOpacity>
       <TouchableOpacity
-        style={{width: 130}}
+        style={{width: 130, flexDirection: 'column', alignSelf: "center"}}
         onPress={() => {
           // dispatch(dashboardActions.reset());
-          navigate('BalanceCharts', {type: 'ReplaceCurrentScreen'})
+          navigation.navigate('BalanceCharts', {type: 'ReplaceCurrentScreen'})
         }}>
-        <Text>Balance</Text>
+        <Text style={(navigation.state.index === 2
+                      ? {color: "#ffffff", fontSize: 18, alignSelf: "center", flex: 1, textAlignVertical: "center"}
+                      : {color: "#b5c6cc", alignSelf: "center", flex: 1, textAlignVertical: "center"})}>Balance</Text>
       </TouchableOpacity>
     </View>
   );

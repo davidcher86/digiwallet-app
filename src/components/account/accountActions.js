@@ -73,7 +73,7 @@ export const handleRegisterAccount = (account, uid, navigation) => dispatch => {
     }
   // });
   const dt = new Date();
-  const balanceTrend = {'initial': {balanceChange: 26, ballance: 290, date: "2020-04-19T10:35:25.775Z", type: "INITIAL"}}
+  const balanceTrend = {'-0Initial': {balanceChange: 0, ballance: account.assets, date: dt.toISOString(), type: "INITIAL"}}
   const json = {
     sallary: account.sallary,
     creditCards: account.creditCards,
@@ -81,6 +81,7 @@ export const handleRegisterAccount = (account, uid, navigation) => dispatch => {
     transactions: account.transactions,
     assets: account.assets,
     darkMode: true,
+    balanceTrend: balanceTrend,
     sortedMainCategories: JSON.stringify(sortedMainCategories),
     categories: JSON.stringify(defaultCategories),
   };

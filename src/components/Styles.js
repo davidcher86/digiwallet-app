@@ -7,6 +7,7 @@ export const DARK_MODE = {
     INPUT_TEXT_COLOR: '#f5f5f5',
     PLACE_HOLDER_COLOR: '#6087b1',
     LABEL_COLOR: '#b7d8fb',
+    CARD_BACKGROUND: '#0b4641',
     BACKGROUND_COLOR: '#0f344c',
     HEADER_COLOR: '#021d38',
     FAB_COLOR: '#90befd',
@@ -24,6 +25,9 @@ export const DARK_MODE = {
   title: {
     width: '100%',
     textAlign: 'center',
+  },
+  cardContainer: {
+    backgroundColor: '#15615d'
   },
   h1: {},
   h1Label: {},

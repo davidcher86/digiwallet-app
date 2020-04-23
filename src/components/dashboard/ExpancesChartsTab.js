@@ -10,6 +10,7 @@ import {useNavigationState} from 'react-navigation-hooks';
 import { VictoryPie, VictoryLabel, Slice, VictoryBar, VictoryChart, VictoryContainer, VictoryTheme } from 'victory-native';
 import Svg from 'react-native-svg';
 
+import { DARK_MODE } from './../Styles';
 import * as dashboardActions from './dashboardActions';
 import * as transactionsActions from './../transactions/transactionsActions';
 
@@ -70,10 +71,10 @@ function ExpanceCharts(props) {
   const expanceChart1 = (data) => {
       return (
         <Card style={styles.cardContainer}>
-          <CardItem header>
+          <CardItem style={{backgroundColor: DARK_MODE.COLORS.CARD_BACKGROUND}} header>
             <Text>Expances</Text>
           </CardItem>
-          <CardItem>
+          <CardItem style={{backgroundColor: DARK_MODE.COLORS.CARD_BACKGROUND}}>
             <View style={{flexDirection: 'row', width: '82%', justifyContent: 'center', margin: 30}}>
               <Svg width={300} height={220} viewBox="0 30 400 200" style={{ width: "100%", height: "auto" }}>
                 <VictoryPie
@@ -119,7 +120,7 @@ function ExpanceCharts(props) {
               </Svg>
             </View>
           </CardItem>
-          <CardItem footer>
+          <CardItem style={{backgroundColor: DARK_MODE.COLORS.CARD_BACKGROUND}} footer>
             <Text>GeekyAnts</Text>
           </CardItem>
         </Card>
@@ -129,10 +130,10 @@ function ExpanceCharts(props) {
     const expanceChart2 = (data) => {
       return (
         <Card style={styles.cardContainer}>
-          <CardItem header>
+          <CardItem style={{backgroundColor: DARK_MODE.COLORS.CARD_BACKGROUND}} header>
             <Text>NativeBase</Text>
           </CardItem>
-          <CardItem>
+          <CardItem style={{backgroundColor: DARK_MODE.COLORS.CARD_BACKGROUND}}>
             <View style={{flexDirection: 'row', width: '82%', justifyContent: 'center', margin: 30}}>
               <Svg width={300} height={220} viewBox="0 30 400 200" style={{ width: "100%", height: "auto" }}>
                 <VictoryPie
@@ -151,7 +152,7 @@ function ExpanceCharts(props) {
               </Svg>
             </View>
           </CardItem>
-          <CardItem footer>
+          <CardItem style={{backgroundColor: DARK_MODE.COLORS.CARD_BACKGROUND}} footer>
             <Text>GeekyAnts</Text>
           </CardItem>
         </Card>
@@ -159,27 +160,28 @@ function ExpanceCharts(props) {
     };
 
     return (
-      <ScrollView style={styles.cardContainer}>
-        {expanceChart1({})}
-        {expanceChart2({})}
-        <Text>ExpanceCharts</Text>
-      </ScrollView>
+      <View style={[DARK_MODE.appContainer, styles.containerStyle]}>
+        <ScrollView>
+            {expanceChart1({})}
+            {expanceChart2({})}
+            <Text>ExpanceCharts</Text>
+        </ScrollView>
+      </View>
     );
 }
 
 const styles = StyleSheet.create({
   containerStyle: {
       // flex: 1,
-      // padding: 20,
       alignItems: 'center',
       justifyContent: 'center',
-      flexDirection: 'column'
-      // padding: 10,
+      flexDirection: 'column',
+      padding: 15,
   },
   cardContainer: {
+      // margin: 15,
       // width: '90%',
       // height: 400,
-      margin: 15,
   },
 });
 
