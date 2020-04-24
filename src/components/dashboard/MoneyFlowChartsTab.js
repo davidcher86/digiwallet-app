@@ -100,11 +100,11 @@ function MoneyFlowCharts(props) {
       })
 
       return (
-        <Card style={styles.cardContainer}>
-          <CardItem style={{backgroundColor: DARK_MODE.COLORS.CARD_BACKGROUND}} header>
+        <View style={styles.cardContainer}>
+          <CardItem style={{backgroundColor: DARK_MODE.COLORS.CARD_BACKGROUND, borderTopLeftRadius: 10, borderTopRightRadius: 10, borderBottomRightRadius: 0}} header>
             <Text>Money Flow</Text>
           </CardItem>
-          <CardItem style={{backgroundColor: DARK_MODE.COLORS.CARD_BACKGROUND}}>
+          <CardItem style={{backgroundColor: DARK_MODE.COLORS.CARD_BACKGROUND, borderBottomLeftRadius: 10, borderBottomRightRadius: 10}}>
             <View style={{flex: 1, flexDirection: 'column', alignContent: 'center', marginRight: 10}}>
               <ScrollView horizontal={true}>
                 <Svg width={500} height={300} viewBox="0 0 500 300">
@@ -205,7 +205,7 @@ function MoneyFlowCharts(props) {
               </ScrollView>
             </View>
           </CardItem>
-        </Card>
+        </View>
       );
     };
 
@@ -226,11 +226,12 @@ function MoneyFlowCharts(props) {
       }
       // console.log('totalMoneyFlow', totalMoneyFlow);
       return (
-        <Card style={styles.cardContainer}>
-          <CardItem style={{backgroundColor: DARK_MODE.COLORS.CARD_BACKGROUND}} header>
+        <View style={styles.cardContainer}>
+        {/* <Card style={styles.cardContainer}> */}
+          <CardItem style={{backgroundColor: DARK_MODE.COLORS.CARD_BACKGROUND, borderTopLeftRadius: 5, borderTopRightRadius: 5, borderBottomRightRadius: 0}} header>
             <Text>Total</Text>
           </CardItem>
-          <CardItem style={{backgroundColor: DARK_MODE.COLORS.CARD_BACKGROUND}}>
+          <CardItem style={{backgroundColor: DARK_MODE.COLORS.CARD_BACKGROUND, borderBottomLeftRadius: 5, borderBottomRightRadius: 5}}>
             <Body>
               <View style={{height: 100, width: '100%', backgroundColor: '#d2d2d2'}}>
                 <Text style={{ marginLeft: 10 }}>Total Income</Text>
@@ -264,7 +265,8 @@ function MoneyFlowCharts(props) {
               </View>
             </Body>
           </CardItem>
-        </Card>
+        {/* </Card> */}
+        </View>
       );
     };
 
@@ -283,12 +285,20 @@ function MoneyFlowCharts(props) {
     containerStyle: {
       justifyContent: 'center',
       flexDirection: 'column',
-      padding: 15
+      // padding: 15
     },
     cardContainer: {
       // width: '90%',
       // height: 400,
-      margin: 15,
+      margin: 30,
+
+      borderRadius: 5, shadowColor: '#1f7329',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 1,
+      shadowRadius: 5,
+      borderWidth: 1,
+      borderColor: '#c5ffcc',
+      elevation: 5
     },
   });
 

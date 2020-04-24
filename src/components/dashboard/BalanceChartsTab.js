@@ -107,23 +107,24 @@ function BalanceCharts(props) {
       console.log(dashboard.data.balance);
         // console.log('groupToLine', groupToLine(dashboard.data.balance.list, item => item.mainCategory));
       return (
-          <Card style={styles.cardContainer}>
-              <CardItem style={{backgroundColor: DARK_MODE.COLORS.CARD_BACKGROUND}} header>
+        <View style={styles.cardContainer}>
+          {/* <Card style={styles.cardContainer}> */}
+              <CardItem style={{backgroundColor: DARK_MODE.COLORS.CARD_BACKGROUND, borderTopLeftRadius: 5, borderTopRightRadius: 5, borderBottomRightRadius: 0}} header>
                   <Text>Balance</Text>
               </CardItem>
-              <CardItem style={{backgroundColor: DARK_MODE.COLORS.CARD_BACKGROUND}}>
+              <CardItem style={{backgroundColor: DARK_MODE.COLORS.CARD_BACKGROUND, borderBottomLeftRadius: 5, borderBottomRightRadius: 5}}>
                   <View style={{flex: 1, flexDirection: 'column', alignContent: 'center'}}>
                     <ScrollView horizontal={true}>
                       <Svg width={500} height={300} viewBox="0 0 500 300">
                         <VictoryChart domainPadding={30} width={500} tick animate={{duration: 10}}>
                           {dashboard.data.balance.mainBallanceCategoriesData.length > 1 &&
                             <VictoryAxis
-                            theme={VictoryTheme.material}
-                            style={{
-                              axis: {stroke: "#e8e8e8"},
-                              tickLabels: {fill: "#fffdfd", fontSize: 13, padding: 15},
-                              grid: { strokeWidth: 2, stroke: "grey", strokeOpacity: 0.3, strokeDasharray: '5' }
-                            }}
+                              theme={VictoryTheme.material}
+                              style={{
+                                axis: {stroke: "#e8e8e8"},
+                                tickLabels: {fill: "#fffdfd", fontSize: 13, padding: 15},
+                                grid: { strokeWidth: 2, stroke: "grey", strokeOpacity: 0.3, strokeDasharray: '5' }
+                              }}
                               dependentAxis={true}/>}
                           <VictoryAxis
                             style={{
@@ -154,12 +155,14 @@ function BalanceCharts(props) {
                     </ScrollView>
                   </View>
               </CardItem>
-          </Card>
+          {/* </Card> */}
+          </View>
         );
       };
 
       return (
         <View style={[DARK_MODE.appContainer, styles.containerStyle]}>
+        {/* <View> */}
           <ScrollView>
             {balanceCard({})}
           </ScrollView>
@@ -178,6 +181,14 @@ const styles = StyleSheet.create({
         // width: '90%',
         // height: 400,
         margin: 15,
+
+        borderRadius: 5, shadowColor: '#1f7329',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 1,
+        shadowRadius: 5,
+        borderWidth: 1,
+        borderColor: '#c5ffcc',
+        elevation: 5
     },
 });
 

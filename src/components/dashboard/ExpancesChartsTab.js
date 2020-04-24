@@ -70,11 +70,11 @@ function ExpanceCharts(props) {
 
   const expanceChart1 = (data) => {
       return (
-        <Card style={styles.cardContainer}>
-          <CardItem style={{backgroundColor: DARK_MODE.COLORS.CARD_BACKGROUND}} header>
+        <View style={styles.cardContainer}>
+          <CardItem style={{backgroundColor: DARK_MODE.COLORS.CARD_BACKGROUND, borderTopLeftRadius: 5, borderTopRightRadius: 5, borderBottomRightRadius: 0}} header>
             <Text>Expances</Text>
           </CardItem>
-          <CardItem style={{backgroundColor: DARK_MODE.COLORS.CARD_BACKGROUND}}>
+          <CardItem style={{backgroundColor: DARK_MODE.COLORS.CARD_BACKGROUND, borderBottomLeftRadius: 5, borderBottomRightRadius: 5}}>
             <View style={{flexDirection: 'row', width: '82%', justifyContent: 'center', margin: 30}}>
               <Svg width={300} height={220} viewBox="0 30 400 200" style={{ width: "100%", height: "auto" }}>
                 <VictoryPie
@@ -123,17 +123,17 @@ function ExpanceCharts(props) {
           <CardItem style={{backgroundColor: DARK_MODE.COLORS.CARD_BACKGROUND}} footer>
             <Text>GeekyAnts</Text>
           </CardItem>
-        </Card>
+        </View>
       );
     };
 
     const expanceChart2 = (data) => {
       return (
-        <Card style={styles.cardContainer}>
-          <CardItem style={{backgroundColor: DARK_MODE.COLORS.CARD_BACKGROUND}} header>
+        <View style={styles.cardContainer}>
+          <CardItem style={{backgroundColor: DARK_MODE.COLORS.CARD_BACKGROUND, borderTopLeftRadius: 5, borderTopRightRadius: 5, borderBottomRightRadius: 0}} header>
             <Text>NativeBase</Text>
           </CardItem>
-          <CardItem style={{backgroundColor: DARK_MODE.COLORS.CARD_BACKGROUND}}>
+          <CardItem style={{backgroundColor: DARK_MODE.COLORS.CARD_BACKGROUND, borderBottomLeftRadius: 5, borderBottomRightRadius: 5}}>
             <View style={{flexDirection: 'row', width: '82%', justifyContent: 'center', margin: 30}}>
               <Svg width={300} height={220} viewBox="0 30 400 200" style={{ width: "100%", height: "auto" }}>
                 <VictoryPie
@@ -155,7 +155,7 @@ function ExpanceCharts(props) {
           <CardItem style={{backgroundColor: DARK_MODE.COLORS.CARD_BACKGROUND}} footer>
             <Text>GeekyAnts</Text>
           </CardItem>
-        </Card>
+        </View>
       );
     };
 
@@ -176,12 +176,20 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'center',
       flexDirection: 'column',
-      padding: 15,
+      // padding: 15,
   },
   cardContainer: {
-      // margin: 15,
+      margin: 30,
       // width: '90%',
       // height: 400,
+
+      borderRadius: 5, shadowColor: '#1f7329',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 1,
+      shadowRadius: 5,
+      borderWidth: 1,
+      borderColor: '#c5ffcc',
+      elevation: 5
   },
 });
 
