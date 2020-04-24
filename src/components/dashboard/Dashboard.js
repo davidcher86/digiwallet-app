@@ -33,8 +33,8 @@ function Header(props) {
   }, []);
 
   // useEffect(() => {
-    // console.log("afsf");
-  // }, [navigate]);
+  //   console.log("afsf");
+  // }, [navigation]);
   // console.log(navigation);
 
   return (
@@ -46,7 +46,7 @@ function Header(props) {
           navigation.navigate('ExpanceCharts', {type: 'ReplaceCurrentScreen'})
           }}>
         <Text style={(navigation.state.index === 0
-                      ? {color: "#ffffff", fontSize: 18, alignSelf: "center", flex: 1, textAlignVertical: "center"}
+                      ? {color: "#7ed3e0", fontSize: 18, alignSelf: "center", flex: 1, textAlignVertical: "center"}
                       : {color: "#b5c6cc", alignSelf: "center", flex: 1, textAlignVertical: "center"})}>Expances</Text>
       </TouchableOpacity>
       <TouchableOpacity
@@ -56,7 +56,7 @@ function Header(props) {
           navigation.navigate('MoneyFlowCharts', {type: 'ReplaceCurrentScreen'})
         }}>
         <Text style={(navigation.state.index === 1
-                      ? {color: "#ffffff", fontSize: 18, alignSelf: "center", flex: 1, textAlignVertical: "center"}
+                      ? {color: "#7ed3e0", fontSize: 18, alignSelf: "center", flex: 1, textAlignVertical: "center"}
                       : {color: "#b5c6cc", alignSelf: "center", flex: 1, textAlignVertical: "center"})}>Money Flow</Text>
       </TouchableOpacity>
       <TouchableOpacity
@@ -66,7 +66,7 @@ function Header(props) {
           navigation.navigate('BalanceCharts', {type: 'ReplaceCurrentScreen'})
         }}>
         <Text style={(navigation.state.index === 2
-                      ? {color: "#ffffff", fontSize: 18, alignSelf: "center", flex: 1, textAlignVertical: "center"}
+                      ? {color: "#7ed3e0", fontSize: 18, alignSelf: "center", flex: 1, textAlignVertical: "center"}
                       : {color: "#b5c6cc", alignSelf: "center", flex: 1, textAlignVertical: "center"})}>Balance</Text>
       </TouchableOpacity>
     </View>
