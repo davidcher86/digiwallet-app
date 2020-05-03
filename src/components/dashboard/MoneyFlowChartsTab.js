@@ -13,6 +13,7 @@ import { VictoryPie, VictoryTooltip, VictoryLabel, VictoryAxis, Bar, LineSegment
 import {Svg, Defs, Stop, LinearGradient} from 'react-native-svg';
 
 import { DARK_MODE } from './../Styles';
+import Panel from './../common/Panel';
 import * as dashboardActions from './dashboardActions';
 import * as transactionsActions from './../transactions/transactionsActions';
 
@@ -114,14 +115,15 @@ function MoneyFlowCharts(props) {
                     <VictoryAxis
                       style={{
                         tickLabels: {fill: "#fffdfd", fontSize: 13, padding: 15},
-                        axis: {stroke: "#e8e8e8"}
+                        axis: {stroke: "#e8e8e8"},
+                        grid: { strokeWidth: 2, stroke: "grey", strokeOpacity: 0.3, strokeDasharray: '5' }
                       }}
                       dependentAxis={true}/>}
                     <VictoryAxis
                       style={{
                         axis: {stroke: "#e8e8e8"},
                         tickLabels: {fill: "#fffdfd", fontSize: 13, padding: 15},
-                        grid: { strokeWidth: 5, stroke: "grey", strokeOpacity: 0.3 }
+                        grid: { strokeWidth: 8, stroke: "grey", strokeOpacity: 0.3 }
                       }}
                       tickValues={tickVal} tickFormat={s} offsetY={50} />
                     <LinearGradient id="gradientDown" y1="0%" y2="100%" >
@@ -228,14 +230,14 @@ function MoneyFlowCharts(props) {
       return (
         <View style={styles.cardContainer}>
         {/* <Card style={styles.cardContainer}> */}
-          <CardItem style={{backgroundColor: DARK_MODE.COLORS.CARD_BACKGROUND, borderTopLeftRadius: 5, borderTopRightRadius: 5, borderBottomRightRadius: 0}} header>
+          <CardItem style={{backgroundColor: DARK_MODE.COLORS.CARD_BACKGROUND, borderTopLeftRadius: 10, borderTopRightRadius: 10, borderBottomRightRadius: 0}} header>
             <Text>Total</Text>
           </CardItem>
-          <CardItem style={{backgroundColor: DARK_MODE.COLORS.CARD_BACKGROUND, borderBottomLeftRadius: 5, borderBottomRightRadius: 5}}>
+          <CardItem style={{backgroundColor: DARK_MODE.COLORS.CARD_BACKGROUND, borderBottomLeftRadius: 10, borderBottomRightRadius: 10}}>
             <Body>
-              <View style={{height: 100, width: '100%', backgroundColor: '#d2d2d2'}}>
+              <View style={{height: 120, width: '100%', backgroundColor: DARK_MODE.COLORS.CARD_BACKGROUND}}>
                 <Text style={{ marginLeft: 10 }}>Total Income</Text>
-                <View style={{ margin: 5, flexDirection: 'row' }}>
+                <View style={{ margin: 5, padding: 5, flexDirection: 'row', backgroundColor: '#a7d0e0', borderRadius: 3 }}>
                   <Progress.Bar
                     indeterminateAnimationDuration={2000}
                     // indeterminate={true}
@@ -244,21 +246,21 @@ function MoneyFlowCharts(props) {
                     animationType={'timing'}
                     // progress={0.1}
                     progress={(totalMoneyFlow !== 0 ? totalIncome/totalMoneyFlow : 0)}
-                    width={300}
-                    height={18}
+                    width={250}
+                    height={20}
                     color={'green'}/>
                     {totalMoneyFlow !== 0 && <Text style={{ marginLeft: 10 }}>{Math.round(totalIncome/totalMoneyFlow * 100) +  '%'}</Text>}
                 </View>
                 <Text style={{ marginLeft: 10 }}>Total Expances</Text>
-                <View style={{ margin: 5, flexDirection: 'row' }}>
+                <View style={{ margin: 5, padding: 5, flexDirection: 'row', backgroundColor: '#a7d0e0', borderRadius: 3 }}>
                   <Progress.Bar
                     indeterminateAnimationDuration={2000}
                     animated={true}
                     // progress={0.1}
                     progress={(totalMoneyFlow !== 0 ? totalExpance/totalMoneyFlow : 0)}
-                    width={300}
+                    width={250}
                     borderWidth={0.5}
-                    height={18}
+                    height={20}
                     color={'red'} />
                   {totalMoneyFlow !== 0 && <Text style={{ marginLeft: 10 }}>{Math.round(totalExpance/totalMoneyFlow * 100) +  '%'}</Text>}
                 </View>
@@ -291,11 +293,10 @@ function MoneyFlowCharts(props) {
       // width: '90%',
       // height: 400,
       margin: 30,
-
-      borderRadius: 5, shadowColor: '#1f7329',
+      borderRadius: 10, shadowColor: '#1f7329',
       shadowOffset: { width: 0, height: 2 },
       shadowOpacity: 1,
-      shadowRadius: 5,
+      shadowRadius: 10,
       borderWidth: 1,
       borderColor: '#c5ffcc',
       elevation: 5

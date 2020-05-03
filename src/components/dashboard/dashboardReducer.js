@@ -23,7 +23,8 @@ const initialState = {
     balance: initialBalanace
   },
   pageSettings: {
-    activeTabIndex: 0
+    activeTabIndex: 0,
+    panelOpen: false
   }
 };
 
@@ -32,7 +33,7 @@ export default (state = initialState, action) => {
   switch (action.type) {
     case 'CHANGE_PAGE_SETTINGS':
       let pageSettings = state.pageSettings;
-      pageSettings.activeTabIndex = action.index;
+      pageSettings[action.field] = action.value;
       return Object.assign({}, state, { pageSettings: pageSettings });
     case 'UPDATE_EXPANCE_DATA':
       newData = state.data;

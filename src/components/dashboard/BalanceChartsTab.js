@@ -1,5 +1,5 @@
-import React, {Component, useEffect} from 'react';
-import {View, TouchableOpacity, Text, StyleSheet, ScrollView} from 'react-native';
+import React, {Component, useEffect, useState} from 'react';
+import {View, TouchableOpacity, Text, StyleSheet, ScrollView, PanResponder, Animated, Dimensions} from 'react-native';
 import {Button, Input, Icon} from 'react-native-elements';
 import {connect, useSelector, useDispatch} from 'react-redux';
 import firebase from 'firebase';
@@ -9,9 +9,12 @@ import {createMaterialTopTabNavigator} from 'react-navigation-tabs';
 import {useNavigationState} from 'react-navigation-hooks';
 import { VictoryPie, VictoryLabel, Slice, VictoryTheme, VictoryBar, VictoryAxis, VictoryChart, VictoryContainer, VictoryLine } from 'victory-native';
 import Svg from 'react-native-svg';
+import Drawer from 'react-native-draggable-view';
+import SwipeablePanel from 'react-native-sheets-bottom';
 
 import { DARK_MODE } from './../Styles';
 import * as dashboardActions from './dashboardActions';
+import Panel from './../common/Panel';
 
 function getFixedList(range, date) {
   const fixedDate = date.split('/');
@@ -65,12 +68,16 @@ function groupToLine(list, keyGetter) {
 }
 
 function BalanceCharts(props) {
+  // const dropZoneValues = React.useRef(null);
+  // const pan = React.useRef(new Animated.ValueXY());
+
     const dispatch = useDispatch();
     const transactionList = useSelector(state => state.transactions.transactions);
     const dashboard = useSelector(state => state.dashboard);
     const profile = useSelector(state => state.profile);
     const mainBallanceCategoriesData = useSelector(state => state.dashboard.data.balance.mainBallanceCategoriesData);
     const navigation = props.navigation;
+    const [open, setOpen] = useState(false);
 
     useEffect(() => {
         if (!navigation.isFocused()) {
@@ -85,11 +92,11 @@ function BalanceCharts(props) {
     }, [navigation, profile]);
 
     useEffect(() => {
-      console.log('data', dashboard.data.balance);
+      // console.log('data', dashboard.data.balance);
       if (dashboard.data.balance.list.length > 0 &&
         dashboard.data.balance.mainBallanceCategoriesData.length === 1 &&
         dashboard.data.balance.mainBallanceCategoriesData[0].label === 'init') {
-          console.log('heerrere');
+          // console.log('heerrere');
         const data = groupToLine(dashboard.data.balance.list, item => item.fixedDate);
         // console.log('data', data);
         dispatch(dashboardActions.updateBalanceData(data));
@@ -104,16 +111,16 @@ function BalanceCharts(props) {
         return counter++;
       })
 
-      console.log(dashboard.data.balance);
+      // console.log(dashboard.data.balance);
         // console.log('groupToLine', groupToLine(dashboard.data.balance.list, item => item.mainCategory));
       return (
         <View style={styles.cardContainer}>
           {/* <Card style={styles.cardContainer}> */}
-              <CardItem style={{backgroundColor: DARK_MODE.COLORS.CARD_BACKGROUND, borderTopLeftRadius: 5, borderTopRightRadius: 5, borderBottomRightRadius: 0}} header>
+              <CardItem style={{backgroundColor: DARK_MODE.COLORS.CARD_BACKGROUND, borderTopLeftRadius: 10, borderTopRightRadius: 10, borderBottomRightRadius: 0}} header>
                   <Text>Balance</Text>
               </CardItem>
-              <CardItem style={{backgroundColor: DARK_MODE.COLORS.CARD_BACKGROUND, borderBottomLeftRadius: 5, borderBottomRightRadius: 5}}>
-                  <View style={{flex: 1, flexDirection: 'column', alignContent: 'center'}}>
+              <CardItem style={{backgroundColor: DARK_MODE.COLORS.CARD_BACKGROUND, borderBottomLeftRadius: 10, borderBottomRightRadius: 10}}>
+                  <View style={{flex: 1, flexDirection: 'row', alignContent: 'center'}}>
                     <ScrollView horizontal={true}>
                       <Svg width={500} height={300} viewBox="0 0 500 300">
                         <VictoryChart domainPadding={30} width={500} tick animate={{duration: 10}}>
@@ -159,13 +166,32 @@ function BalanceCharts(props) {
           </View>
         );
       };
-
+      const panel = React.createRef();
       return (
         <View style={[DARK_MODE.appContainer, styles.containerStyle]}>
         {/* <View> */}
           <ScrollView>
             {balanceCard({})}
           </ScrollView>
+          <View style={{width: '100%', bottom: 20, position: 'relative'}}><Text onPress={() => setOpen(true)} style={{alignSelf: 'center'}}>up</Text></View>
+          {/* {Panel()} */}
+        {/* <SwipeablePanel
+          fullWidth
+          isActive={open}
+          closeOnTouchOutside={true}
+          noBackgroundOpacity={true}
+          onClose={() => setOpen(false)}
+          barStyle={{height: 300, width: '100%'}}
+          onPressCloseButton={() => setOpen(false)}
+          style={{position: 'absolute',  zIndex: 40000, marginTop: -80, width: 300}}
+          noBar={true}
+          onlySmall={true}
+          showCloseButton={true}
+        >
+          <View style={{backgroundColor: 'green', zIndex: 40000}}>
+            <Text style={{alignSelf: 'center'}}>up</Text>
+          </View>
+        </SwipeablePanel> */}
         </View>
       );
 }
@@ -181,13 +207,13 @@ const styles = StyleSheet.create({
         // width: '90%',
         // height: 400,
         margin: 15,
-
-        borderRadius: 5, shadowColor: '#1f7329',
+        borderRadius: 10, shadowColor: '#1f7329',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 1,
-        shadowRadius: 5,
+        shadowRadius: 10,
         borderWidth: 1,
         borderColor: '#c5ffcc',
+        zIndex: 2,
         elevation: 5
     },
 });

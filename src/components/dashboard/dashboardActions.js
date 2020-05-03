@@ -1,7 +1,15 @@
-export const setPageSettingsIndex = (index) => {
+// export const setPageSettingsIndex = (index) => {
+//     return {
+//         type: 'CHANGE_PAGE_SETTINGS',
+//         index
+//     };
+// };
+
+export const setPageSettings = (field, value) => {
     return {
         type: 'CHANGE_PAGE_SETTINGS',
-        index
+        field,
+        value
     };
 };
 
