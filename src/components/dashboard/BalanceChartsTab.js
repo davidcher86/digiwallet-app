@@ -169,29 +169,9 @@ function BalanceCharts(props) {
       const panel = React.createRef();
       return (
         <View style={[DARK_MODE.appContainer, styles.containerStyle]}>
-        {/* <View> */}
           <ScrollView>
             {balanceCard({})}
           </ScrollView>
-          <View style={{width: '100%', bottom: 20, position: 'relative'}}><Text onPress={() => setOpen(true)} style={{alignSelf: 'center'}}>up</Text></View>
-          {/* {Panel()} */}
-        {/* <SwipeablePanel
-          fullWidth
-          isActive={open}
-          closeOnTouchOutside={true}
-          noBackgroundOpacity={true}
-          onClose={() => setOpen(false)}
-          barStyle={{height: 300, width: '100%'}}
-          onPressCloseButton={() => setOpen(false)}
-          style={{position: 'absolute',  zIndex: 40000, marginTop: -80, width: 300}}
-          noBar={true}
-          onlySmall={true}
-          showCloseButton={true}
-        >
-          <View style={{backgroundColor: 'green', zIndex: 40000}}>
-            <Text style={{alignSelf: 'center'}}>up</Text>
-          </View>
-        </SwipeablePanel> */}
         </View>
       );
 }
