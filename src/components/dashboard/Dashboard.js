@@ -77,55 +77,8 @@ function Header(props) {
 
   return (
     <View style={{flexDirection: 'column'}}>
-      {console.log('open', open)}
-      {/* <View style={{width: '100%', bottom: 280, flexDirection: 'row', justifyContent: 'center', backgroundColor: 'transparent'}}> */}
-      {/* <GestureRecognizer
-          // onSwipe={(direction, state) => console.log('onSwipeUp', direction)}
-          // onSwipeUp={(state) => expandPanel()}
-          // onSwipeDown={(state) => closePanel()}
-          // onSwipeUp={(state) => setOpen(true)}
-          // onSwipeDown={(state) => setOpen(false)}
-          // config={{
-          //   velocityThreshold: 0.3,
-          //   directionalOffsetThreshold: 30
-          // }}
-          // style={{
-          //   width: 50,
-          //   height: 20,
-          //   position: 'relative',
-          //   bottom: 50,
-          //   left: 150,
-          //   backgroundColor: 'green' ,
-          //   borderTopRightRadius: 10,
-          //   borderTopLeftRadius: 10,
-          //   borderBottomRightRadius: -10,
-          //   borderBottomLeftRadius: -10
-          // }}
-          // >
-          <View style={{width: '100%'}}><Text onPress={() => setOpen(true)} style={{alignSelf: 'center'}}>up</Text></View>
-        </GestureRecognizer> */}
-        {/* <View style={{width: '100%', position: 'relative'}}>
-          <Text onPress={() => setOpen(true)} style={{alignSelf: 'center'}}>up</Text>
-          </View>
-        <SwipeablePanel
-          fullWidth
-          isActive={open}
-          closeOnTouchOutside={true}
-          onClose={() => setOpen(false)}
-          barStyle={{height: 300, width: '100%'}}
-          onPressCloseButton={() => setOpen(false)}
-          style={{height: 200, position: 'relative', bottom: 60}}
-          showCloseButton={true}
-        >
-          <View style={{height: 300, backgroundColor: 'green'}}>
-            <Text style={{alignSelf: 'center'}}>up</Text>
-          </View>
-        </SwipeablePanel> */}
-      {/* </View> */}
-      {/* <Animated.View style={{width: 200, position: 'relative', left: 50, height: panelHeight, backgroundColor: 'yellow'}}>
-        <Text>hidden</Text>
-      </Animated.View> */}
-      {Panel()}
+      {/* {Panel()} */}
+      <Panel />
     <View style={{flexDirection: 'row', width: '100%', bottom: 0, position:'absolute', backgroundColor: "#08191f"}}>
       <TouchableOpacity
         style={{height: 50, width: 130, flexDirection: 'column', alignSelf: "center"}}
