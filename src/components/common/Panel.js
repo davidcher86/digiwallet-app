@@ -97,14 +97,14 @@ class Panel extends Component {
                     // {...this._panResponder.panHandlers}
                     style={[styles.panelContainer, this.state.pos, {transform: [{translateX}, {translateY}]}, {height: 140, alignItems: 'center'}]} >
                     {/* <View style={{width: 280}}> */}
-                        <View {...this._panResponder.panHandlers} style={{overflow: 'hidden', flexDirection: 'row', height: 20, width: 280, justifyContent: 'center', borderTopLeftRadius: 20, borderTopRightRadius: 20}}>
-                            <View style={{borderWidth: 8,borderColor: 'yellow', width: 45, height: 45, borderRadius: 50, top: -18, position: 'relative'}} />
+                        <View {...this._panResponder.panHandlers} style={{borderWidth: 2, overflow: 'hidden', flexDirection: 'row', height: 20, width: 280, justifyContent: 'center', borderTopLeftRadius: 20, borderTopRightRadius: 20, padding: 0}}>
+                            <View style={{borderWidth: 8,borderColor: 'yellow', width: 40, height: 40, borderRadius: 50, top: -20, marginRight: -15}} />
 
-                            <View style={{backgroundColor: 'red', width: 240, height: 50}} >
+                            <View style={{backgroundColor: 'red', width: 240, height: 50, borderTopLeftRadius: 20, borderTopRightRadius: 20}} >
                                 <Text style={{width: 60}}>Drag me!</Text>
                             </View>
 
-                            <View style={{backgroundColor: 'red', width: 40, height: 40, borderRadius: 50, marginTop: -20, position: 'relative'}} />
+                            <View style={{borderWidth: 8,borderColor: 'yellow',backgroundColor: 'red', width: 40, height: 40, borderRadius: 50, marginTop: -20, position: 'relative'}} />
                             {/* <View style={{backgroundColor: 'red', width: 30, height: 30, borderRadius: 50}} /> */}
                             {/* <View style={{backgroundColor: 'red', width: 30, height: 30, borderRadius: 50}} /> */}
                             {/* <View style={{backgroundColor: 'red', width: 15, height: 15}} >
