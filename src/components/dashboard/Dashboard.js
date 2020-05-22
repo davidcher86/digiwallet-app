@@ -5,6 +5,7 @@ import {ProgressSteps, ProgressStep} from 'react-native-progress-steps';
 import {connect, useSelector, useDispatch} from 'react-redux';
 import SwipeableViews from 'react-swipeable-views-native';
 import Dots from 'react-native-dots-pagination';
+import { Dropdown } from 'react-native-material-dropdown';
 import {createMaterialBottomTabNavigator} from 'react-navigation-material-bottom-tabs';
 import {createMaterialTopTabNavigator, createBottomTabNavigator} from 'react-navigation-tabs';
 import Panel from './../common/Panel';
@@ -67,14 +68,23 @@ function Header(props) {
   //   console.log("afsf");
   // }, [navigation]);
   // console.log(Drawer);
-
+  const dropdownData = [{
+    value: 'Banana',
+  }, {
+    value: 'Mango',
+  }, {
+    value: 'Pear',
+  }];
   const MyComponent = () => (
     <View style={{flex: 1, flexDirection: 'column'}}>
       <SwipeableViews style={styles.slideContainer} onChangeIndex={(index) => setActiveContentTab(index)}>
         <View style={[styles.slide, styles.slide1]}>
-          <Text style={styles.text}>
-            slide n°1
-          </Text>
+          <Dropdown
+            label='Favorite Fruit'
+            containerStyle={{borderWidth: 2, padding: 0}}
+            selectedItemColor="blue"
+            baseColor="blue"
+            data={dropdownData} />
         </View>
         <View style={[styles.slide, styles.slide2]}>
           <Text style={styles.text}>
