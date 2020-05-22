@@ -9,6 +9,7 @@ import {
   ScrollView,
   StyleSheet,
   Image,
+  Alert,
 } from 'react-native';
 import {Input, Icon} from 'react-native-elements';
 import {connect} from 'react-redux';
@@ -22,7 +23,7 @@ import {
   Left,
   Body,
   Right,
-  Button,
+  Button
 } from 'native-base';
 
 import * as actions from './transactionsActions';
@@ -42,6 +43,7 @@ class TransactionItem extends Component {
     this.expandItem = this.expandItem.bind(this);
     this.closeItem = this.closeItem.bind(this);
     this.toggleItemExpand = this.toggleItemExpand.bind(this);
+    this.twoOptionAlertHandler = this.twoOptionAlertHandler.bind(this);
   }
 
   expandItem = () => {
@@ -85,6 +87,27 @@ class TransactionItem extends Component {
       this.expandItem();
     }
   }
+
+  twoOptionAlertHandler = (transactionItem) => {
+    const {identity, deleteTransaction} = this.props;
+
+    Alert.alert(
+      //title
+      'Delete Transaction',
+      //body
+      'Are you sure you want to delete transaction ?',
+      [
+        { text: 'Yes', onPress: () => this.props.deleteTransaction(transactionItem.uid, identity.uid) },
+        {
+          text: 'No',
+          onPress: () => console.log('No Pressed'),
+          style: 'cancel',
+        },
+      ],
+      { cancelable: false }
+      //clicking out side of alert will not cancel
+    );
+  };
 
   componentDidUpdate() {
     if (
@@ -143,9 +166,11 @@ class TransactionItem extends Component {
             <TouchableOpacity
               transparent
               style={styles.deleteBtn}
-              onPress={() =>
-                deleteTransaction(transactionItem.uid, identity.uid)
-              }>
+              onPress={() => this.twoOptionAlertHandler(transactionItem)}
+              // onPress={() =>
+              //   deleteTransaction(transactionItem.uid, identity.uid)
+              // }
+              >
               <MaterialIcons name="delete" size={25} color="#4F8EF7" />
               {/* <Image
                 style={{width: 20, height: 20}}

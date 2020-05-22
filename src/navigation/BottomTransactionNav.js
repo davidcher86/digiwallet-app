@@ -37,7 +37,14 @@ class BottomTransactionsStack extends Component {
     };
 
     return (
-      <View style={styles.container}>
+      <View style={{flexDirection: 'row',
+      width: '100%',
+      height: 60,
+      backgroundColor: '#17BED0',
+      zIndex: 50,
+      justifyContent: 'center',
+      alignItems: 'center'}}>
+        <View style={styles.container}>
         <View
           style={[
             styles.tabContainer,
@@ -113,7 +120,10 @@ class BottomTransactionsStack extends Component {
             </View>
           </TouchableOpacity>
         </View>
-        <Fab onPress={() => {console.log('sdfsdf')}} />
+        </View>
+        <View style={{position: 'relative', width: 100, height: 100, bottom: 10, overflow: 'hidden', elevation: 10, right: 20}} >
+          <Fab onPress={() => {console.log('sdfsdf')}} />
+        </View>
       </View>
     );
   }
