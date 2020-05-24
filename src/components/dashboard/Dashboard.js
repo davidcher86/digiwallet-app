@@ -5,7 +5,8 @@ import {ProgressSteps, ProgressStep} from 'react-native-progress-steps';
 import {connect, useSelector, useDispatch} from 'react-redux';
 import SwipeableViews from 'react-swipeable-views-native';
 import Dots from 'react-native-dots-pagination';
-import { Dropdown } from 'react-native-material-dropdown';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import ModalDropdown from 'react-native-modal-dropdown';
 import {createMaterialBottomTabNavigator} from 'react-navigation-material-bottom-tabs';
 import {createMaterialTopTabNavigator, createBottomTabNavigator} from 'react-navigation-tabs';
 import Panel from './../common/Panel';
@@ -79,12 +80,20 @@ function Header(props) {
     <View style={{flex: 1, flexDirection: 'column'}}>
       <SwipeableViews style={styles.slideContainer} onChangeIndex={(index) => setActiveContentTab(index)}>
         <View style={[styles.slide, styles.slide1]}>
-          <Dropdown
-            label='Favorite Fruit'
-            containerStyle={{borderWidth: 2, padding: 0}}
-            selectedItemColor="blue"
-            baseColor="blue"
-            data={dropdownData} />
+          <Button
+            buttonStyle={{width:50, height: 30, borderWidth: 2, borderColor: '#f0f8ff'}}
+            icon={<AntDesign name="caretleft" size={15} color="#f0f8ff" />}
+            type="outline"/>
+          <ModalDropdown
+            showsVerticalScrollIndicator={false}
+            textStyle={{height: 30, padding: 5}}
+            style={{width: 200, borderTopWidth: 2, borderBottomWidth: 2, height: 30, borderColor: '#f0f8ff' }}
+            dropdownStyle={{height: 80, width: 200, zIndex: 4000, position: 'relative'}}
+            options={['This Year', 'This Month', 'This Week', 'Today']}/>
+          <Button
+            buttonStyle={{width:50, height: 30, borderWidth: 2, borderColor: '#f0f8ff'}}
+            icon={<AntDesign name="caretright" size={15} color="#f0f8ff" />}
+            type="outline"/>
         </View>
         <View style={[styles.slide, styles.slide2]}>
           <Text style={styles.text}>
@@ -177,7 +186,10 @@ const styles = StyleSheet.create({
     height: 100,
   },
   slide1: {
-    backgroundColor: '#187b72'
+    backgroundColor: '#187b72',
+    flexDirection: 'row',
+    flex: 1,
+    justifyContent: 'center'
     // backgroundColor: '#FEA900',
   },
   slide2: {
