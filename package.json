@@ -12,6 +12,7 @@
   "dependencies": {
     "@react-native-community/art": "^1.1.2",
     "@react-native-community/async-storage": "^1.9.0",
+    "@react-native-community/datetimepicker": "^2.4.0",
     "@react-native-community/google-signin": "^3.0.4",
     "@react-native-community/masked-view": "^0.1.5",
     "@react-navigation/material-top-tabs": "^5.0.0-alpha.26",
@@ -39,11 +40,7 @@
     "react-native-indicator": "^1.2.0",
     "react-native-keyboard-aware-scroll-view": "^0.9.1",
     "react-native-linear-gradient": "^2.5.6",
-<<<<<<< HEAD
-    "react-native-material-dropdown": "^0.11.1",
-=======
     "react-native-modal-dropdown": "^0.7.0",
->>>>>>> 12daebcb9087d830ec750407e3ea7cf3ade6231c
     "react-native-modalbox": "^2.0.0",
     "react-native-multiselect-sortable-flatlist": "^1.0.5",
     "react-native-paper": "^3.8.0",

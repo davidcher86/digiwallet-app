@@ -7,6 +7,7 @@ import SwipeableViews from 'react-swipeable-views-native';
 import Dots from 'react-native-dots-pagination';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import ModalDropdown from 'react-native-modal-dropdown';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import {createMaterialBottomTabNavigator} from 'react-navigation-material-bottom-tabs';
 import {createMaterialTopTabNavigator, createBottomTabNavigator} from 'react-navigation-tabs';
 import Panel from './../common/Panel';
@@ -20,10 +21,111 @@ import Fab from './../common/Fab';
 
 var ScrollableTabView = require('react-native-scrollable-tab-view');
 
+function PanelContent(props) {
+  let now = new Date();
+  const initialState = {
+    range: {from: now, to: now},
+    lastPeriod: {selected: ''},
+    period: {type: 'This Month', previosPeriodCount: 0}
+  };
+  const [state, setState] = useState(initialState);
+  const [date, setDate] = useState(new Date(1598051730000));
+  const [mode, setMode] = useState('date');
+  const [show, setShow] = useState(false);
+  const [activeContentTab, setActiveContentTab] = useState(0);
+
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShow(false);
+    setDate(currentDate);
+  };
+
+  const showMode = currentMode => {
+    setShow(true);
+    setMode(currentMode);
+  };
+
+  const showDatepicker = () => {
+    showMode('date');
+  };
+
+  const showTimepicker = () => {
+    showMode('time');
+  };
+
+  const onChangeData = (e, tab, field) => {
+    let updatedState = state;
+    // console.log(updatedState[tab]);
+    updatedState[tab][field] = e;
+    setState({...state,  period: {
+      type: e
+    }})
+    // console.log(e);
+  };
+  console.log(state);
+  return (
+    <View style={{flex: 1, flexDirection: 'column'}}>
+      <SwipeableViews style={styles.slideContainer} onChangeIndex={(index) => setActiveContentTab(index)}>
+        <View style={[styles.slide, styles.slide1]}>
+          <Button
+            buttonStyle={{width:50, height: 30, borderWidth: 2, borderColor: '#f0f8ff'}}
+            icon={<AntDesign name="caretleft" size={15} color="#f0f8ff" />}
+            type="outline"/>
+          <ModalDropdown
+            showsVerticalScrollIndicator={false}
+            // defaultIndex={1}
+            defaultValue={state.period.type}
+            value={state.period.type}
+            textStyle={{height: 30, padding: 5}}
+            onSelect={(e) => onChangeData(e, 'period','type')}
+            style={{width: 200, borderTopWidth: 2, borderBottomWidth: 2, height: 30, borderColor: '#f0f8ff' }}
+            dropdownStyle={{height: 80, width: 200, zIndex: 4000, position: 'relative'}}
+            options={['This Year', 'This Month', 'This Week', 'Today']}/>
+          <Button
+            buttonStyle={{width:50, height: 30, borderWidth: 2, borderColor: '#f0f8ff'}}
+            icon={<AntDesign name="caretright" size={15} color="#f0f8ff" />}
+            type="outline"/>
+        </View>
+        <View style={[styles.slide, styles.slide2]}>
+        <Button onPress={showDatepicker} title="Show date picker!" />
+        <Button onPress={showTimepicker} title="Show time picker!" />
+        {show && <DateTimePicker
+          testID="dateTimePicker"
+          timeZoneOffsetInMinutes={0}
+          value={date}
+          mode={mode}
+          is24Hour={true}
+          display="default"
+          onChange={e => onChangeData(e, 'period','type')}
+        />}
+        </View>
+        <View style={[styles.slide, styles.slide3]}>
+          <Text style={styles.text}>
+            slide n°3
+          </Text>
+        </View>
+      </SwipeableViews>
+      <View style={{backgroundColor: '#187b72', height: 23, marginBottom: 35, padding: 4}}>
+        <Dots
+          length={3}
+          width={250}
+          paddingHorizontal={10}
+          paddingVertical={4}
+          activeDotWidth={12}
+          activeDotHeight={12}
+          activeColor="#0981def2"
+          passiveColor="#80c3f7eb"
+          passiveDotWidth={9}
+          passiveDotHeight={9}
+          active={activeContentTab} />
+      </View>
+    </View>
+  );
+}
+
 function Header(props) {
   const {navigation} = props;
   const [open, setOpen] = useState(false);
-  const [activeContentTab, setActiveContentTab] = useState(0);
   const transactions = useSelector(state => state.transactions);
   const profile = useSelector(state => state.profile);
   const identity = useSelector(state => state.identity);
@@ -76,57 +178,12 @@ function Header(props) {
   }, {
     value: 'Pear',
   }];
-  const MyComponent = () => (
-    <View style={{flex: 1, flexDirection: 'column'}}>
-      <SwipeableViews style={styles.slideContainer} onChangeIndex={(index) => setActiveContentTab(index)}>
-        <View style={[styles.slide, styles.slide1]}>
-          <Button
-            buttonStyle={{width:50, height: 30, borderWidth: 2, borderColor: '#f0f8ff'}}
-            icon={<AntDesign name="caretleft" size={15} color="#f0f8ff" />}
-            type="outline"/>
-          <ModalDropdown
-            showsVerticalScrollIndicator={false}
-            textStyle={{height: 30, padding: 5}}
-            style={{width: 200, borderTopWidth: 2, borderBottomWidth: 2, height: 30, borderColor: '#f0f8ff' }}
-            dropdownStyle={{height: 80, width: 200, zIndex: 4000, position: 'relative'}}
-            options={['This Year', 'This Month', 'This Week', 'Today']}/>
-          <Button
-            buttonStyle={{width:50, height: 30, borderWidth: 2, borderColor: '#f0f8ff'}}
-            icon={<AntDesign name="caretright" size={15} color="#f0f8ff" />}
-            type="outline"/>
-        </View>
-        <View style={[styles.slide, styles.slide2]}>
-          <Text style={styles.text}>
-            slide n°2
-          </Text>
-        </View>
-        <View style={[styles.slide, styles.slide3]}>
-          <Text style={styles.text}>
-            slide n°3
-          </Text>
-        </View>
-      </SwipeableViews>
-      <View style={{backgroundColor: '#187b72', height: 23, marginBottom: 35, padding: 4}}>
-        <Dots
-          length={3}
-          width={250}
-          paddingHorizontal={10}
-          paddingVertical={4}
-          activeDotWidth={12}
-          activeDotHeight={12}
-          activeColor="#0981def2"
-          passiveColor="#80c3f7eb"
-          passiveDotWidth={9}
-          passiveDotHeight={9}
-          active={activeContentTab} />
-      </View>
-    </View>
-  );
-
+  
   return (
     <View style={{flexDirection: 'column'}}>
       {/* {Panel()} */}
-      <Panel content={MyComponent()}/>
+      {/* <Panel content={MyComponent()}/> */}
+      <Panel content={PanelContent()}/>
       <View style={{flexDirection: 'row', width: '100%', bottom: 0, position:'absolute', backgroundColor: "#08191f"}}>
         <TouchableOpacity
           style={{height: 50, width: 130, flexDirection: 'column', alignSelf: "center"}}
