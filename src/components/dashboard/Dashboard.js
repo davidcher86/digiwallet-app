@@ -55,25 +55,56 @@ function PanelContent(props) {
 
   const onChangeData = (e, tab, field) => {
     let updatedState = state;
-    // console.log(updatedState[tab]);
-    updatedState[tab][field] = e;
-    setState({...state,  period: {
-      type: e
-    }})
+    const options = ['This Year', 'This Month', 'This Week', 'Today'];
+
+    var dt = new Date();
+    console.log(e);
+    if (field = 'type') {
+      switch (field) {
+        case 'This Year':
+          updatedState[tab][field] = e;
+          if (updatedState.period.previosPeriodCount > 0) {
+            var year = dt.getFullYear() - updatedState.period.previosPeriodCount;
+            updatedState.period.type = year;
+          }
+
+          if (updatedState.period.previosPeriodCount <= 0) {
+            updatedState.period.type = 'This Year';
+            updatedState.period.previosPeriodCount = 0;
+          }
+          break;
+        case 'This Month':
+          break;
+        case 'This Week':
+          break;
+        case 'Today':
+          break;
+        default:
+          break;
+      }
+    }
+    // updatedState[tab][field] = e;
+
+    // console.log(updatedState);
+    setState({...updatedState});
+    // setState({...state,  period: {
+    //   type: options[e]
+    // }})
     // console.log(e);
   };
-  console.log(state);
+  console.log('state', state);
   return (
     <View style={{flex: 1, flexDirection: 'column'}}>
       <SwipeableViews style={styles.slideContainer} onChangeIndex={(index) => setActiveContentTab(index)}>
         <View style={[styles.slide, styles.slide1]}>
           <Button
+            onPress={e => onChangeData(state.period.previosPeriodCount + 1, 'period', 'previosPeriodCount')}
             buttonStyle={{width:50, height: 30, borderWidth: 2, borderColor: '#f0f8ff'}}
             icon={<AntDesign name="caretleft" size={15} color="#f0f8ff" />}
             type="outline"/>
           <ModalDropdown
             showsVerticalScrollIndicator={false}
-            // defaultIndex={1}
+            // defaultIndex={'1'}
             defaultValue={state.period.type}
             value={state.period.type}
             textStyle={{height: 30, padding: 5}}
@@ -82,6 +113,7 @@ function PanelContent(props) {
             dropdownStyle={{height: 80, width: 200, zIndex: 4000, position: 'relative'}}
             options={['This Year', 'This Month', 'This Week', 'Today']}/>
           <Button
+            onPress={e => onChangeData(state.period.previosPeriodCount - 1, 'period','previosPeriodCount')}
             buttonStyle={{width:50, height: 30, borderWidth: 2, borderColor: '#f0f8ff'}}
             icon={<AntDesign name="caretright" size={15} color="#f0f8ff" />}
             type="outline"/>
@@ -178,7 +210,7 @@ function Header(props) {
   }, {
     value: 'Pear',
   }];
-  
+
   return (
     <View style={{flexDirection: 'column'}}>
       {/* {Panel()} */}
